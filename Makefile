@@ -6,7 +6,8 @@ CFLAGS =  -g -O2 -fPIE -I$(LIBMLX)/include -I./libft -I./get_next_line -I./inclu
 LDFLAGS = -L$(LIBMLX)/build -lmlx42 -lglfw -pthread -lm -L./libft -lft -pie
 
 SRC = \
-src/main.c 
+src/main.c \
+src/movement.c
 
 OBJ = $(SRC:.c=.o)
 

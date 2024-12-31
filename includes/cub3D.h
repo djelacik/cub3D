@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 16:01:21 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/30 16:02:44 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/31 15:48:13 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,8 @@ typedef struct s_data {
 	t_player	player;
 	char		**map;
 }	t_data;
+
+void	handle_keys(mlx_key_data_t keydata, void *param);
+int		is_wall(char **map, double x, double y);
 
 #endif

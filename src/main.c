@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 16:02:56 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/30 17:00:58 by djelacik         ###   ########.fr       */
+/*   Updated: 2024/12/31 16:12:41 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,28 @@ char	**init_map(void)
 {
 	char	**map;
 
-	map = malloc(sizeof(char *) * 6);
+	map = malloc(sizeof(char *) * 11);
 	if (!map)
 		return (NULL);
-	map[0] = "111111";
-	map[1] = "100001";
-	map[2] = "100001";
-	map[3] = "100001";
-	map[4] = "111111";
-	map[5] = NULL;
+	map[0] = "1111111111";
+	map[1] = "1000000001";
+	map[2] = "1001111001";
+	map[3] = "1001001001";
+	map[4] = "1001001001";
+	map[5] = "1000000001";
+	map[6] = "1001111101";
+	map[7] = "1000000001";
+	map[8] = "1111111111";
+	map[9] = NULL;
 	return (map);
+}
+
+
+int	is_wall(char **map, double x, double y)
+{
+	if (map[(int)y][(int)x] == '1')
+		return (1);
+	return (0);
 }
 
 void	draw_square(mlx_image_t *image, int x, int y, int color)
@@ -39,12 +51,17 @@ void	draw_square(mlx_image_t *image, int x, int y, int color)
 		j = 0;
 		while (j < TILE_SIZE)
 		{
-			mlx_put_pixel(image, x + i, y + j, color);
+			// Piirrä viivat neliön reunoille
+			if (i == 0 || i == TILE_SIZE - 1 || j == 0 || j == TILE_SIZE - 1)
+				mlx_put_pixel(image, x + i, y + j, 0xFF0000); // Punainen viiva
+			else
+				mlx_put_pixel(image, x + i, y + j, color); // Täyttö
 			j++;
 		}
 		i++;
 	}
 }
+
 
 void	draw_map(t_data *data)
 {
@@ -59,7 +76,10 @@ void	draw_map(t_data *data)
 		{
 			if (data->map[y][x] == '1')
 				draw_square(data->image, x * TILE_SIZE,
-					y * TILE_SIZE, 0xFFFFFF);
+					y * TILE_SIZE, 0xFFFFFF); // Valkoinen täyttö
+			else
+				draw_square(data->image, x * TILE_SIZE,
+					y * TILE_SIZE, 0xAAAAAA); // Harmaa lattia
 			x++;
 		}
 		y++;
@@ -154,6 +174,7 @@ int	main(void)
 	if (!data.image)
 		return (1);
 	mlx_image_to_window(data.mlx, data.image, 0, 0);
+	mlx_key_hook(data.mlx, handle_keys, &data);
 	mlx_loop_hook(data.mlx, (void (*)(void *))render, &data);
 	mlx_loop(data.mlx);
 	mlx_terminate(data.mlx);
