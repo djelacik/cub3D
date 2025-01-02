@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 16:01:21 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/31 15:48:13 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:37:47 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define WIN_WIDTH 800
-#define WIN_HEIGHT 600
+#define WIN_WIDTH 1800
+#define WIN_HEIGHT 1600
 #define TILE_SIZE 64
 #define STEP_SIZE 0.1
 #define FOV (M_PI / 3)
