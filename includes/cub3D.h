@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 16:01:21 by djelacik          #+#    #+#             */
-/*   Updated: 2025/01/02 16:37:47 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/01/05 22:38:08 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define WIN_WIDTH 1800
-#define WIN_HEIGHT 1600
+# include "../get_next_line/get_next_line.h"
+# include "../libft/libft.h"
+
+#define WIN_WIDTH 1200
+#define WIN_HEIGHT 800
+#define MINIMAP_SCALE 0.2
 #define TILE_SIZE 64
 #define STEP_SIZE 0.1
 #define FOV (M_PI / 3)
 
 //# define DEBUG
 #ifdef DEBUG 
-# define dbg_print(...) fprintf(stderr, __VA_ARGS__)
+# define DBG_PRINT(...) fprintf(stderr, __VA_ARGS__)
 #else
-# define dbg_print(...) ((void)0)
+# define DBG_PRINT(...) ((void)0)
 #endif
 
 typedef struct s_player {
@@ -37,14 +41,65 @@ typedef struct s_player {
 	double		angle;
 }	t_player;
 
+typedef struct s_textures {
+	mlx_texture_t *north;
+	mlx_texture_t *south;
+	mlx_texture_t *west;
+	mlx_texture_t *east;
+}	t_textures;
+
+typedef struct s_ray {
+	double			distance;
+	double			hit_x;
+	double			hit_y;
+	int				side;
+	double			wall_x;
+	mlx_texture_t	*texture;
+	double			dir_x;
+	double			dir_y;
+}	t_ray;
+
 typedef struct s_data {
 	mlx_t		*mlx;
 	mlx_image_t	*image;
+	t_ray		*ray;
 	t_player	player;
+	t_textures	*textures;
 	char		**map;
+	uint32_t	floor_color;
+	uint32_t	ceiling_color;
 }	t_data;
+
+
 
 void	handle_keys(mlx_key_data_t keydata, void *param);
 int		is_wall(char **map, double x, double y);
+
+void	draw_rays(t_data *data);
+double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
+
+
+int	is_wall(char **map, double x, double y);
+double	calculate_distance(t_player player, double angle, char **map);
+
+void	draw_mini_map(t_data *data);
+void	draw_mini_player(t_data *data);
+void	draw_mini_rays(t_data *data);
+void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
+
+void	draw_floor_and_ceiling(t_data *data);
+
+double	get_wall_x(double hit_x, double hit_y, int hit_side);
+uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y);
+void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y);
+void	draw_rays(t_data *data);
+void	draw_single_ray(t_data *data, double angle, int screen_x);
+double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
+t_ray	calculate_ray(t_data *data, double angle);
+mlx_texture_t *get_wall_texture(t_data *data, double dir_x, double dir_y, int side);
+
+void	loop_hook(void *param);
+
+int	load_textures(t_data *data);
 
 #endif

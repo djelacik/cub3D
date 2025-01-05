@@ -1,0 +1,110 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minimap.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/04 16:37:41 by djelacik          #+#    #+#             */
+/*   Updated: 2025/01/04 17:29:59 by djelacik         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/cub3D.h"
+
+void	draw_mini_map(t_data *data)
+{
+	int	x;
+	int	y;
+	int	screen_x;
+	int	screen_y;
+
+	y = 0;
+	while (data->map[y])
+	{
+		x = 0;
+		while (data->map[y][x])
+		{
+			screen_x = x * TILE_SIZE * MINIMAP_SCALE;
+			screen_y = y * TILE_SIZE * MINIMAP_SCALE;
+			if (data->map[y][x] == '1') // Seinät
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xAAAAAA);
+			else // Lattia
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xCCCCCC);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	draw_mini_player(t_data *data)
+{
+	int	x;
+	int	y;
+	int	size;
+	int	i;
+	int	j;
+
+	x = (int)(data->player.x * TILE_SIZE * MINIMAP_SCALE);
+	y = (int)(data->player.y * TILE_SIZE * MINIMAP_SCALE);
+	size = 5; // Pelaajan koko minimapilla
+	i = -size / 2;
+	while (i <= size / 2)
+	{
+		j = -size / 2;
+		while (j <= size / 2)
+		{
+			if (x + i >= 0 && x + i < WIN_WIDTH &&
+				y + j >= 0 && y + j < WIN_HEIGHT)
+				mlx_put_pixel(data->image, x + i, y + j, 0xFF0000); // Punainen
+			j++;
+		}
+		i++;
+	}
+}
+
+void	draw_mini_rays(t_data *data)
+{
+	double	ray_x;
+	double	ray_y;
+	double	angle;
+	int		screen_x;
+	int		screen_y;
+
+	angle = data->player.angle - FOV / 2;
+	while (angle <= data->player.angle + FOV / 2)
+	{
+		ray_x = data->player.x;
+		ray_y = data->player.y;
+		while (data->map[(int)ray_y][(int)ray_x] != '1')
+		{
+			ray_x += cos(angle) * STEP_SIZE;
+			ray_y += sin(angle) * STEP_SIZE;
+			screen_x = ray_x * TILE_SIZE * MINIMAP_SCALE;
+			screen_y = ray_y * TILE_SIZE * MINIMAP_SCALE;
+			if (screen_x >= 0 && screen_x < WIN_WIDTH
+				&& screen_y >= 0 && screen_y < WIN_HEIGHT)
+				mlx_put_pixel(data->image, screen_x, screen_y, 0x444444);
+		}
+		angle += 0.01;
+	}
+}
+
+void	draw_square(mlx_image_t *image, int x, int y, int size, int color)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < size)
+	{
+		j = 0;
+		while (j < size)
+		{
+			// Piirrä ilman reunoja
+			mlx_put_pixel(image, x + i, y + j, color);
+			j++;
+		}
+		i++;
+	}
+}

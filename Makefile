@@ -7,6 +7,10 @@ LDFLAGS = -L$(LIBMLX)/build -lmlx42 -lglfw -pthread -lm -L./libft -lft -pie
 
 SRC = \
 src/main.c \
+src/rays.c \
+src/hooks.c \
+src/utils.c \
+src/minimap.c \
 src/movement.c
 
 OBJ = $(SRC:.c=.o)
