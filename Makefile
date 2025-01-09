@@ -1,12 +1,19 @@
 NAME = cub3D
+CC = cc
 LIBMLX = ./MLX42
 MLX_42 = $(LIBMLX)/build/libmlx42.a
-CC = gcc
-CFLAGS =  -g -O2 -fPIE -I$(LIBMLX)/include -I./libft -I./get_next_line -I./include
-LDFLAGS = -L$(LIBMLX)/build -lmlx42 -lglfw -pthread -lm -L./libft -lft -pie
+
+INCLUDES = -Iincludes -Ilibft -Iget_next_line -I$(LIBMLX)/include
+CFLAGS =  -Wall -Werror -Wextra -g -O2 #-fPIE
+
+LDFLAGS = -L./MLX42/build -lmlx42 -lglfw -pthread -lm -L./libft -lft #-pie
 
 SRC = \
+src/color_utils.c \
 src/main.c \
+src/shading.c \
+src/texture.c \
+src/ray.c \
 src/rays.c \
 src/hooks.c \
 src/utils.c \
@@ -41,8 +48,8 @@ $(MLX_42): mlx_clone
 	fi
 
 # Compile object files from source
-%.o: %.c $(MLX_42)
-	$(CC) $(CFLAGS) -o $@ -c $<
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
 
 # Clean object files
 clean:

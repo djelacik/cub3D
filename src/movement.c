@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3D.h"
+#include "cub3D.h"
 
 static void	handle_movement(t_data *data)
 {
@@ -76,10 +76,10 @@ static void	render(t_data *data)
 	data->image = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGHT);
 	mlx_image_to_window(data->mlx, data->image, 0, 0);
 	draw_floor_and_ceiling(data);
+	draw_rays(data);
 	draw_mini_map(data);
 	draw_mini_player(data);
 	draw_mini_rays(data);
-	draw_rays(data);
 }
 
 void	loop_hook(void *param)

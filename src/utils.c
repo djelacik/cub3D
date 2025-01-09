@@ -10,30 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3D.h"
+#include "cub3D.h"
 
 int	is_wall(char **map, double x, double y)
 {
 	if (map[(int)y][(int)x] == '1')
 		return (1);
 	return (0);
-}
-
-double	calculate_distance(t_player player, double angle, char **map)
-{
-	double	ray_x;
-	double	ray_y;
-	double	distance;
-
-	ray_x = player.x;
-	ray_y = player.y;
-	while (!is_wall(map, ray_x, ray_y))
-	{
-		ray_x += cos(angle) * STEP_SIZE;
-		ray_y += sin(angle) * STEP_SIZE;
-	}
-	distance = sqrt(pow(ray_x - player.x, 2) + pow(ray_y - player.y, 2));
-	return (distance);
 }
 
 void	draw_floor_and_ceiling(t_data *data)

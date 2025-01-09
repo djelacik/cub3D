@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3D.h"
+#include "cub3D.h"
 
 void	draw_mini_map(t_data *data)
 {
@@ -28,9 +28,9 @@ void	draw_mini_map(t_data *data)
 			screen_x = x * TILE_SIZE * MINIMAP_SCALE;
 			screen_y = y * TILE_SIZE * MINIMAP_SCALE;
 			if (data->map[y][x] == '1') // Seinät
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xAAAAAA);
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0x000000);
 			else // Lattia
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xCCCCCC);
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xAAAAAA);
 			x++;
 		}
 		y++;
