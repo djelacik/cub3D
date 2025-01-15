@@ -19,8 +19,8 @@ static void	handle_movement(t_data *data)
 
 	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
 	{
-		new_x = data->player.x + cos(data->player.angle) * 0.01;
-		new_y = data->player.y + sin(data->player.angle) * 0.01;
+		new_x = data->player.x + cos(data->player.angle) * 0.1;
+		new_y = data->player.y + sin(data->player.angle) * 0.1;
 		if (!is_wall(data->map, new_x, data->player.y))
 			data->player.x = new_x;
 		if (!is_wall(data->map, data->player.x, new_y))
@@ -28,8 +28,8 @@ static void	handle_movement(t_data *data)
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
 	{
-		new_x = data->player.x - cos(data->player.angle) * 0.01;
-		new_y = data->player.y - sin(data->player.angle) * 0.01;
+		new_x = data->player.x - cos(data->player.angle) * 0.1;
+		new_y = data->player.y - sin(data->player.angle) * 0.1;
 		if (!is_wall(data->map, new_x, data->player.y))
 			data->player.x = new_x;
 		if (!is_wall(data->map, data->player.x, new_y))
@@ -44,8 +44,8 @@ static void	handle_strafe(t_data *data)
 
 	if (mlx_is_key_down(data->mlx, MLX_KEY_D))
 	{
-		new_x = data->player.x - sin(data->player.angle) * 0.01;
-		new_y = data->player.y + cos(data->player.angle) * 0.01;
+		new_x = data->player.x - sin(data->player.angle) * 0.1;
+		new_y = data->player.y + cos(data->player.angle) * 0.1;
 		if (!is_wall(data->map, new_x, data->player.y))
 			data->player.x = new_x;
 		if (!is_wall(data->map, data->player.x, new_y))
@@ -53,8 +53,8 @@ static void	handle_strafe(t_data *data)
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_A))
 	{
-		new_x = data->player.x + sin(data->player.angle) * 0.01;
-		new_y = data->player.y - cos(data->player.angle) * 0.01;
+		new_x = data->player.x + sin(data->player.angle) * 0.1;
+		new_y = data->player.y - cos(data->player.angle) * 0.1;
 		if (!is_wall(data->map, new_x, data->player.y))
 			data->player.x = new_x;
 		if (!is_wall(data->map, data->player.x, new_y))
@@ -65,18 +65,21 @@ static void	handle_strafe(t_data *data)
 static void	handle_rotation(t_data *data)
 {
 	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
-		data->player.angle -= 0.01;
+		data->player.angle -= 0.1;
 	if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
-		data->player.angle += 0.01;
+		data->player.angle += 0.1;
 }
 
 void my_resize_callback(int width, int height, void* param)
 {
 	t_data *data = (t_data *)param;
 
-	if (width < MIN_WIDTH || height < MIN_HEIGHT)
+	//debug print
+    printf("Window resized to %dx%d\n", data->width, data->height);
+	if (width <= MIN_WIDTH || height <= MIN_HEIGHT)
 	{
-		printf("Reached smallest resolution reached\n");
+		if (width == MIN_WIDTH && height == MIN_HEIGHT)
+			printf("Reached smallest resolution: %i x %i\n", width, height);
 		//mlx_set_window_size(data->mlx, data->width, data->height);
 		if (width <= MIN_WIDTH)
 			data->width = MIN_WIDTH;
@@ -90,8 +93,6 @@ void my_resize_callback(int width, int height, void* param)
 	}
 	data->width = width;
 	data->height = height;
-	//debug print
-    printf("Window resized to %dx%d\n", data->width, data->height);
 	//mlx_set_window_size(data->mlx, data->width, data->height);
 }
 

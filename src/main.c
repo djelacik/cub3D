@@ -91,11 +91,6 @@ int	main(void)
 	mlx_set_window_size(data.mlx, data.width, data.height);
 	mlx_set_window_limit(data.mlx, MIN_WIDTH, MIN_HEIGHT, monitor_width, monitor_height);
 	mlx_set_window_pos(data.mlx, (monitor_width - data.width) / 2, (monitor_height - data.height) / 2);
-	//int aux_width, aux_height;
-	//mlx_get_window_size(data.mlx, &aux_width, &aux_height);
-	//printf("Window size: %d x %d\n", aux_width, aux_height);
-	//mlx_set_window_limit();
-	//printf("Monitor size: %d x %d\n", data.width, data.height);
 	if (!data.mlx)
 		return (1);
 	data.image = mlx_new_image(data.mlx, data.width, data.height);
