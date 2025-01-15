@@ -81,7 +81,7 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int 
 //             wrappedTexY += ray->texture->height;
 //         color = get_texture_color(ray->texture, tex_x, wrappedTexY);
 // 		shaded_color = simple_shading(color, ray->distance);
-//         //if (y >= 0 && y < WIN_HEIGHT)
+//         //if (y >= 0 && y < MIN_HEIGHT)
 //             mlx_put_pixel(data->image, screen_x, y, shaded_color);
 // 		y++;
 //     }

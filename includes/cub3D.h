@@ -21,8 +21,8 @@
 # include "get_next_line.h"
 # include "libft.h"
 
-#define WIN_WIDTH 128
-#define WIN_HEIGHT 128
+#define MIN_WIDTH 384
+#define MIN_HEIGHT 216
 #define MINIMAP_SCALE 0.2
 #define TILE_SIZE 64
 #define STEP_SIZE 0.01

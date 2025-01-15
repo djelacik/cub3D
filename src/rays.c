@@ -19,7 +19,7 @@
 // 	y = start_y;
 // 	while (y <= end_y)
 // 	{
-// 		if (y >= 0 && y < WIN_HEIGHT)
+// 		if (y >= 0 && y < MIN_HEIGHT)
 // 			mlx_put_pixel(image, x, y, color);
 // 		y++;
 // 	}

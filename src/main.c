@@ -75,6 +75,8 @@ void	free_textures(t_textures *textures)
 int	main(void)
 {
 	t_data	data;
+	int		monitor_width;
+	int		monitor_height;
 
 	data.map = init_map();
 	if (!data.map)
@@ -82,10 +84,13 @@ int	main(void)
 	data.player.x = 2;
 	data.player.y = 2;
 	data.player.angle = 0.0;
-	data.mlx = mlx_init(WIN_WIDTH, WIN_HEIGHT, "Cub3D Ray-Casting", true);
-	mlx_get_monitor_size(0, &data.width, &data.height);
+	data.mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
+	mlx_get_monitor_size(0, &monitor_width, &monitor_height);
+	data.width = monitor_width * 0.5;
+	data.height = monitor_height * 0.5;
 	mlx_set_window_size(data.mlx, data.width, data.height);
-	mlx_set_window_pos(data.mlx, 0, 0);
+	mlx_set_window_limit(data.mlx, MIN_WIDTH, MIN_HEIGHT, monitor_width, monitor_height);
+	mlx_set_window_pos(data.mlx, (monitor_width - data.width) / 2, (monitor_height - data.height) / 2);
 	//int aux_width, aux_height;
 	//mlx_get_window_size(data.mlx, &aux_width, &aux_height);
 	//printf("Window size: %d x %d\n", aux_width, aux_height);

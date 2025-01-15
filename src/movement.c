@@ -74,10 +74,18 @@ void my_resize_callback(int width, int height, void* param)
 {
 	t_data *data = (t_data *)param;
 
-	if (width < WIN_WIDTH || height < WIN_HEIGHT)
+	if (width < MIN_WIDTH || height < MIN_HEIGHT)
 	{
-		printf("Reached smallest resolution permitted (128 x 128), stopping\n");
-		mlx_set_window_size(data->mlx, data->width, data->height);
+		printf("Reached smallest resolution reached\n");
+		//mlx_set_window_size(data->mlx, data->width, data->height);
+		if (width <= MIN_WIDTH)
+			data->width = MIN_WIDTH;
+		else
+			data->width = width;
+		if (height <= MIN_HEIGHT)
+			data->height = MIN_HEIGHT;
+		else
+			data->height = height;
 		return ;
 	}
 	data->width = width;
