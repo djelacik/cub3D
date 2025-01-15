@@ -21,8 +21,8 @@
 # include "get_next_line.h"
 # include "libft.h"
 
-#define WIN_WIDTH 1200
-#define WIN_HEIGHT 800
+#define WIN_WIDTH 128
+#define WIN_HEIGHT 128
 #define MINIMAP_SCALE 0.2
 #define TILE_SIZE 64
 #define STEP_SIZE 0.01
@@ -60,6 +60,8 @@ typedef struct s_ray {
 }	t_ray;
 
 typedef struct s_data {
+	int 		width;
+	int 		height;
 	mlx_t		*mlx;
 	mlx_image_t	*image;
 	t_ray		*ray;
@@ -84,7 +86,8 @@ uint32_t	simple_shading(uint32_t color, double distance);
 uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y);
 mlx_texture_t *get_wall_texture(t_data *data, double dir_x, double dir_y, int side);
 void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y);
-void	draw_wall_pattern_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y);
+//void	draw_wall_pattern_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y);
+void	draw_wall_pattern_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y, double scale);
 
 //ray.c
 double	calculate_distance(t_player player, double angle, char **map, t_ray *ray);

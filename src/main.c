@@ -43,10 +43,10 @@ char	**init_map(void)
 
 int	load_textures(t_data *data)
 {
-	data->textures->north = mlx_load_png("textures/lava.png");
-	data->textures->south = mlx_load_png("textures/metal.png");
-	data->textures->west = mlx_load_png("textures/rock.png");
-	data->textures->east = mlx_load_png("textures/water.png");
+	data->textures->north = mlx_load_png("textures/wall64px.png");
+	data->textures->south = mlx_load_png("textures/pics/bluestone.png");
+	data->textures->west = mlx_load_png("textures/pics/colorstone.png");
+	data->textures->east = mlx_load_png("textures/pics/greystone.png");
 
 	// Tarkista, onnistuiko kaikkien tekstuurien lataus
 	if (!data->textures->north)
@@ -72,8 +72,6 @@ void	free_textures(t_textures *textures)
 		mlx_delete_texture(textures->east);
 }
 
-
-
 int	main(void)
 {
 	t_data	data;
@@ -84,10 +82,18 @@ int	main(void)
 	data.player.x = 2;
 	data.player.y = 2;
 	data.player.angle = 0.0;
-	data.mlx = mlx_init(WIN_WIDTH, WIN_HEIGHT, "Cub3D Ray-Casting", false);
+	data.mlx = mlx_init(WIN_WIDTH, WIN_HEIGHT, "Cub3D Ray-Casting", true);
+	mlx_get_monitor_size(0, &data.width, &data.height);
+	mlx_set_window_size(data.mlx, data.width, data.height);
+	mlx_set_window_pos(data.mlx, 0, 0);
+	//int aux_width, aux_height;
+	//mlx_get_window_size(data.mlx, &aux_width, &aux_height);
+	//printf("Window size: %d x %d\n", aux_width, aux_height);
+	//mlx_set_window_limit();
+	//printf("Monitor size: %d x %d\n", data.width, data.height);
 	if (!data.mlx)
 		return (1);
-	data.image = mlx_new_image(data.mlx, WIN_WIDTH, WIN_HEIGHT);
+	data.image = mlx_new_image(data.mlx, data.width, data.height);
 	if (!data.image)
 		return (1);
 	data.textures = malloc(sizeof(t_textures));
@@ -109,7 +115,6 @@ int	main(void)
 		printf("Error: Player starts inside a wall\n");
 		return (1);
 	}
-	
 	mlx_image_to_window(data.mlx, data.image, 0, 0);
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);

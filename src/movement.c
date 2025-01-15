@@ -70,10 +70,28 @@ static void	handle_rotation(t_data *data)
 		data->player.angle += 0.01;
 }
 
+void my_resize_callback(int width, int height, void* param)
+{
+	t_data *data = (t_data *)param;
+
+	if (width < WIN_WIDTH || height < WIN_HEIGHT)
+	{
+		printf("Reached smallest resolution permitted (128 x 128), stopping\n");
+		mlx_set_window_size(data->mlx, data->width, data->height);
+		return ;
+	}
+	data->width = width;
+	data->height = height;
+	//debug print
+    printf("Window resized to %dx%d\n", data->width, data->height);
+	//mlx_set_window_size(data->mlx, data->width, data->height);
+}
+
 static void	render(t_data *data)
 {
 	mlx_delete_image(data->mlx, data->image);
-	data->image = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGHT);
+	mlx_resize_hook(data->mlx, &my_resize_callback, (void *)data);
+	data->image = mlx_new_image(data->mlx, data->width, data->height);
 	mlx_image_to_window(data->mlx, data->image, 0, 0);
 	draw_floor_and_ceiling(data);
 	draw_rays(data);
@@ -85,7 +103,6 @@ static void	render(t_data *data)
 void	loop_hook(void *param)
 {
 	t_data	*data;
-
 	data = (t_data *)param;
 	handle_movement(data);
 	handle_strafe(data);

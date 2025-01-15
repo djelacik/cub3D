@@ -54,8 +54,8 @@ void	draw_mini_player(t_data *data)
 		j = -size / 2;
 		while (j <= size / 2)
 		{
-			if (x + i >= 0 && x + i < WIN_WIDTH &&
-				y + j >= 0 && y + j < WIN_HEIGHT)
+			if (x + i >= 0 && x + i < data->width &&
+				y + j >= 0 && y + j < data->height)
 				mlx_put_pixel(data->image, x + i, y + j, 0xFF0000); // Punainen
 			j++;
 		}
@@ -82,8 +82,8 @@ void	draw_mini_rays(t_data *data)
 			ray_y += sin(angle) * STEP_SIZE;
 			screen_x = ray_x * TILE_SIZE * MINIMAP_SCALE;
 			screen_y = ray_y * TILE_SIZE * MINIMAP_SCALE;
-			if (screen_x >= 0 && screen_x < WIN_WIDTH
-				&& screen_y >= 0 && screen_y < WIN_HEIGHT)
+			if (screen_x >= 0 && screen_x < data->width
+				&& screen_y >= 0 && screen_y < data->height)
 				mlx_put_pixel(data->image, screen_x, screen_y, 0x444444);
 		}
 		angle += 0.01;

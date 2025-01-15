@@ -6,7 +6,7 @@ MLX_42 = $(LIBMLX)/build/libmlx42.a
 INCLUDES = -Iincludes -Ilibft -Iget_next_line -I$(LIBMLX)/include
 CFLAGS =  -Wall -Werror -Wextra -g -O2 #-fPIE
 
-LDFLAGS = -L./MLX42/build -lmlx42 -lglfw -pthread -lm -L./libft -lft #-pie
+LDFLAGS = -L./MLX42/build -lmlx42 -lglfw -pthread -lm -L./libft -lft -L"/opt/homebrew/Cellar/glfw/3.4/lib/" #-ldl #-pie
 
 SRC = \
 src/color_utils.c \

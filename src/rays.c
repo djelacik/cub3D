@@ -25,19 +25,19 @@
 // 	}
 // }
 
-static void	calculate_wall_limits(int *start_y, int *end_y, double corrected_distance)
+static void	calculate_wall_limits(t_data *data, int *start_y, int *end_y, double corrected_distance)
 {
 	int wall_height;
 
 	//wall_height = (TILE_SIZE / corrected_distance) * 7;
-	wall_height = (int)(WIN_HEIGHT / corrected_distance);
-	*start_y = (WIN_HEIGHT / 2) - (wall_height / 2);
-	*end_y = (WIN_HEIGHT / 2) + (wall_height / 2);
+	wall_height = (int)(data->height / corrected_distance);
+	*start_y = (data->height / 2) - (wall_height / 2);
+	*end_y = (data->height / 2) + (wall_height / 2);
 
 	if (*start_y < 0)
 		*start_y = 0;
-	if (*end_y >= WIN_HEIGHT)
-		*end_y = WIN_HEIGHT - 1;
+	if (*end_y >= data->height)
+		*end_y = data->height - 1;
 
 	DBG_PRINT("Wall Height: %d, Start Y: %d, End Y: %d, Height Difference: %d\n", wall_height, *start_y, *end_y, *end_y - *start_y);
 	DBG_PRINT("Wall Height: %d, Start Y: %d, End Y: %d\n", wall_height, *start_y, *end_y);
@@ -72,12 +72,13 @@ void	draw_single_ray(t_data *data, double angle, int screen_x)
 	ray = calculate_ray(data, angle);
 	corrected_distance = calculate_corrected_distance(ray.distance, angle, data->player.angle);
 
-	calculate_wall_limits(&start_y, &end_y, corrected_distance);
+	calculate_wall_limits(data, &start_y, &end_y, corrected_distance);
 
 	DBG_PRINT("Screen X: %d, Corrected Distance: %f, Start Y: %d, End Y: %d\n", screen_x, corrected_distance, start_y, end_y);
 
 	//draw_wall_column(data->image, screen_x, start_y, end_y, simple_shading(0xFFB6C1, corrected_distance));
-	draw_wall_texture(data, &ray, screen_x, start_y, end_y);
+	//draw_wall_texture(data, &ray, screen_x, start_y, end_y);
+	draw_wall_pattern_texture(data, &ray, screen_x, start_y, end_y, 2);
 	//draw_wall_pattern_texture(data, &ray, screen_x, start_y, end_y);
 }
 
@@ -91,14 +92,14 @@ void	draw_rays(t_data *data)
 	screen_x = 0;
 
 	// Käy läpi kaikki näytön x-koordinaatit
-	while (screen_x < WIN_WIDTH)
+	while (screen_x < data->width)
 	{
 		DBG_PRINT("Ray Angle: %f, Screen X: %d\n", angle, screen_x);
 		// Käytä draw_single_ray-funktiota yhden säteen laskemiseen ja piirtämiseen
 		draw_single_ray(data, angle, screen_x);
 
 		// Siirry seuraavaan säteeseen
-		angle += FOV / (WIN_WIDTH);
+		angle += FOV / (data->width); //-1?
 		screen_x++;
 	}
 }

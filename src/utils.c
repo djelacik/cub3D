@@ -25,12 +25,12 @@ void	draw_floor_and_ceiling(t_data *data)
 	int	y;
 
 	y = 0;
-	while (y < WIN_HEIGHT)
+	while (y < data->height)
 	{
 		x = 0;
-		while (x < WIN_WIDTH)
+		while (x < data->width)
 		{
-			if (y < WIN_HEIGHT / 2)
+			if (y < data->height / 2)
 				mlx_put_pixel(data->image, x, y, data->ceiling_color); // Katon väri
 			else
 				mlx_put_pixel(data->image, x, y, data->floor_color); // Lattian väri
