@@ -19,8 +19,8 @@ static void	handle_movement(t_data *data)
 
 	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
 	{
-		new_x = data->player.x + cos(data->player.angle) * 0.1;
-		new_y = data->player.y + sin(data->player.angle) * 0.1;
+		new_x = data->player.x + cos(data->player.angle) * data->player.speed;
+		new_y = data->player.y + sin(data->player.angle) * data->player.speed;
 		if (!is_wall(data->map, new_x, data->player.y))
 			data->player.x = new_x;
 		if (!is_wall(data->map, data->player.x, new_y))
@@ -28,8 +28,8 @@ static void	handle_movement(t_data *data)
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
 	{
-		new_x = data->player.x - cos(data->player.angle) * 0.1;
-		new_y = data->player.y - sin(data->player.angle) * 0.1;
+		new_x = data->player.x - cos(data->player.angle) * data->player.speed;
+		new_y = data->player.y - sin(data->player.angle) * data->player.speed;
 		if (!is_wall(data->map, new_x, data->player.y))
 			data->player.x = new_x;
 		if (!is_wall(data->map, data->player.x, new_y))
@@ -44,8 +44,8 @@ static void	handle_strafe(t_data *data)
 
 	if (mlx_is_key_down(data->mlx, MLX_KEY_D))
 	{
-		new_x = data->player.x - sin(data->player.angle) * 0.1;
-		new_y = data->player.y + cos(data->player.angle) * 0.1;
+		new_x = data->player.x - sin(data->player.angle) * data->player.speed;
+		new_y = data->player.y + cos(data->player.angle) * data->player.speed;
 		if (!is_wall(data->map, new_x, data->player.y))
 			data->player.x = new_x;
 		if (!is_wall(data->map, data->player.x, new_y))
@@ -53,8 +53,8 @@ static void	handle_strafe(t_data *data)
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_A))
 	{
-		new_x = data->player.x + sin(data->player.angle) * 0.1;
-		new_y = data->player.y - cos(data->player.angle) * 0.1;
+		new_x = data->player.x + sin(data->player.angle) * data->player.speed;
+		new_y = data->player.y - cos(data->player.angle) * data->player.speed;
 		if (!is_wall(data->map, new_x, data->player.y))
 			data->player.x = new_x;
 		if (!is_wall(data->map, data->player.x, new_y))
@@ -65,9 +65,9 @@ static void	handle_strafe(t_data *data)
 static void	handle_rotation(t_data *data)
 {
 	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
-		data->player.angle -= 0.1;
+		data->player.angle -= data->player.speed;
 	if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
-		data->player.angle += 0.1;
+		data->player.angle += data->player.speed;
 }
 
 void my_resize_callback(int width, int height, void* param)
@@ -93,7 +93,7 @@ void my_resize_callback(int width, int height, void* param)
 	}
 	data->width = width;
 	data->height = height;
-	//mlx_set_window_size(data->mlx, data->width, data->height);
+	data->player.speed = (double)height * 0.00002;
 }
 
 static void	render(t_data *data)

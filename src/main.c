@@ -84,6 +84,7 @@ int	main(void)
 	data.player.x = 2;
 	data.player.y = 2;
 	data.player.angle = 0.0;
+	data.player.speed = 0.01;
 	data.mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	mlx_get_monitor_size(0, &monitor_width, &monitor_height);
 	data.width = monitor_width * 0.5;

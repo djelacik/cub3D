@@ -39,6 +39,7 @@ typedef struct s_player {
 	double		x;
 	double		y;
 	double		angle;
+	double		speed;
 }	t_player;
 
 typedef struct s_textures {
