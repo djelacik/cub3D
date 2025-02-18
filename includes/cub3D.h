@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 16:01:21 by djelacik          #+#    #+#             */
-/*   Updated: 2025/01/05 22:38:08 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:41:38 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 #define MINIMAP_SCALE 0.2
 #define TILE_SIZE 64
 #define STEP_SIZE 0.01
-#define FOV (M_PI / 180) * 90
+#define FOV (M_PI / 180) * 45
+#define COLLISION_LIMIT 0.15
 
 //# define DEBUG
 #ifdef DEBUG 

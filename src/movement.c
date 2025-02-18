@@ -12,54 +12,79 @@
 
 #include "cub3D.h"
 
-static void	handle_movement(t_data *data)
+static int can_move_to(t_data *data, double new_x, double new_y)
 {
-	double	new_x;
-	double	new_y;
-
-	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
-	{
-		new_x = data->player.x + cos(data->player.angle) * data->player.speed;
-		new_y = data->player.y + sin(data->player.angle) * data->player.speed;
-		if (!is_wall(data->map, new_x, data->player.y))
-			data->player.x = new_x;
-		if (!is_wall(data->map, data->player.x, new_y))
-			data->player.y = new_y;
-	}
-	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
-	{
-		new_x = data->player.x - cos(data->player.angle) * data->player.speed;
-		new_y = data->player.y - sin(data->player.angle) * data->player.speed;
-		if (!is_wall(data->map, new_x, data->player.y))
-			data->player.x = new_x;
-		if (!is_wall(data->map, data->player.x, new_y))
-			data->player.y = new_y;
-	}
+	// Check four diagonal directions
+    double diag_offset;
+	
+	diag_offset = COLLISION_LIMIT / sqrt(2);
+    // Check four cardinal directions
+    if (is_wall(data->map, new_x + COLLISION_LIMIT, new_y)) // Right
+        return 0;
+    if (is_wall(data->map, new_x - COLLISION_LIMIT, new_y)) // Left
+        return 0;
+    if (is_wall(data->map, new_x, new_y + COLLISION_LIMIT)) // Down
+        return 0;
+    if (is_wall(data->map, new_x, new_y - COLLISION_LIMIT)) // Up
+        return 0;
+    if (is_wall(data->map, new_x + diag_offset, new_y + diag_offset)) // Bottom-right
+        return 0;
+    if (is_wall(data->map, new_x - diag_offset, new_y + diag_offset)) // Bottom-left
+        return 0;
+    if (is_wall(data->map, new_x + diag_offset, new_y - diag_offset)) // Top-right
+        return 0;
+    if (is_wall(data->map, new_x - diag_offset, new_y - diag_offset)) // Top-left
+        return 0;
+    return 1; // No collisions, movement allowed
 }
 
-static void	handle_strafe(t_data *data)
+static void handle_movement(t_data *data)
 {
-	double	new_x;
-	double	new_y;
+    double orig_x;
+    double orig_y;
+    double new_x;
+	double new_y;
 
-	if (mlx_is_key_down(data->mlx, MLX_KEY_D))
-	{
-		new_x = data->player.x - sin(data->player.angle) * data->player.speed;
-		new_y = data->player.y + cos(data->player.angle) * data->player.speed;
-		if (!is_wall(data->map, new_x, data->player.y))
-			data->player.x = new_x;
-		if (!is_wall(data->map, data->player.x, new_y))
-			data->player.y = new_y;
-	}
-	if (mlx_is_key_down(data->mlx, MLX_KEY_A))
-	{
-		new_x = data->player.x + sin(data->player.angle) * data->player.speed;
-		new_y = data->player.y - cos(data->player.angle) * data->player.speed;
-		if (!is_wall(data->map, new_x, data->player.y))
-			data->player.x = new_x;
-		if (!is_wall(data->map, data->player.x, new_y))
-			data->player.y = new_y;
-	}
+	orig_x = data->player.x;
+	orig_y = data->player.y;
+    if (mlx_is_key_down(data->mlx, MLX_KEY_W))
+    {
+        new_x = orig_x + cos(data->player.angle) * data->player.speed;
+        new_y = orig_y + sin(data->player.angle) * data->player.speed;
+    }
+    else if (mlx_is_key_down(data->mlx, MLX_KEY_S))
+    {
+        new_x = orig_x - cos(data->player.angle) * data->player.speed;
+        new_y = orig_y - sin(data->player.angle) * data->player.speed;
+    }
+	else if (mlx_is_key_down(data->mlx, MLX_KEY_D))
+    {
+        new_x = orig_x - sin(data->player.angle) * data->player.speed;
+        new_y = orig_y + cos(data->player.angle) * data->player.speed;
+    }
+    else if (mlx_is_key_down(data->mlx, MLX_KEY_A))
+    {
+        new_x = orig_x + sin(data->player.angle) * data->player.speed;
+        new_y = orig_y - cos(data->player.angle) * data->player.speed;
+    }
+    else
+        return; // No forward/backward movement
+
+    // Try moving diagonally first
+    if (can_move_to(data, new_x, new_y))
+    {
+        data->player.x = new_x;
+        data->player.y = new_y;
+    }
+    else
+    {
+        // If blocked, try moving along X only
+        if (can_move_to(data, new_x, orig_y))
+            data->player.x = new_x;
+        // And try moving along Y only
+        if (can_move_to(data, orig_x, new_y))
+            data->player.y = new_y;
+    }
 }
 
 static void	handle_rotation(t_data *data)
@@ -114,7 +139,6 @@ void	loop_hook(void *param)
 	t_data	*data;
 	data = (t_data *)param;
 	handle_movement(data);
-	handle_strafe(data);
 	handle_rotation(data);
 	render(data);
 	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
