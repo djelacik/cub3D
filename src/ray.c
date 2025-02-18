@@ -45,19 +45,15 @@ int calculate_hit_side(t_player player, double angle, char **map)
     int step_y;
     int hit_side;
 
-    // Säteen suunta (kulmasta)
     ray_dir_x = cos(angle);
     ray_dir_y = sin(angle);
 
-    // Pelaajan grid-sijainti
     map_x = (int)player.x;
     map_y = (int)player.y;
 
-    // Deltaetäisyydet
     delta_dist_x = fabs(1 / ray_dir_x);
     delta_dist_y = fabs(1 / ray_dir_y);
 
-    // Lasketaan alkuetäisyydet
     if (ray_dir_x < 0)
     {
         step_x = -1;
@@ -79,8 +75,6 @@ int calculate_hit_side(t_player player, double angle, char **map)
         side_dist_y = (map_y + 1.0 - player.y) * delta_dist_y;
     }
 
-	DBG_PRINT("Ray Direction: (%f, %f), Delta Distances: (%f, %f)\n", ray_dir_x, ray_dir_y, delta_dist_x, delta_dist_y);
-	DBG_PRINT("Step X: %d, Step Y: %d, Side Distances: (%f, %f), Map: (%d, %d)\n", step_x, step_y, side_dist_x, side_dist_y, map_x, map_y);
     // DDA: Eteneminen gridissä
     while (1)
     {
@@ -115,13 +109,10 @@ t_ray	calculate_ray(t_data *data, double angle)
 {
 	t_ray ray;
 
-	// Lasketaan säteen tiedot (distance, hit_x, hit_y, side jne.)
-	//ray.distance = calculate_distance(data->player, angle, data->map);
 	ray.distance = calculate_distance(data->player, angle, data->map, &ray);
 	ray.side = calculate_hit_side(data->player, angle, data->map);
 	ray.wall_x = get_wall_x(ray.hit_x, ray.hit_y, ray.side);
 	ray.texture = get_wall_texture(data, cos(angle), sin(angle), ray.side);
 
-	DBG_PRINT("Ray Distance: %f, Wall X: %f, Side: %d\n", ray.distance, ray.wall_x, ray.side);
 	return (ray);
 }

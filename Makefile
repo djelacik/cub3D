@@ -15,7 +15,6 @@ src/shading.c \
 src/texture.c \
 src/ray.c \
 src/rays.c \
-src/hooks.c \
 src/utils.c \
 src/minimap.c \
 src/movement.c

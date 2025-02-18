@@ -47,9 +47,6 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int 
 	if ((ray->side == 0 && ray->dir_x > 0) || (ray->side == 1 && ray->dir_y < 0))
 		tex_x = ray->texture->width - tex_x - 1;
 
-	//DBG_PRINT("Wall X: %f, Tex X: %d, Ray Side: %d\n", ray->wall_x, tex_x, ray->side);
-	//DBG_PRINT("Drawing Wall: Screen X: %d, Tex X: %d, Start Y: %d, End Y: %d\n", screen_x, tex_x, start_y, end_y);
-
 	y = start_y;
 	while (y <= end_y)
 	{
@@ -60,32 +57,6 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int 
 		y++;
 	}
 }
-
-// void draw_wall_pattern_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y)
-// {
-// 	int	tex_x;
-// 	int	y;
-// 	uint32_t color;
-// 	uint32_t shaded_color;
-
-//     tex_x = (int)(ray->wall_x * ray->texture->width);
-//     if ((ray->side == 0 && ray->dir_x > 0) || (ray->side == 1 && ray->dir_y < 0))
-//         tex_x = ray->texture->width - tex_x - 1;
-
-// 	y = start_y;
-//     //from the top of the wall (start_y) to the bottom (end_y)
-//     while (y <= end_y)
-//     {
-//         int wrappedTexY = (y - start_y) % (int)ray->texture->height;
-//         if (wrappedTexY < 0)
-//             wrappedTexY += ray->texture->height;
-//         color = get_texture_color(ray->texture, tex_x, wrappedTexY);
-// 		shaded_color = simple_shading(color, ray->distance);
-//         //if (y >= 0 && y < MIN_HEIGHT)
-//             mlx_put_pixel(data->image, screen_x, y, shaded_color);
-// 		y++;
-//     }
-// }
 
 void draw_wall_pattern_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y, double scale)
 {

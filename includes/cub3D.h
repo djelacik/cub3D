@@ -26,7 +26,7 @@
 #define MINIMAP_SCALE 0.2
 #define TILE_SIZE 64
 #define STEP_SIZE 0.01
-#define FOV (M_PI / 3)
+#define FOV (M_PI / 180) * 90
 
 //# define DEBUG
 #ifdef DEBUG 
