@@ -83,6 +83,9 @@ int	main(void)
 		return (1);
 	data.player.x = 2;
 	data.player.y = 2;
+	data.camera.x = 0;
+	data.camera.y = 0;
+	data.camera.toggle = 1;
 	data.player.angle = 0.0;
 	data.player.speed = 0.01;
 	data.mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);

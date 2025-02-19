@@ -27,7 +27,9 @@
 #define TILE_SIZE 64
 #define STEP_SIZE 0.01
 #define FOV (M_PI / 180) * 45
+
 #define COLLISION_LIMIT 0.15
+#define MOUSE_SENSITIVITY 0.001
 
 //# define DEBUG
 #ifdef DEBUG 
@@ -42,6 +44,13 @@ typedef struct s_player {
 	double		angle;
 	double		speed;
 }	t_player;
+
+typedef struct s_view {
+	int32_t		x;
+    int32_t		y;
+	int8_t		toggle;
+}	t_view;
+
 
 typedef struct s_textures {
 	mlx_texture_t *north;
@@ -68,6 +77,7 @@ typedef struct s_data {
 	mlx_image_t	*image;
 	t_ray		*ray;
 	t_player	player;
+	t_view		camera;
 	t_textures	*textures;
 	char		**map;
 	uint32_t	floor_color;

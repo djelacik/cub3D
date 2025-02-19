@@ -95,6 +95,33 @@ static void	handle_rotation(t_data *data)
 		data->player.angle += data->player.speed;
 }
 
+static void handle_mouse_rotation(t_data *data)
+{
+    int32_t aux_x = 0;
+    int32_t aux_y = 0;
+    int32_t dx = 0;
+    int32_t dy = 0;
+
+    if (mlx_is_key_down(data->mlx, MLX_KEY_TAB))
+        data->camera.toggle = 0;
+    if (!data->camera.toggle && mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
+        data->camera.toggle = 1;
+    if (data->camera.toggle == 0)
+    {
+        mlx_set_cursor_mode(data->mlx, MLX_MOUSE_NORMAL);
+        return ;
+    }
+    mlx_get_mouse_pos(data->mlx, &aux_x, &aux_y);
+    dx = aux_x - data->camera.x;
+    dy = aux_y - data->camera.y;
+    if (dx)
+        data->player.angle += dx * MOUSE_SENSITIVITY;
+    mlx_set_cursor_mode(data->mlx, MLX_MOUSE_HIDDEN);
+    data->camera.x = data->width / 2;
+    data->camera.y = data->height / 2;
+    mlx_set_mouse_pos(data->mlx, data->camera.x, data->camera.y);
+}
+
 void my_resize_callback(int width, int height, void* param)
 {
 	t_data *data = (t_data *)param;
@@ -139,6 +166,7 @@ void	loop_hook(void *param)
 	t_data	*data;
 	data = (t_data *)param;
 	handle_movement(data);
+    handle_mouse_rotation(data);
 	handle_rotation(data);
 	render(data);
 	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
