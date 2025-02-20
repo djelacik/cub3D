@@ -44,7 +44,8 @@ char	**init_map(void)
 int	load_textures(t_data *data)
 {
 	data->textures->north = mlx_load_png("textures/wall64px.png");
-	data->textures->south = mlx_load_png("textures/pics/bluestone.png");
+	//data->textures->south = mlx_load_png("textures/pics/bluestone.png");
+	data->textures->south = mlx_load_png("textures/pics/spruce.png");
 	data->textures->west = mlx_load_png("textures/pics/colorstone.png");
 	data->textures->east = mlx_load_png("textures/pics/greystone.png");
 

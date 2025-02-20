@@ -43,8 +43,6 @@ void	draw_single_ray(t_data *data, double angle, int screen_x)
 
 	calculate_wall_limits(data, &start_y, &end_y, corrected_distance);
 
-	DBG_PRINT("Screen X: %d, Corrected Distance: %f, Start Y: %d, End Y: %d\n", screen_x, corrected_distance, start_y, end_y);
-
 	//draw_wall_column(data->image, screen_x, start_y, end_y, simple_shading(0xFFB6C1, corrected_distance));
 	draw_wall_texture(data, &ray, screen_x, start_y, end_y);
 	//draw_wall_pattern_texture(data, &ray, screen_x, start_y, end_y, 2);
