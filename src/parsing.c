@@ -6,7 +6,7 @@
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:32:54 by aapadill          #+#    #+#             */
-/*   Updated: 2025/02/21 14:55:13 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:27:09 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,49 @@
 //parse_texture_line()
 //parse_color_line
 //is_map_closed()
+
+static bool	valid_character(char c)
+{
+	return (c == ' ' || c == '0' || c != '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
+}
+
+bool	is_map_line(char *line)
+{
+	while (*line)
+	{
+		if (!valid_character(*line))
+			return (false);
+		line++;
+	}
+	return (true);
+}
+
+bool	parse_texture_line(const char *line, t_data *data)
+{
+	if (ft_strncmp(line, "NO ", 3) == 0)
+	{
+		//data->textures.north = ft_strdup(line + 3);
+		//hardcoded jump of 3
+		data->textures->north = mlx_load_png(line + 3);
+		return (true);
+	}
+	else if (ft_strncmp(line, "SO ", 3) == 0)
+	{
+		data->textures.south = ft_strdup(line + 3);
+		return (true);
+	}
+	else if (ft_strncmp(line, "WE ", 3) == 0)
+	{
+		data->textures.west = ft_strdup(line + 3);
+		return (true);
+	}
+	else if (ft_strncmp(line, "EA ", 3) == 0)
+	{
+		data->textures.east = ft_strdup(line + 3);
+		return (true);
+	}
+	return (false);
+}
 
 int	parse_cubfile(char *filepath, t_data *data)
 {
