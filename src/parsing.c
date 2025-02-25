@@ -166,10 +166,10 @@ int	parse_cubfile(char *filepath, t_data *data)
 		return (1);
 	}
 	//memset 0 data->(everything)
-	data->textures->north = NULL;
-	data->textures->south = NULL;
-	data->textures->west  = NULL;
-	data->textures->east  = NULL;
+	//data->textures->north = NULL;
+	//data->textures->south = NULL;
+	//data->textures->west  = NULL;
+	//data->textures->east  = NULL;
 	//data->floor_color = (t_color){ -1, -1, -1 };
 	//data->ceiling_color = (t_color){ -1, -1, -1 };
 	data->map = NULL;
@@ -186,6 +186,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 	line = get_next_line(fd);
 	while (line)
 	{
+		printf("line: %s\n", line);
 		//remove nl
 		nl = ft_strchr(line, '\n');
 		if (nl)
@@ -228,6 +229,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 			status = 1;
 			break ;
 		}
+		line = get_next_line(fd);
 	}
 	close(fd);
 	//clean static buffer from gnl
@@ -261,12 +263,14 @@ int	parse_cubfile(char *filepath, t_data *data)
 		ft_putstr_fd("Missing one or more texture paths\n", 2);
 		status = 1;
 	}
+	/* 
 	//hardcoded //check all bytes of color struct
 	if (data->floor.r < 0 || data->ceiling.r < 0)
 	{
 		ft_putstr_fd("Invalid colors\n", 2);
 		status = 1;
 	}
+	*/
 	if (!status && is_map_closed(data))
 	{
 		ft_putstr_fd("Map is not closed\n", 2);
