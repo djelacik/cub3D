@@ -20,7 +20,7 @@
 
 static bool	valid_character(char c)
 {
-	return (c == ' ' || c == '0' || c != '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
+	return (c == ' ' || c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
 }
 
 bool	is_map_line(char *line)
@@ -187,14 +187,17 @@ int	parse_cubfile(char *filepath, t_data *data)
 	while (line)
 	{
 		printf("line: %s\n", line);
+		printf("map_started?: %i\n", map_started);
 		//remove nl
+		if (!*line)
+			break ;
 		nl = ft_strchr(line, '\n');
 		if (nl)
 			*nl = '\0';
 		//skip empty lines
-		if (!map_started && *line == '\0')
+		if (!map_started && !*line)
 		{
-			free(line);
+			//free(line);
 			continue ;
 		}
 		//if line has valid map chars, add it to map_vec
@@ -212,6 +215,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		//if line doesnt look like map stuff, might be either texture or color
 		else if (!map_started)
 		{
+			//printf("so this should happen: %s\n", line);
 			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
 			{
 				ft_putstr_fd("Invalid config line\n", 2);
@@ -224,7 +228,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 		else
 		{
 			ft_putstr_fd("Map must be the last thing in file\n", 2);
-			//print line
 			free(line);
 			status = 1;
 			break ;
