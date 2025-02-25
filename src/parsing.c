@@ -173,11 +173,11 @@ int	parse_cubfile(char *filepath, t_data *data)
 	//data->floor_color = (t_color){ -1, -1, -1 };
 	//data->ceiling_color = (t_color){ -1, -1, -1 };
 	data->map = NULL;
-	data->height = 0;
-	data->width = 0;
+	//data->height = 0;
+	//data->width = 0;
 
 	t_vec	map_vec;
-	if (vec_new(&map_vec, 16, sizeof(char *) < 0))
+	if (vec_new(&map_vec, 16, sizeof(char *)) < 0)
 	{
 		ft_putstr_fd("Vec alloc failed\n", 2);
 		close(fd);

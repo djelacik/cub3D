@@ -1,7 +1,7 @@
 NAME = cub3D
 
 CC = cc
-CFLAGS =  -Wall -Werror -Wextra #-g -O2 #-fPIE
+CFLAGS =  -Wall -Werror -Wextra -g -O2 #-fPIE
 LDFLAGS = -lglfw -pthread -lm -L./MLX42/include/MLX42 -L./includes -L"/opt/homebrew/Cellar/glfw/3.4/lib/" #-ldl #-pie -lft 
 
 LIBMLX = ./MLX42

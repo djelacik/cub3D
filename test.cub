@@ -1,10 +1,10 @@
-NO ./
-SO ./
-WE ./
-EA ./
+NO ./textures/lava.png
+SO ./textures/metal.png
+WE ./textures/rock.png
+EA ./textures/water.png
 
 F 220,100,0
-C 225, 30, 0
+C 225,30,0
 
 1111111111
 1000000001
