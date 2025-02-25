@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum_or_underscore.c                         :+:      :+:    :+:   */
+/*   gc_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: karpatel <karpatel@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 09:37:42 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/20 10:18:13 by mjaakkol         ###   ########.fr       */
+/*   Created: 2024/12/23 13:26:04 by karpatel          #+#    #+#             */
+/*   Updated: 2024/12/23 13:26:05 by karpatel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isalnum_or_underscore(char *str)
-{
-	int		i;
+#include "libft.h"
+#include "gc_alloc.h"
 
-	i = 1;
-	while (str[i])
-	{
-		if ((str[i] < 'A' || str[i] > 'Z') && (str[i] < 'a' || str[i] > 'z')
-			&& (str[i] < '0' || str[i] > '9') && str[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
+t_list	*gc_lstnew(void *content)
+{
+	t_list	*lstptr;
+
+	lstptr = (gc_alloc(sizeof(t_list)));
+	if (!lstptr)
+		return (NULL);
+	lstptr->content = content;
+	lstptr->next = NULL;
+	return (lstptr);
 }

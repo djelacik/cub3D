@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 17:57:35 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/07 13:21:39 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/24 13:06:00 by aapadill          #+#    #+#             */
+/*   Updated: 2024/05/09 13:16:00 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,13 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	void	*buffer;
-	size_t	total;
+	void	*mem;
 
-	if (count != 0 && size > 18446744073709551615ULL / count)
+	if (size != 0 && ((SIZE_MAX / size) <= (count * size)))
 		return (NULL);
-	total = count * size;
-	buffer = malloc(total);
-	if (!buffer)
+	mem = malloc(count * size);
+	if (!mem)
 		return (NULL);
-	ft_bzero(buffer, total);
-	return (buffer);
+	ft_bzero(mem, count * size);
+	return (mem);
 }

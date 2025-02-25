@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcat.c                                        :+:      :+:    :+:   */
+/*   has_duplicates.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/13 09:27:22 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/13 09:28:40 by djelacik         ###   ########.fr       */
+/*   Created: 2024/07/19 17:40:12 by aapadill          #+#    #+#             */
+/*   Updated: 2024/08/12 12:42:24 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strcat(char *dest, char *src)
+#include "libft.h"
+
+int	has_duplicates(int i, char **argv)
 {
-	int	i;
 	int	j;
 
-	i = 0;
-	while (dest[i] != '\0')
-		i++;
-	j = 0;
-	while (src[j] != '\0')
+	j = i - 1;
+	while (i && j + 1)
 	{
-		dest[i + j] = src[j];
-		j++;
+		if (ft_atoi(argv[i]) == ft_atoi(argv[j]))
+			return (1);
+		j--;
 	}
-	dest[i + j] = '\0';
-	return (dest);
+	return (0);
 }

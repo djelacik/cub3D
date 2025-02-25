@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*   gc_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 08:23:37 by aapadill          #+#    #+#             */
-/*   Updated: 2024/04/29 17:22:03 by aapadill         ###   ########.fr       */
+/*   Created: 2024/11/07 23:35:31 by aapadill          #+#    #+#             */
+/*   Updated: 2024/11/08 13:05:57 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "gc_alloc.h"
 
 static int	ft_exp(int base, int exp)
 {
@@ -50,7 +50,7 @@ static int	signer(int n)
 	return (sign);
 }
 
-char	*ft_itoa(int n)
+char	*gc_itoa(int n)
 {
 	int		digits;
 	int		sign;
@@ -58,12 +58,12 @@ char	*ft_itoa(int n)
 	int		j;
 
 	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
+		return (gc_strdup("-2147483648"));
 	sign = signer(n);
 	if (sign)
 		n = -n;
 	digits = ft_digit_counter(n);
-	str = malloc((digits + sign + 1) * sizeof(char));
+	str = gc_alloc((digits + sign + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
 	if (sign)

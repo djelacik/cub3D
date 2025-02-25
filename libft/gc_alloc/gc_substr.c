@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   gc_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/24 15:55:29 by aapadill          #+#    #+#             */
-/*   Updated: 2024/05/05 11:55:12 by aapadill         ###   ########.fr       */
+/*   Created: 2024/11/07 23:55:37 by aapadill          #+#    #+#             */
+/*   Updated: 2024/11/08 13:10:13 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@
 ** NULL if malloc fails.
 */
 
-#include "libft.h"
+#include "gc_alloc.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*gc_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*sub;
 	size_t	s_len;
@@ -37,11 +37,11 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	s_len = ft_strlen(s);
 	if (start >= s_len)
-		return (ft_strdup(""));
+		return (gc_strdup(""));
 	writable = len;
 	if (s_len - start < len)
 		writable = s_len - start;
-	sub = malloc(writable + 1);
+	sub = gc_alloc(writable + 1);
 	if (!sub)
 		return (NULL);
 	ft_strlcpy(sub, s + start, writable + 1);

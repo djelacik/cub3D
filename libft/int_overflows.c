@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   int_overflows.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/24 12:55:08 by aapadill          #+#    #+#             */
-/*   Updated: 2024/08/06 17:53:47 by aapadill         ###   ########.fr       */
+/*   Created: 2024/07/19 17:43:48 by aapadill          #+#    #+#             */
+/*   Updated: 2024/08/08 12:32:55 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,22 @@ static int	ft_signer(const char c)
 	return (0);
 }
 
-/*
-** @error
-** -9223372036854775808 might be wrong
-*/
-
-static int	ft_overflow_check(long value, int digit, int sign)
+static int	ft_overflow_check_int(long value, int digit, int sign)
 {
-	if (value > LONG_MAX / 10 || (value == LONG_MAX / 10 && digit > 7))
-	{
+	if (value > INT_MAX / 10 || (value == INT_MAX / 10 && digit > 7))
 		if (sign == 1)
 			return (1);
-		else
-			return (-1);
-	}
+	if (value > INT_MAX / 10 || (value == INT_MAX / 10 && digit > 8))
+		if (sign == -1)
+			return (1);
 	return (0);
 }
 
-int	ft_atoi(const char *str)
+int	int_overflows(const char *str)
 {
 	const char	*start;
 	int			sign;
-	long long	pre;
+	long		pre;
 	int			digit;
 	int			overflow;
 
@@ -57,18 +51,19 @@ int	ft_atoi(const char *str)
 	sign = ft_signer(*start);
 	if (sign && !ft_isdigit(*start))
 		start++;
+	if (!ft_isdigit(*start))
+		return (1);
 	pre = 0;
 	while (ft_isdigit(*start))
 	{
 		digit = *start - '0';
-		overflow = ft_overflow_check(pre, digit, sign);
-		if (overflow == 1)
-			return ((int)LLONG_MAX);
-		if (overflow == -1)
-			return ((int)LLONG_MIN);
+		overflow = ft_overflow_check_int(pre, digit, sign);
+		if (overflow)
+			return (1);
 		pre = pre * 10 + digit;
 		start++;
 	}
-	pre = pre * sign;
-	return ((int)pre);
+	if (*start && !ft_isdigit(*start))
+		return (1);
+	return (0);
 }

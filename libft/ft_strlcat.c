@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 08:37:43 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/03 10:38:29 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/22 15:23:57 by aapadill          #+#    #+#             */
+/*   Updated: 2024/05/07 12:14:51 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
-	size_t	c;
-	size_t	d;
+	size_t	srclen;
+	size_t	dstlen;
+	size_t	i;
 
-	if (dstsize <= ft_strlen(dst))
-		return (dstsize + ft_strlen(src));
-	c = ft_strlen(dst);
-	d = 0;
-	while (src[d] != '\0' && c + 1 < dstsize)
-	{
-		dst[c] = src[d];
-		c++;
-		d++;
-	}
-	dst[c] = '\0';
-	return (ft_strlen(dst) + ft_strlen(&src[d]));
+	srclen = ft_strlen(src);
+	if (!dst && !dstsize)
+		return (srclen);
+	dstlen = ft_strlen(dst);
+	i = dstlen;
+	if (!dstsize || dstlen >= dstsize)
+		return (dstsize + srclen);
+	while (i < dstsize - 1 && *src)
+		dst[i++] = *src++;
+	dst[i] = 0;
+	return (dstlen + srclen);
 }

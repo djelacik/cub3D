@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/16 14:39:45 by djelacik          #+#    #+#             */
-/*   Updated: 2024/12/13 17:45:45 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/17 13:49:23 by aapadill          #+#    #+#             */
+/*   Updated: 2024/07/19 17:46:12 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(char *str)
+int	ft_isdigit(int c)
 {
-	while (*str)
-	{
-		if (*str == '-' || *str == '+')
-			str++;
-		if (*str < '0' || *str > '9')
-			return (0);
-		str++;
-	}
+	if (c < 48 || c > 57)
+		return (0);
 	return (1);
 }

@@ -3,21 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/16 14:41:38 by djelacik          #+#    #+#             */
-/*   Updated: 2024/04/16 14:44:10 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/17 19:35:13 by aapadill          #+#    #+#             */
+/*   Updated: 2024/04/23 22:51:51 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_isascii(int c)
 {
 	if (c >= 0 && c <= 127)
-	{
 		return (1);
-	}
-	else
-	{
-		return (0);
-	}
+	return (0);
 }

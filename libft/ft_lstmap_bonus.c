@@ -3,51 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/29 15:58:07 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/03 11:06:06 by djelacik         ###   ########.fr       */
+/*   Created: 2024/05/01 15:47:53 by aapadill          #+#    #+#             */
+/*   Updated: 2024/06/12 08:21:56 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
+** @description
+** Iterates the list ’lst’ and applies the function ’f’ on the content of each
+** node. 
+** Creates a new list resulting of the successive applications of the function 
+** ’f’. 
+** The ’del’ function is used to delete the content of a node if needed.
+**
+** @param
+** lst: The address of a pointer to a node. 
+** f: The address of the function used to iterate on the list.
+** del: The address of the function used to delete the content of a node if 
+** needed.
+**
+** @return
+** The new list.
+** NULL if the allocation fails.
+*/
+
 #include "libft.h"
-
-static t_list	*add_node(t_list **new_list, void *content, void (*del)(void *))
-{
-	t_list	*node;
-
-	node = ft_lstnew(content);
-	if (!node)
-	{
-		free(content);
-		ft_lstclear(new_list, del);
-		return (NULL);
-	}
-	ft_lstadd_back(new_list, node);
-	return (node);
-}
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*new_list;
+	t_list	*mapped;
 	t_list	*node;
-	void	*result;
+	void	*new_content;
 
-	if (!lst || !f)
-		return (NULL);
-	new_list = NULL;
+	mapped = NULL;
 	while (lst)
 	{
-		result = f(lst->content);
-		if (!result)
+		new_content = f(lst->content);
+		if (!new_content)
 		{
-			ft_lstclear(&new_list, del);
-			return (NULL);
+			ft_lstclear(&mapped, del);
+			break ;
 		}
-		node = add_node(&new_list, result, del);
+		node = ft_lstnew(new_content);
 		if (!node)
-			return (NULL);
+		{
+			del(new_content);
+			ft_lstclear(&mapped, del);
+			break ;
+		}
+		ft_lstadd_back(&mapped, node);
 		lst = lst->next;
 	}
-	return (new_list);
+	return (mapped);
 }

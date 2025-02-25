@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   gc_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: karpatel <karpatel@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/13 09:22:10 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/13 19:18:17 by djelacik         ###   ########.fr       */
+/*   Created: 2024/12/25 11:42:10 by karpatel          #+#    #+#             */
+/*   Updated: 2024/12/25 11:42:12 by karpatel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strcpy(char *s1, char *s2)
-{
-	int	i;
+#include "gc_alloc.h"
 
+char	*gc_strndup(char *s, int n)
+{
+	char	*dest;
+	int		i;
+
+	dest = gc_alloc((n + 1) * sizeof(char));
+	if (!dest)
+		return (NULL);
 	i = 0;
-	while (s2[i])
+	while (s[i] && i < n)
 	{
-		s1[i] = s2[i];
+		dest[i] = s[i];
 		i++;
 	}
-	s1[i] = s2[i];
-	return (s1);
+	dest[i] = 0;
+	return (dest);
 }

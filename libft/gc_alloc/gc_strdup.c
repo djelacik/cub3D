@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec_new.c                                          :+:      :+:    :+:   */
+/*   gc_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/20 15:09:30 by aapadill          #+#    #+#             */
-/*   Updated: 2025/02/20 17:07:22 by aapadill         ###   ########.fr       */
+/*   Created: 2024/11/07 23:38:26 by aapadill          #+#    #+#             */
+/*   Updated: 2024/11/08 13:09:22 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vec.h"
+#include "gc_alloc.h"
 
-int	vec_new(t_vec *dst, size_t init_len, size_t elem_size)
+char	*gc_strdup(const char *s1)
 {
-	if (!dst || !elem_size)
-		return (-1);
-	dst->alloc_size = init_len * elem_size;
-	dst->len = 0;
-	dst->elem_size = elem_size;
-	if (!init_len)
-		dst->memory = NULL;
-	else
-	{
-		dst->memory = malloc(dst->alloc_size);
-		if (!dst->memory)
-			return (-1);
-	}
-	return (1);
+	size_t	len;
+	char	*dest;
+	char	*result;
+
+	len = ft_strlen(s1);
+	dest = gc_alloc((len + 1) * sizeof(char));
+	if (!dest)
+		return (NULL);
+	result = dest;
+	while (*s1)
+		*dest++ = *s1++;
+	*dest = 0;
+	return (result);
 }

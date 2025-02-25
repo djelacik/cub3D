@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 16:01:21 by djelacik          #+#    #+#             */
-/*   Updated: 2025/02/18 11:41:38 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:55:18 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-# include "MLX42/MLX42.h"
-# include "get_next_line.h"
 # include "libft.h"
+# include "vec.h"
+# include "gc_alloc.h"
+
+# include <MLX42/MLX42.h>
 
 #define MIN_WIDTH 384
 #define MIN_HEIGHT 216
@@ -51,13 +53,25 @@ typedef struct s_view {
 	int8_t		toggle;
 }	t_view;
 
-
 typedef struct s_textures {
 	mlx_texture_t *north;
 	mlx_texture_t *south;
 	mlx_texture_t *west;
 	mlx_texture_t *east;
 }	t_textures;
+
+typedef struct s_color {
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
+	uint8_t	a;
+}	t_color;
+
+typedef struct s_map {
+	char	**grid;
+	int		width;
+	int		height;
+}	t_map;
 
 typedef struct s_ray {
 	double			distance;
@@ -71,17 +85,22 @@ typedef struct s_ray {
 }	t_ray;
 
 typedef struct s_data {
-	int 		width;
-	int 		height;
+	int			width; //remove
+	int			height; //remove
+	char		**map; //remove
+	//create map struct!!!!!!
+	//t_map		map;
 	mlx_t		*mlx;
 	mlx_image_t	*image;
 	t_ray		*ray;
 	t_player	player;
 	t_view		camera;
 	t_textures	*textures;
-	char		**map;
-	uint32_t	floor_color;
-	uint32_t	ceiling_color;
+	uint32_t	floor_color; //remove
+	t_color		floor;
+	uint32_t	ceiling_color; //remove
+	t_color		ceiling;
+
 }	t_data;
 
 //color_utils.c
@@ -124,6 +143,13 @@ void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
 //utils.c
 int		is_wall(char **map, double x, double y);
 void	draw_floor_and_ceiling(t_data *data);
+
+//parsing.c
+int		parse_cubfile(char *filepath, t_data *data);
+
+//free.c
+void	free_and_exit(void);
+void	free_and_exit_with(int exit_code);
 
 //void	handle_keys(mlx_key_data_t keydata, void *param);
 //int	load_textures(t_data *data);

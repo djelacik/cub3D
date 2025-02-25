@@ -12,6 +12,7 @@
 
 #include "cub3D.h"
 
+/*
 char	**init_map(void)
 {
 	char	**map;
@@ -72,6 +73,7 @@ void	free_textures(t_textures *textures)
 	if (textures->east)
 		mlx_delete_texture(textures->east);
 }
+*/
 
 int	main(void)
 {
@@ -79,15 +81,16 @@ int	main(void)
 	int		monitor_width;
 	int		monitor_height;
 
-	data.map = init_map();
-	if (!data.map)
-		return (1);
+	//data.map = init_map();
+	//if (!data.map)
+	//	return (1);
+	ft_memset(&data, 0, sizeof(t_data));
 	data.player.x = 2;
 	data.player.y = 2;
-	data.camera.x = 0;
-	data.camera.y = 0;
+	//data.camera.x = 0;
+	//data.camera.y = 0;
 	data.camera.toggle = 1;
-	data.player.angle = 0.0;
+	//data.player.angle = 0.0;
 	data.player.speed = 0.01;
 	data.mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	mlx_get_monitor_size(0, &monitor_width, &monitor_height);
@@ -104,17 +107,20 @@ int	main(void)
 	data.textures = malloc(sizeof(t_textures));
 	data.floor_color = 0xAAAABBCC; // Esimerkiksi sininen lattia
 	data.ceiling_color = 0x00FFEEDD; // Esimerkiksi vaalean keltainen katto
+	parse_cubfile("test.cub", &data);
 	if (!data.textures)
 	{
 		fprintf(stderr, "Error: Failed to allocate memory for textures\n");
 		return (EXIT_FAILURE);
 	}
 	ft_memset(data.textures, 0, sizeof(t_textures));
+	/*
 	if (load_textures(&data))
 	{
 		mlx_terminate(data.mlx);
 		return (EXIT_FAILURE);
 	}
+	*/
 	if (is_wall(data.map, data.player.x, data.player.y))
 	{
 		printf("Error: Player starts inside a wall\n");
@@ -124,7 +130,7 @@ int	main(void)
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
 	mlx_terminate(data.mlx);
-	free_textures(data.textures);
+	//free_textures(data.textures);
 	free(data.textures);
 	return (0);
 }

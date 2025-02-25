@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vec_free.c                                         :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/20 17:11:42 by aapadill          #+#    #+#             */
-/*   Updated: 2025/02/20 17:24:27 by aapadill         ###   ########.fr       */
+/*   Created: 2025/02/24 15:15:42 by aapadill          #+#    #+#             */
+/*   Updated: 2025/02/24 15:16:13 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	vec_free(t_vec *src)
+#include "cub3D.h"
+
+void	free_and_exit(void)
 {
-	if (!src || !src->alloc_size)
-		return ;
-	free(src->memory);
-	src->memory = NULL;
-	src->alloc_size = 0;
-	src->elem_size = 0;
-	src->len = 0;
+	gc_free_all();
+	exit(EXIT_FAILURE);
+}
+
+void	free_and_exit_with(int exit_code)
+{
+	gc_free_all();
+	exit(exit_code);
 }

@@ -11,15 +11,16 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
+#include <fcntl.h>
 
 //is_map_line()
 //parse_texture_line()
-//parse_color_line
+//parse_color_line()
 //is_map_closed()
 
 static bool	valid_character(char c)
 {
-	return (c == ' ' || c == '0' || c != '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
+	return (c == ' ' || c == '0' || c != '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
 }
 
 bool	is_map_line(char *line)
@@ -38,27 +39,114 @@ bool	parse_texture_line(const char *line, t_data *data)
 	if (ft_strncmp(line, "NO ", 3) == 0)
 	{
 		//data->textures.north = ft_strdup(line + 3);
-		//hardcoded jump of 3
+		//hardcoded jump of 3 //make it to jump spaces
 		data->textures->north = mlx_load_png(line + 3);
+		if (!data->textures->north)
+		{
+			ft_putstr_fd("Failed to load texture\n", 2);
+			return (false);
+		}
 		return (true);
 	}
 	else if (ft_strncmp(line, "SO ", 3) == 0)
 	{
-		data->textures.south = ft_strdup(line + 3);
+		data->textures->south = mlx_load_png(line + 3);
+		if (!data->textures->south)
+		{
+			ft_putstr_fd("Failed to load texture\n", 2);
+			//free_textures
+			return (false);
+		}
 		return (true);
 	}
 	else if (ft_strncmp(line, "WE ", 3) == 0)
 	{
-		data->textures.west = ft_strdup(line + 3);
+		data->textures->west = mlx_load_png(line + 3);
+		if (!data->textures->west)
+		{
+			ft_putstr_fd("Failed to load texture\n", 2);
+			//free_textures
+			return (false);
+		}
 		return (true);
 	}
 	else if (ft_strncmp(line, "EA ", 3) == 0)
 	{
-		data->textures.east = ft_strdup(line + 3);
+		data->textures->east = mlx_load_png(line + 3);
+		if (!data->textures->east)
+		{
+			ft_putstr_fd("Failed to load texture\n", 2);
+			//free_textures
+			return (false);
+		}
 		return (true);
 	}
 	return (false);
 }
+
+bool parse_color_values(char *str, t_color *color)
+{
+	// skip leading spaces
+	while (*str == ' ' || *str == '\t')
+		str++;
+	// now str should be "220,100,0" or something similar
+	int r, g, b;
+	if (sscanf(str, "%d,%d,%d", &r, &g, &b) != 3)
+		return false;
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+		return false;
+	color->r = r;
+	color->g = g;
+	color->b = b;
+	color->a = 255;
+	return true;
+}
+
+bool	parse_color_line(char *line, t_data *data)
+{
+	if (line[0] == 'F' && (line[1] == ' ' || line[1] == '\t'))
+	{
+		// parse after 'F '
+		return parse_color_values(line + 1, &data->floor);
+	}
+	if (line[0] == 'C' && (line[1] == ' ' || line[1] == '\t'))
+	{
+		// parse after 'C '
+		return parse_color_values(line + 1, &data->ceiling);
+	}
+	return false;
+}
+
+bool is_map_closed(t_data *data)
+{
+	int i, j;
+
+	// Check first and last row
+	for (j = 0; j < data->width; j++)
+	{
+		// If we are beyond row's length, we consider it 'space' => error
+		if (j >= (int)ft_strlen(data->map[0]) || data->map[0][j] != '1')
+			return (false);
+		if (j >= (int)ft_strlen(data->map[data->height - 1]) 
+			|| data->map[data->height - 1][j] != '1')
+			return (false);
+	}
+
+	// Check left and right walls
+	for (i = 1; i < data->height - 1; i++)
+	{
+		int len = (int)ft_strlen(data->map[i]);
+		if (len == 0)
+			return (false);
+		if (data->map[i][0] != '1')
+			return (false);
+		// The last visible character in the row
+		if (data->map[i][len - 1] != '1')
+			return (false);
+	}
+	return (true);
+}
+
 
 int	parse_cubfile(char *filepath, t_data *data)
 {
@@ -173,16 +261,17 @@ int	parse_cubfile(char *filepath, t_data *data)
 		ft_putstr_fd("Missing one or more texture paths\n", 2);
 		status = 1;
 	}
-	//hardcoded
-	if (data->floor_color < 0 || data->ceiling_color < 0)
+	//hardcoded //check all bytes of color struct
+	if (data->floor.r < 0 || data->ceiling.r < 0)
 	{
 		ft_putstr_fd("Invalid colors\n", 2);
 		status = 1;
 	}
-	if (!status && is_map_closed(&data->map))
+	if (!status && is_map_closed(data))
 	{
 		ft_putstr_fd("Map is not closed\n", 2);
 		status = 1;
 	}
 	vec_free(&map_vec);
+	return (status);
 }

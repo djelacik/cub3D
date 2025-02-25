@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: karpatel <karpatel@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 18:45:35 by djelacik          #+#    #+#             */
-/*   Updated: 2024/11/10 18:46:39 by djelacik         ###   ########.fr       */
+/*   Created: 2024/12/25 18:16:53 by karpatel          #+#    #+#             */
+/*   Updated: 2024/12/25 18:16:54 by karpatel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,24 @@
 
 char	*ft_strndup(const char *s, size_t n)
 {
-	char			*res;
-	unsigned int	i;
+	char	*dup;
+	size_t	len;
+	size_t	i;
 
-	i = 0;
-	res = malloc(sizeof(char) * (n + 1));
-	if (!res)
+	if (!s)
 		return (NULL);
-	while (i < n)
+	len = 0;
+	while (s[len] && len < n)
+		len++;
+	dup = malloc(len + 1);
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (i < len)
 	{
-		res[i] = s[i];
+		dup[i] = s[i];
 		i++;
 	}
-	res[i] = '\0';
-	return (res);
+	dup[i] = '\0';
+	return (dup);
 }
