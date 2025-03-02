@@ -34,9 +34,32 @@ bool	is_map_line(char *line)
 	return (true);
 }
 
+bool	is_texture_line(const char *line)
+{
+	if (ft_strncmp(line, "NO", 2) == 0)
+		return (true);
+	if (ft_strncmp(line, "SO", 2) == 0)
+		return (true);
+	if (ft_strncmp(line, "WE", 2) == 0)
+		return (true);
+	if (ft_strncmp(line, "EA", 2) == 0)
+		return (true);
+	return (false);
+}
+
+//improve to check commas and numbers range 0-255
+bool	is_color_line(const char *line)
+{
+	if (ft_strncmp(line, "F", 1) == 0)
+		return (true);
+	if (ft_strncmp(line, "C", 1) == 0)
+		return (true);
+	return (false);
+}
+
 bool	parse_texture_line(const char *line, t_data *data)
 {
-	if (ft_strncmp(line, "NO ", 3) == 0)
+	if (ft_strncmp(line, "NO", 2) == 0)
 	{
 		//data->textures.north = ft_strdup(line + 3);
 		//hardcoded jump of 3 //make it to jump spaces
@@ -48,7 +71,7 @@ bool	parse_texture_line(const char *line, t_data *data)
 		}
 		return (true);
 	}
-	else if (ft_strncmp(line, "SO ", 3) == 0)
+	else if (ft_strncmp(line, "SO", 2) == 0)
 	{
 		data->textures->south = mlx_load_png(line + 3);
 		if (!data->textures->south)
@@ -59,7 +82,7 @@ bool	parse_texture_line(const char *line, t_data *data)
 		}
 		return (true);
 	}
-	else if (ft_strncmp(line, "WE ", 3) == 0)
+	else if (ft_strncmp(line, "WE", 2) == 0)
 	{
 		data->textures->west = mlx_load_png(line + 3);
 		if (!data->textures->west)
@@ -70,7 +93,7 @@ bool	parse_texture_line(const char *line, t_data *data)
 		}
 		return (true);
 	}
-	else if (ft_strncmp(line, "EA ", 3) == 0)
+	else if (ft_strncmp(line, "EA", 2) == 0)
 	{
 		data->textures->east = mlx_load_png(line + 3);
 		if (!data->textures->east)
@@ -122,18 +145,18 @@ bool is_map_closed(t_data *data)
 	int i, j;
 
 	// Check first and last row
-	for (j = 0; j < data->width; j++)
+	for (j = 0; j < data->map_data.width; j++)
 	{
 		// If we are beyond row's length, we consider it 'space' => error
 		if (j >= (int)ft_strlen(data->map[0]) || data->map[0][j] != '1')
 			return (false);
-		if (j >= (int)ft_strlen(data->map[data->height - 1]) 
-			|| data->map[data->height - 1][j] != '1')
+		if (j >= (int)ft_strlen(data->map[data->map_data.height - 1]) 
+			|| data->map[data->map_data.height - 1][j] != '1')
 			return (false);
 	}
 
 	// Check left and right walls
-	for (i = 1; i < data->height - 1; i++)
+	for (i = 1; i < data->map_data.height - 1; i++)
 	{
 		int len = (int)ft_strlen(data->map[i]);
 		if (len == 0)
@@ -147,7 +170,6 @@ bool is_map_closed(t_data *data)
 	return (true);
 }
 
-
 int	parse_cubfile(char *filepath, t_data *data)
 {
 	char	*line;
@@ -156,7 +178,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 	bool	map_started = false;
 	bool	status = 0;
 	size_t	i;
-	int		row_len;
+	int	row_len;
 
 	line = NULL;
 	fd = open(filepath, O_RDONLY);
@@ -165,17 +187,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 		perror("open failed");
 		return (1);
 	}
-	//memset 0 data->(everything)
-	//data->textures->north = NULL;
-	//data->textures->south = NULL;
-	//data->textures->west  = NULL;
-	//data->textures->east  = NULL;
-	//data->floor_color = (t_color){ -1, -1, -1 };
-	//data->ceiling_color = (t_color){ -1, -1, -1 };
-	data->map = NULL;
-	//data->height = 0;
-	//data->width = 0;
-
 	t_vec	map_vec;
 	if (vec_new(&map_vec, 16, sizeof(char *)) < 0)
 	{
@@ -186,24 +197,32 @@ int	parse_cubfile(char *filepath, t_data *data)
 	line = get_next_line(fd);
 	while (line)
 	{
-		printf("line: %s\n", line);
-		printf("map_started?: %i\n", map_started);
-		//remove nl
-		if (!*line)
-			break ;
+		//skip empty lines
+		if (line[0] == '\n')
+		{
+			free(line);
+			line = get_next_line(fd);
+			continue ;
+		}
 		nl = ft_strchr(line, '\n');
 		if (nl)
 			*nl = '\0';
-		//skip empty lines
-		if (!map_started && !*line)
-		{
-			//free(line);
-			continue ;
-		}
-		//if line has valid map chars, add it to map_vec
+		/*
+			remove all spaces from line
+		*/
+		printf("->line: %s<-", line);
+		/*
 		if (is_map_line(line))
 		{
-			map_started = true;
+			if (!map_started)
+				map_started = true;
+			printf("is map line\n");
+		}
+		*/
+		if (is_map_line(line))
+		{
+			if (!map_started)
+				map_started = true;
 			if (vec_push(&map_vec, &line) < 0)
 			{
 				ft_putstr_fd("Vec push failed\n", 2);
@@ -212,10 +231,17 @@ int	parse_cubfile(char *filepath, t_data *data)
 				break ;
 			}
 		}
-		//if line doesnt look like map stuff, might be either texture or color
+		/*
 		else if (!map_started)
 		{
-			//printf("so this should happen: %s\n", line);
+			if (is_texture_line(line))
+				printf("is texture line\n");
+			if (is_color_line(line))
+				printf("is color line\n");
+		}
+		*/
+		else if (!map_started)
+		{
 			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
 			{
 				ft_putstr_fd("Invalid config line\n", 2);
@@ -224,7 +250,10 @@ int	parse_cubfile(char *filepath, t_data *data)
 				break ;
 			}
 		}
-		//map already started but not map_line
+		/*
+		else
+			printf("error: either map is not last or line not valid\n");
+		*/
 		else
 		{
 			ft_putstr_fd("Map must be the last thing in file\n", 2);
@@ -238,47 +267,34 @@ int	parse_cubfile(char *filepath, t_data *data)
 	//clean static buffer from gnl
 	if (!status)
 	{
-		//create map struct? with map.height, map.width, map.grid
-		data->height = map_vec.len;
+		data->map_data.height = map_vec.len;
 		data->map = malloc((map_vec.len + 1) * sizeof(char *));
 		if (!data->map)
 		{
 			ft_putstr_fd("Map alloc failed\n", 2);
 			status = 1;
 		}
-		//malloc worked
 		else
 		{
 			i = 0;
 			while (i < map_vec.len)
 			{
 				data->map[i] = *(char **)vec_get(&map_vec, i);
-				row_len = (int)ft_strlen(data->map[i]);
-				if (row_len > data->width)
-					data->width = row_len;
+				row_len = ft_strlen(data->map[i]);
+				if (row_len > data->map_data.width)
+					data->map_data.width = row_len;
 				i++;
 			}
 			data->map[map_vec.len] = NULL;
 		}
 	}
-	if (!data->textures->north || !data->textures->south || !data->textures->east || data->textures->west)
-	{
-		ft_putstr_fd("Missing one or more texture paths\n", 2);
-		status = 1;
-	}
-	/* 
-	//hardcoded //check all bytes of color struct
-	if (data->floor.r < 0 || data->ceiling.r < 0)
-	{
-		ft_putstr_fd("Invalid colors\n", 2);
-		status = 1;
-	}
-	*/
 	if (!status && is_map_closed(data))
 	{
 		ft_putstr_fd("Map is not closed\n", 2);
 		status = 1;
 	}
 	vec_free(&map_vec);
+	printf("status: %d\n", status);
 	return (status);
+	//return (1);
 }
