@@ -109,8 +109,11 @@ t_ray	calculate_ray(t_data *data, double angle)
 {
 	t_ray ray;
 
-	ray.distance = calculate_distance(data->player, angle, data->map, &ray);
-	ray.side = calculate_hit_side(data->player, angle, data->map);
+	//refactor calculate_distance to receive t_data and t_ray as arguments
+	ray.distance = calculate_distance(data->player, angle, data->map.grid, &ray);
+	//refactor calculate_hit_side to receive t_data and t_ray as arguments
+	ray.side = calculate_hit_side(data->player, angle, data->map.grid);
+	//refactor get_wall_x to receive t_ray as argument
 	ray.wall_x = get_wall_x(ray.hit_x, ray.hit_y, ray.side);
 	ray.texture = get_wall_texture(data, cos(angle), sin(angle), ray.side);
 

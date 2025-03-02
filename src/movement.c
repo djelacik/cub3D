@@ -19,21 +19,21 @@ static int can_move_to(t_data *data, double new_x, double new_y)
 
 	diag_offset = COLLISION_LIMIT / sqrt(2);
 	// Check four cardinal directions
-	if (is_wall(data->map, new_x + COLLISION_LIMIT, new_y)) // Right
+	if (is_wall(data->map.grid, new_x + COLLISION_LIMIT, new_y)) // Right
 		return 0;
-	if (is_wall(data->map, new_x - COLLISION_LIMIT, new_y)) // Left
+	if (is_wall(data->map.grid, new_x - COLLISION_LIMIT, new_y)) // Left
 		return 0;
-	if (is_wall(data->map, new_x, new_y + COLLISION_LIMIT)) // Down
+	if (is_wall(data->map.grid, new_x, new_y + COLLISION_LIMIT)) // Down
 		return 0;
-	if (is_wall(data->map, new_x, new_y - COLLISION_LIMIT)) // Up
+	if (is_wall(data->map.grid, new_x, new_y - COLLISION_LIMIT)) // Up
 		return 0;
-	if (is_wall(data->map, new_x + diag_offset, new_y + diag_offset)) // Bottom-right
+	if (is_wall(data->map.grid, new_x + diag_offset, new_y + diag_offset)) // Bottom-right
 		return 0;
-	if (is_wall(data->map, new_x - diag_offset, new_y + diag_offset)) // Bottom-left
+	if (is_wall(data->map.grid, new_x - diag_offset, new_y + diag_offset)) // Bottom-left
 		return 0;
-	if (is_wall(data->map, new_x + diag_offset, new_y - diag_offset)) // Top-right
+	if (is_wall(data->map.grid, new_x + diag_offset, new_y - diag_offset)) // Top-right
 		return 0;
-	if (is_wall(data->map, new_x - diag_offset, new_y - diag_offset)) // Top-left
+	if (is_wall(data->map.grid, new_x - diag_offset, new_y - diag_offset)) // Top-left
 		return 0;
 	return 1; // No collisions, movement allowed
 }

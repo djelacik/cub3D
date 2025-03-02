@@ -87,9 +87,7 @@ typedef struct s_ray {
 typedef struct s_data {
 	int			width; //window width
 	int			height; //window height
-	char		**map;
-	//create map struct!!!!!!
-	t_map		map_data;
+	t_map		map;
 	mlx_t		*mlx;
 	mlx_image_t	*image;
 	t_ray		*ray;

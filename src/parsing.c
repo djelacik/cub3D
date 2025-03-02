@@ -34,36 +34,29 @@ bool	is_map_line(char *line)
 	return (true);
 }
 
-bool	is_texture_line(const char *line)
+bool	remove_spaces(char *line)
 {
-	if (ft_strncmp(line, "NO", 2) == 0)
-		return (true);
-	if (ft_strncmp(line, "SO", 2) == 0)
-		return (true);
-	if (ft_strncmp(line, "WE", 2) == 0)
-		return (true);
-	if (ft_strncmp(line, "EA", 2) == 0)
-		return (true);
-	return (false);
-}
+	char	*src;
+	char	*dst;
 
-//improve to check commas and numbers range 0-255
-bool	is_color_line(const char *line)
-{
-	if (ft_strncmp(line, "F", 1) == 0)
-		return (true);
-	if (ft_strncmp(line, "C", 1) == 0)
-		return (true);
-	return (false);
+	src = line;
+	dst = line;
+	while (*src)
+	{
+		if (*src != ' ' && *src != '\t')
+			*dst++ = *src;
+		src++;
+	}
+	*dst = '\0';
+	return (true);
 }
 
 bool	parse_texture_line(const char *line, t_data *data)
 {
 	if (ft_strncmp(line, "NO", 2) == 0)
 	{
-		//data->textures.north = ft_strdup(line + 3);
-		//hardcoded jump of 3 //make it to jump spaces
-		data->textures->north = mlx_load_png(line + 3);
+		//hardcoded jump of 2
+		data->textures->north = mlx_load_png(line + 2);
 		if (!data->textures->north)
 		{
 			ft_putstr_fd("Failed to load texture\n", 2);
@@ -73,7 +66,7 @@ bool	parse_texture_line(const char *line, t_data *data)
 	}
 	else if (ft_strncmp(line, "SO", 2) == 0)
 	{
-		data->textures->south = mlx_load_png(line + 3);
+		data->textures->south = mlx_load_png(line + 2);
 		if (!data->textures->south)
 		{
 			ft_putstr_fd("Failed to load texture\n", 2);
@@ -84,7 +77,7 @@ bool	parse_texture_line(const char *line, t_data *data)
 	}
 	else if (ft_strncmp(line, "WE", 2) == 0)
 	{
-		data->textures->west = mlx_load_png(line + 3);
+		data->textures->west = mlx_load_png(line + 2);
 		if (!data->textures->west)
 		{
 			ft_putstr_fd("Failed to load texture\n", 2);
@@ -95,7 +88,7 @@ bool	parse_texture_line(const char *line, t_data *data)
 	}
 	else if (ft_strncmp(line, "EA", 2) == 0)
 	{
-		data->textures->east = mlx_load_png(line + 3);
+		data->textures->east = mlx_load_png(line + 2);
 		if (!data->textures->east)
 		{
 			ft_putstr_fd("Failed to load texture\n", 2);
@@ -107,11 +100,9 @@ bool	parse_texture_line(const char *line, t_data *data)
 	return (false);
 }
 
+//check commas and numbers
 bool parse_color_values(char *str, t_color *color)
 {
-	// skip leading spaces
-	while (*str == ' ' || *str == '\t')
-		str++;
 	// now str should be "220,100,0" or something similar
 	int r, g, b;
 	if (sscanf(str, "%d,%d,%d", &r, &g, &b) != 3)
@@ -127,14 +118,13 @@ bool parse_color_values(char *str, t_color *color)
 
 bool	parse_color_line(char *line, t_data *data)
 {
-	if (line[0] == 'F' && (line[1] == ' ' || line[1] == '\t'))
+	if (line[0] == 'F')
 	{
-		// parse after 'F '
+		//hardcoded jump of 1
 		return parse_color_values(line + 1, &data->floor);
 	}
-	if (line[0] == 'C' && (line[1] == ' ' || line[1] == '\t'))
+	if (line[0] == 'C')
 	{
-		// parse after 'C '
 		return parse_color_values(line + 1, &data->ceiling);
 	}
 	return false;
@@ -145,26 +135,26 @@ bool is_map_closed(t_data *data)
 	int i, j;
 
 	// Check first and last row
-	for (j = 0; j < data->map_data.width; j++)
+	for (j = 0; j < data->map.width; j++)
 	{
 		// If we are beyond row's length, we consider it 'space' => error
-		if (j >= (int)ft_strlen(data->map[0]) || data->map[0][j] != '1')
+		if (j >= (int)ft_strlen(data->map.grid[0]) || data->map.grid[0][j] != '1')
 			return (false);
-		if (j >= (int)ft_strlen(data->map[data->map_data.height - 1]) 
-			|| data->map[data->map_data.height - 1][j] != '1')
+		if (j >= (int)ft_strlen(data->map.grid[data->map.height - 1]) 
+			|| data->map.grid[data->map.height - 1][j] != '1')
 			return (false);
 	}
 
 	// Check left and right walls
-	for (i = 1; i < data->map_data.height - 1; i++)
+	for (i = 1; i < data->map.height - 1; i++)
 	{
-		int len = (int)ft_strlen(data->map[i]);
+		int len = (int)ft_strlen(data->map.grid[i]);
 		if (len == 0)
 			return (false);
-		if (data->map[i][0] != '1')
+		if (data->map.grid[i][0] != '1')
 			return (false);
 		// The last visible character in the row
-		if (data->map[i][len - 1] != '1')
+		if (data->map.grid[i][len - 1] != '1')
 			return (false);
 	}
 	return (true);
@@ -207,16 +197,14 @@ int	parse_cubfile(char *filepath, t_data *data)
 		nl = ft_strchr(line, '\n');
 		if (nl)
 			*nl = '\0';
-		/*
-			remove all spaces from line
-		*/
-		printf("->line: %s<-", line);
+		remove_spaces(line);
+		printf("line->%s<-\n", line);
 		/*
 		if (is_map_line(line))
 		{
 			if (!map_started)
 				map_started = true;
-			printf("is map line\n");
+			printf("is map.grid line\n");
 		}
 		*/
 		if (is_map_line(line))
@@ -252,7 +240,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		}
 		/*
 		else
-			printf("error: either map is not last or line not valid\n");
+			printf("error: either map.grid is not last or line not valid\n");
 		*/
 		else
 		{
@@ -267,9 +255,9 @@ int	parse_cubfile(char *filepath, t_data *data)
 	//clean static buffer from gnl
 	if (!status)
 	{
-		data->map_data.height = map_vec.len;
-		data->map = malloc((map_vec.len + 1) * sizeof(char *));
-		if (!data->map)
+		data->map.height = map_vec.len;
+		data->map.grid = malloc((map_vec.len + 1) * sizeof(char *));
+		if (!data->map.grid)
 		{
 			ft_putstr_fd("Map alloc failed\n", 2);
 			status = 1;
@@ -279,22 +267,22 @@ int	parse_cubfile(char *filepath, t_data *data)
 			i = 0;
 			while (i < map_vec.len)
 			{
-				data->map[i] = *(char **)vec_get(&map_vec, i);
-				row_len = ft_strlen(data->map[i]);
-				if (row_len > data->map_data.width)
-					data->map_data.width = row_len;
+				data->map.grid[i] = *(char **)vec_get(&map_vec, i);
+				row_len = ft_strlen(data->map.grid[i]);
+				if (row_len > data->map.width)
+					data->map.width = row_len;
 				i++;
 			}
-			data->map[map_vec.len] = NULL;
+			data->map.grid[map_vec.len] = NULL;
 		}
 	}
+	/*
 	if (!status && is_map_closed(data))
 	{
 		ft_putstr_fd("Map is not closed\n", 2);
 		status = 1;
 	}
+	*/
 	vec_free(&map_vec);
-	printf("status: %d\n", status);
 	return (status);
-	//return (1);
 }

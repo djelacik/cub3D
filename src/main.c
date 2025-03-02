@@ -116,8 +116,8 @@ int	main(void)
 	ft_memset(data.textures, 0, sizeof(t_textures));
 	data.floor_color = 0xAAAABBCC; // Esimerkiksi sininen lattia
 	data.ceiling_color = 0x00FFEEDD; // Esimerkiksi vaalean keltainen katto
-	//int status;
-	parse_cubfile("test.cub", &data);
+	int status;
+	status = parse_cubfile("test.cub", &data);
 	/*
 	if (load_textures(&data))
 	{
@@ -125,14 +125,12 @@ int	main(void)
 		return (EXIT_FAILURE);
 	}
 	*/
-	/*
 	if (status)
 	{
 		mlx_terminate(data.mlx);
 		return (EXIT_FAILURE);
 	}
-	*/
-	if (is_wall(data.map, data.player.x, data.player.y))
+	if (is_wall(data.map.grid, data.player.x, data.player.y))
 	{
 		printf("Error: Player starts inside a wall\n");
 		return (1);

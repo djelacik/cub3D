@@ -20,14 +20,14 @@ void	draw_mini_map(t_data *data)
 	int	screen_y;
 
 	y = 0;
-	while (data->map[y])
+	while (data->map.grid[y])
 	{
 		x = 0;
-		while (data->map[y][x])
+		while (data->map.grid[y][x])
 		{
 			screen_x = x * TILE_SIZE * MINIMAP_SCALE;
 			screen_y = y * TILE_SIZE * MINIMAP_SCALE;
-			if (data->map[y][x] == '1') // Seinät
+			if (data->map.grid[y][x] == '1') // Seinät
 				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0x000000);
 			else // Lattia
 				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xAAAAAA);
@@ -76,7 +76,7 @@ void	draw_mini_rays(t_data *data)
 	{
 		ray_x = data->player.x;
 		ray_y = data->player.y;
-		while (data->map[(int)ray_y][(int)ray_x] != '1')
+		while (data->map.grid[(int)ray_y][(int)ray_x] != '1')
 		{
 			ray_x += cos(angle) * STEP_SIZE;
 			ray_y += sin(angle) * STEP_SIZE;
