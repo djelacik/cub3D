@@ -109,6 +109,7 @@ t_ray	calculate_ray(t_data *data, double angle)
 {
 	t_ray ray;
 
+	ft_memset(&ray, 0, sizeof(t_ray));
 	//refactor calculate_distance to receive t_data and t_ray as arguments
 	ray.distance = calculate_distance(data->player, angle, data->map.grid, &ray);
 	//refactor calculate_hit_side to receive t_data and t_ray as arguments

@@ -89,7 +89,6 @@ typedef struct s_door {
 	double	progress;
 }	t_door;
 
-
 typedef struct s_map {
 	char	**grid;
 	int		width;

@@ -202,11 +202,11 @@ bool	parse_player_pos(t_data *data)
 			}
 			else if (data->map.grid[i][j] == 'D')
 			{
-
 				data->doors[data->door_count].x = j;
 				data->doors[data->door_count].y = i;
 				data->doors[data->door_count].state = CLOSED;
 				data->doors[data->door_count].progress = 0;
+				data->door_count++;
 			}
 			else if (data->map.grid[i][j] != '0' && data->map.grid[i][j] != '1')
 			{
@@ -264,6 +264,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 	bool	status = 0;
 	size_t	i;
 	int	row_len;
+	int		doors_count = 0;
 
 	line = NULL;
 	data->player.angle = 0;
@@ -371,7 +372,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 				{
 					if (data->map.grid[i][j] == 'D')
 					{
-						data->door_count++;
+						doors_count++;
 					}
 					/*
 					else if (data->map.grid[i][j] == 'X')
@@ -387,7 +388,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 					data->map.width = row_len;
 				i++;
 			}
-			data->doors = malloc(data->door_count * sizeof(t_door));
+			data->doors = malloc(doors_count * sizeof(t_door));
+			ft_memset(data->doors, 0, sizeof(t_door));
 			data->map.grid[map_vec.len] = NULL;
 		}
 	}
