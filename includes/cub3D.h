@@ -16,6 +16,9 @@
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <limits.h>
+# include <float.h> //erase
+# include <assert.h> //erase
 
 # include "libft.h"
 # include "vec.h"
@@ -23,11 +26,14 @@
 
 # include <MLX42/MLX42.h>
 
+#define GRAY_COLOR 0x444444
+
 #define MIN_WIDTH 384
 #define MIN_HEIGHT 216
 #define MINIMAP_SCALE 0.2
 #define TILE_SIZE 64
 #define STEP_SIZE 0.01
+#define DEGREE (M_PI / 180)
 #define FOV (M_PI / 180) * 45
 
 #define COLLISION_LIMIT 0.15
@@ -39,6 +45,13 @@
 #else
 # define DBG_PRINT(...) ((void)0)
 #endif
+
+typedef enum e_door_state{
+	CLOSED,
+	OPENING,
+	OPEN,
+	CLOSING
+} t_door_state;
 
 typedef struct s_player {
 	double		x;
@@ -60,12 +73,22 @@ typedef struct s_textures {
 	mlx_texture_t *east;
 }	t_textures;
 
+/*
 typedef struct s_color {
 	uint8_t	r;
 	uint8_t	g;
 	uint8_t	b;
 	uint8_t	a;
 }	t_color;
+*/
+
+typedef struct s_door {
+	int	x;
+	int	y;
+	t_door_state state;
+	double	progress;
+}	t_door;
+
 
 typedef struct s_map {
 	char	**grid;
@@ -94,11 +117,12 @@ typedef struct s_data {
 	t_player	player;
 	t_view		camera;
 	t_textures	*textures;
-	uint32_t	floor_color; //remove
-	t_color		floor;
-	uint32_t	ceiling_color; //remove
-	t_color		ceiling;
-
+	uint32_t	floor;
+	//t_color		floor;
+	uint32_t	ceiling;
+	//t_color		ceiling;
+	t_door		*doors;
+	int			door_count;
 }	t_data;
 
 //color_utils.c
@@ -139,7 +163,7 @@ void	draw_mini_rays(t_data *data);
 void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
 
 //utils.c
-int		is_wall(char **map, double x, double y);
+int		is_wall(char **map, double x, double y); //update
 void	draw_floor_and_ceiling(t_data *data);
 
 //parsing.c

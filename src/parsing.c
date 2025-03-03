@@ -20,7 +20,7 @@
 
 static bool	valid_character(char c)
 {
-	return (c == ' ' || c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
+	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == 'D'); //door?
 }
 
 bool	is_map_line(char *line)
@@ -100,34 +100,129 @@ bool	parse_texture_line(const char *line, t_data *data)
 	return (false);
 }
 
-//check commas and numbers
-bool parse_color_values(char *str, t_color *color)
+bool	is_number(char *str)
 {
-	// now str should be "220,100,0" or something similar
-	int r, g, b;
-	if (sscanf(str, "%d,%d,%d", &r, &g, &b) != 3)
-		return false;
-	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		return false;
-	color->r = r;
-	color->g = g;
-	color->b = b;
-	color->a = 255;
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return false;
+		str++;
+	}
 	return true;
+}
+
+//check commas and numbers
+bool	parse_color_values(char *str, uint32_t *color)
+{
+	int count;
+	char **split;
+	char **copy;
+	int number;
+
+	split = ft_split(str, ',', &count);
+	if (count != 3)
+		return (false);
+	copy = split;
+	while (*copy)
+	{
+		number = ft_atoi(*copy);
+		if (!is_number(*copy) || number < 0 || number > 255)
+			return (false);
+		copy++;
+	}
+	/*
+	color->r = ft_atoi(split[0]);
+	color->g = ft_atoi(split[1]);
+	color->b = ft_atoi(split[2]);
+	color->a = 255;
+	printf("color->r = %d\n", color->r);
+	printf("color->g = %d\n", color->g);
+	printf("color->b = %d\n", color->b);
+	*/
+	*color = get_rgba(ft_atoi(split[0]), ft_atoi(split[1]), ft_atoi(split[2]), 255);
+	return (true);
 }
 
 bool	parse_color_line(char *line, t_data *data)
 {
+	bool	status;
 	if (line[0] == 'F')
 	{
 		//hardcoded jump of 1
-		return parse_color_values(line + 1, &data->floor);
+		printf("Floor color:\n");
+		status = parse_color_values(line + 1, &data->floor);
+		printf("data->floor_color = 0x%08x\n", data->floor);
+		return (status);
 	}
 	if (line[0] == 'C')
 	{
-		return parse_color_values(line + 1, &data->ceiling);
+		//hardcoded jump of 1
+		printf("Ceiling color:\n");
+		status = parse_color_values(line + 1, &data->ceiling);
+		printf("data->ceiling_color = 0x%08x\n", data->ceiling);
+		return (status);
 	}
 	return false;
+}
+
+//not working!!!
+bool	parse_player_pos(t_data *data)
+{
+	int i, j, already_assigned = 0;
+
+	i = 0;
+	while (data->map.grid[i])
+	{
+		j = 0;
+		while (data->map.grid[i][j])
+		{
+			if ((data->map.grid[i][j] == 'N' || data->map.grid[i][j] == 'S' || data->map.grid[i][j] == 'E' || data->map.grid[i][j] == 'W') && !already_assigned)
+			{
+				/*
+				if (data->map.grid[i][j] == 'N')
+					data->player.angle = 270 * DEGREE;
+				else if (data->map.grid[i][j] == 'S')
+					data->player.angle = 90 * DEGREE;
+				else if (data->map.grid[i][j] == 'E')
+					data->player.angle = 0;
+				else if (data->map.grid[i][j] == 'W')
+					data->player.angle = 180 * DEGREE;
+				*/
+				data->player.x = j + 0.5;
+				data->player.y = i + 0.5;
+				//printf("--->%c becomes ", data->map.grid[i][j]);
+				data->map.grid[i][j] = '0';
+				//printf("%c<---\n", data->map.grid[i][j]);
+				already_assigned = 1;
+			}
+			else if((data->map.grid[i][j] == 'N' || data->map.grid[i][j] == 'S' || data->map.grid[i][j] == 'E' || data->map.grid[i][j] == 'W') && already_assigned)
+			{
+				ft_putstr_fd("Error, multiple player positions\n", 2);
+				return (true);
+			}
+			else if (data->map.grid[i][j] == 'D')
+			{
+
+				data->doors[data->door_count].x = j;
+				data->doors[data->door_count].y = i;
+				data->doors[data->door_count].state = CLOSED;
+				data->doors[data->door_count].progress = 0;
+			}
+			else if (data->map.grid[i][j] != '0' && data->map.grid[i][j] != '1')
+			{
+				ft_putstr_fd("Error, invalid character in map\n", 2);
+				return (true);
+			}
+			j++;
+		}
+		i++;
+	}
+	if (!already_assigned)
+	{
+		ft_putstr_fd("Error, no player position found\n", 2);
+		return (true);
+	}
+	return (false);
 }
 
 bool is_map_closed(t_data *data)
@@ -171,6 +266,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 	int	row_len;
 
 	line = NULL;
+	data->player.angle = 0;
 	fd = open(filepath, O_RDONLY);
 	if (fd < 0)
 	{
@@ -198,7 +294,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		if (nl)
 			*nl = '\0';
 		remove_spaces(line);
-		printf("line->%s<-\n", line);
+		//printf("line->%s<-\n", line);
 		/*
 		if (is_map_line(line))
 		{
@@ -268,13 +364,37 @@ int	parse_cubfile(char *filepath, t_data *data)
 			while (i < map_vec.len)
 			{
 				data->map.grid[i] = *(char **)vec_get(&map_vec, i);
+				printf("->%s<-\n", data->map.grid[i]);
+				/*should this be here?*/
+				int j = 0;
+				while (data->map.grid[i][j])
+				{
+					if (data->map.grid[i][j] == 'D')
+					{
+						data->door_count++;
+					}
+					/*
+					else if (data->map.grid[i][j] == 'X')
+					{
+						//data->enemy_count++;
+					}
+					*/
+					j++;
+				}
+				/*should this be here?*/
 				row_len = ft_strlen(data->map.grid[i]);
 				if (row_len > data->map.width)
 					data->map.width = row_len;
 				i++;
 			}
+			data->doors = malloc(data->door_count * sizeof(t_door));
 			data->map.grid[map_vec.len] = NULL;
 		}
+	}
+	if (!status)
+	{
+		if (parse_player_pos(data))
+			status = 1;
 	}
 	/*
 	if (!status && is_map_closed(data))

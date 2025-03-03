@@ -1,15 +1,15 @@
 NO ./textures/lava.png
 SO ./textures/metal.png
 WE ./textures/rock.png
-EA                   ./          textures/water.png
+EA ./textures/water.png
 
-F 220,100,0
-C 225,30,0
+F 0,255,0
+C 255,0,255
 
-1            111111111
-10000000        01
-10010           10001
+1111111111
+1100000011
+1001N10001
 1001010001
 1000000001
-1000000001
+1D00000011
 1111111111

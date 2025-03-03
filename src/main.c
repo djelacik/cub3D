@@ -88,12 +88,7 @@ int	main(void)
 	/*
 		assign N, S, W, E to player.angle and set player.x, player.y
 	*/
-	data.player.x = 2;
-	data.player.y = 2;
-	//data.camera.x = 0;
-	//data.camera.y = 0;
 	data.camera.toggle = 1;
-	//data.player.angle = 0.0;
 	data.player.speed = 0.01;
 	data.mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	mlx_get_monitor_size(0, &monitor_width, &monitor_height);
@@ -114,8 +109,6 @@ int	main(void)
 		return (EXIT_FAILURE);
 	}
 	ft_memset(data.textures, 0, sizeof(t_textures));
-	data.floor_color = 0xAAAABBCC; // Esimerkiksi sininen lattia
-	data.ceiling_color = 0x00FFEEDD; // Esimerkiksi vaalean keltainen katto
 	int status;
 	status = parse_cubfile("test.cub", &data);
 	/*

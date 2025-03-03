@@ -82,6 +82,7 @@ void	draw_rays(t_data *data)
 		offset = (screen_x + 0.5) - ((double)data->width / 2.0);
 		angle_offset = atan(offset / distToPlane);
 		ray_angle = data->player.angle + angle_offset;
+		//data->player.angle = data->player.angle + angle_offset;
 		draw_single_ray(data, ray_angle, screen_x);
 		screen_x++;
 	}

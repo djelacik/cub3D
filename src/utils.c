@@ -14,8 +14,17 @@
 
 int	is_wall(char **map, double x, double y)
 {
-	if (map[(int)y][(int)x] == '1')
+	char	cell;
+
+	cell = map[(int)y][(int)x];
+	if (cell == '1')
 		return (1);
+	else if (cell == 'D')
+	{
+		printf("Door found\n");
+		//find door in doors array, need to change args to receive t_data
+		return (1);
+	}
 	return (0);
 }
 
@@ -31,9 +40,9 @@ void	draw_floor_and_ceiling(t_data *data)
 		while (x < data->width)
 		{
 			if (y < data->height / 2)
-				mlx_put_pixel(data->image, x, y, data->ceiling_color); // Katon väri
+				mlx_put_pixel(data->image, x, y, data->ceiling); // Katon väri
 			else
-				mlx_put_pixel(data->image, x, y, data->floor_color); // Lattian väri
+				mlx_put_pixel(data->image, x, y, data->floor); // Lattian väri
 			x++;
 		}
 		y++;
