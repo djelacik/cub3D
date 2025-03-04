@@ -111,6 +111,7 @@ int	main(void)
 	ft_memset(data.textures, 0, sizeof(t_textures));
 	int status;
 	status = parse_cubfile("test.cub", &data);
+	data.textures->door = mlx_load_png("textures/pics/eagle.png");
 	/*
 	if (load_textures(&data))
 	{
@@ -123,7 +124,7 @@ int	main(void)
 		mlx_terminate(data.mlx);
 		return (EXIT_FAILURE);
 	}
-	if (is_wall(data.map.grid, data.player.x, data.player.y))
+	if (is_wall(&data, data.player.x, data.player.y))
 	{
 		printf("Error: Player starts inside a wall\n");
 		return (1);

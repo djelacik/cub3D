@@ -71,6 +71,7 @@ typedef struct s_textures {
 	mlx_texture_t *south;
 	mlx_texture_t *west;
 	mlx_texture_t *east;
+	mlx_texture_t *door;
 }	t_textures;
 
 /*
@@ -104,6 +105,8 @@ typedef struct s_ray {
 	mlx_texture_t	*texture;
 	double			dir_x;
 	double			dir_y;
+	bool			is_door;
+	double			door_progress;
 }	t_ray;
 
 typedef struct s_data {
@@ -122,6 +125,7 @@ typedef struct s_data {
 	//t_color		ceiling;
 	t_door		*doors;
 	int			door_count;
+
 }	t_data;
 
 //color_utils.c
@@ -138,14 +142,12 @@ uint32_t	simple_shading(uint32_t color, double distance);
 uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y);
 mlx_texture_t *get_wall_texture(t_data *data, double dir_x, double dir_y, int side);
 void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y);
-//void	draw_wall_pattern_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y);
-void	draw_wall_pattern_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y, double scale);
 
 //ray.c
-double	calculate_distance(t_player player, double angle, char **map, t_ray *ray);
-int		calculate_hit_side(t_player player, double angle, char **map);
-double	get_wall_x(double hit_x, double hit_y, int hit_side);
-t_ray	calculate_ray(t_data *data, double angle);
+double	calculate_distance(t_data *data, double angle, t_ray *ray);
+int		calculate_hit_side(t_data *data, double angle, t_ray *ray);
+double	get_wall_x(t_ray *ray);
+bool	calculate_ray(t_data *data, double angle, t_ray *ray);
 
 //rays.c
 double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
@@ -162,7 +164,9 @@ void	draw_mini_rays(t_data *data);
 void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
 
 //utils.c
-int		is_wall(char **map, double x, double y); //update
+double	lookup_door_progress(t_data *data, int x, int y);
+void	update_doors(t_data *data);
+int		is_wall(t_data *data, double x, double y); //update
 void	draw_floor_and_ceiling(t_data *data);
 
 //parsing.c

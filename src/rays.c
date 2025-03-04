@@ -38,15 +38,13 @@ void	draw_single_ray(t_data *data, double angle, int screen_x)
 	int		end_y;
 	double	corrected_distance;
 
-	ray = calculate_ray(data, angle);
+	ft_memset(&ray, 0, sizeof(t_ray));
+	calculate_ray(data, angle, &ray);
 	corrected_distance = calculate_corrected_distance(ray.distance, angle, data->player.angle);
 
 	calculate_wall_limits(data, &start_y, &end_y, corrected_distance);
-
 	//draw_wall_column(data->image, screen_x, start_y, end_y, simple_shading(0xFFB6C1, corrected_distance));
 	draw_wall_texture(data, &ray, screen_x, start_y, end_y);
-	//draw_wall_pattern_texture(data, &ray, screen_x, start_y, end_y, 2);
-	//draw_wall_pattern_texture(data, &ray, screen_x, start_y, end_y);
 }
 
 /*

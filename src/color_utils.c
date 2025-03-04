@@ -14,7 +14,7 @@
 
 uint8_t	get_r(uint32_t rgba)
 {
-	return ((rgba >> 16) & 0xFF);
+	return (rgba & 0xFF);
 }
 
 uint8_t	get_g(uint32_t rgba)
@@ -24,7 +24,7 @@ uint8_t	get_g(uint32_t rgba)
 
 uint8_t	get_b(uint32_t rgba)
 {
-	return (rgba & 0xFF);
+	return (rgba >> 16 & 0xFF);
 }
 
 uint8_t	get_a(uint32_t rgba)

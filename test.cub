@@ -1,15 +1,15 @@
-NO ./textures/lava.png
-SO ./textures/metal.png
-WE ./textures/rock.png
-EA ./textures/water.png
+NO ./textures/pics/mossy.png
+EA ./textures/pics/redbrick.png
+WE ./textures/pics/greystone.png
+SO ./textures/pics/mossy.png
 
 F 0,255,0
 C 255,0,255
 
 1111111111
-1100000011
+1100000001
 1001N10001
-1001010001
-1000000001
-1D00000011
+100101000111
+100000000D01
+100000000111
 1111111111
