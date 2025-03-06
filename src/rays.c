@@ -47,24 +47,6 @@ void	draw_single_ray(t_data *data, double angle, int screen_x)
 	draw_wall_texture(data, &ray, screen_x, start_y, end_y);
 }
 
-/*
-void	draw_rays(t_data *data)
-{
-	double	angle;
-	int		screen_x;
-
-	angle = data->player.angle - FOV / 2;
-	screen_x = 0;
-
-	while (screen_x < data->width)
-	{
-		draw_single_ray(data, angle, screen_x);
-
-		angle += FOV / (data->width); //-1?
-		screen_x++;
-	}
-}*/
-
 void	draw_rays(t_data *data)
 {
 	double	distToPlane;

@@ -44,8 +44,6 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int 
 	uint32_t	shaded_color;
 
 	tex_x = ray->wall_x * ray->texture->width;
-	//if (tex_x < 0)
-	//	tex_x = 0;
 	if (tex_x >= ray->texture->width)
 		tex_x = ray->texture->width - 1;
 	if (ray->is_door && ray->texture == data->textures->door)
@@ -59,8 +57,6 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int 
 	while (y <= end_y)
 	{
 		tex_y = (uint32_t)(((y - start_y) / (double)(end_y - start_y)) * ray->texture->height);
-		//if (tex_y < 0)
-		//	tex_y = 0;
 		if (tex_y >= ray->texture->height)
 			tex_y = ray->texture->height - 1;
 		color = get_texture_color(ray->texture, tex_x, tex_y);

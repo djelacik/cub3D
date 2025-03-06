@@ -13,11 +13,6 @@
 #include "cub3D.h"
 #include <fcntl.h>
 
-//is_map_line()
-//parse_texture_line()
-//parse_color_line()
-//is_map_closed()
-
 static bool	valid_character(char c)
 {
 	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == 'D'); //door?
