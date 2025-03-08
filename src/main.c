@@ -26,6 +26,8 @@ void	free_textures(t_textures *textures)
 		mlx_delete_texture(textures->door);
 }
 
+//many doors
+//use argv[1] as cubfile
 bool	initializer(t_data *data)
 {
 	int	monitor_width;
@@ -48,6 +50,8 @@ bool	initializer(t_data *data)
 	mlx_set_window_size(data->mlx, data->width, data->height);
 	mlx_set_window_limit(data->mlx, MIN_WIDTH, MIN_HEIGHT, monitor_width, monitor_height);
 	mlx_set_window_pos(data->mlx, (monitor_width - data->width) / 2, (monitor_height - data->height) / 2);
+	data->camera.x = data->width / 2;
+	data->camera.y = data->height / 2;
 	data->image = mlx_new_image(data->mlx, data->width, data->height);
 	if (!data->image)
 		return (EXIT_FAILURE);
@@ -80,8 +84,6 @@ bool	initializer(t_data *data)
 int	main(void)
 {
 	t_data	data;
-	//int		monitor_width;
-	//int		monitor_height;
 	int		error;
 
 	error = initializer(&data);
@@ -95,6 +97,3 @@ int	main(void)
 	free(data.textures);
 	return (EXIT_SUCCESS);
 }
-
-
-

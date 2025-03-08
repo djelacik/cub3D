@@ -27,10 +27,10 @@ void	draw_mini_map(t_data *data)
 		{
 			screen_x = x * TILE_SIZE * MINIMAP_SCALE;
 			screen_y = y * TILE_SIZE * MINIMAP_SCALE;
-			if (data->map.grid[y][x] == '1') // Seinät
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0x000000);
+			if (data->map.grid[y][x] == '1')
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR);
 			else // Lattia
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xAAAAAA);
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR_2);
 			x++;
 		}
 		y++;
@@ -47,7 +47,7 @@ void	draw_mini_player(t_data *data)
 
 	x = (int)(data->player.x * TILE_SIZE * MINIMAP_SCALE);
 	y = (int)(data->player.y * TILE_SIZE * MINIMAP_SCALE);
-	size = 5; // Pelaajan koko minimapilla
+	size = 5; //size of player
 	i = -size / 2;
 	while (i <= size / 2)
 	{
@@ -56,7 +56,7 @@ void	draw_mini_player(t_data *data)
 		{
 			if (x + i >= 0 && x + i < data->width &&
 				y + j >= 0 && y + j < data->height)
-				mlx_put_pixel(data->image, x + i, y + j, 0xFF0000); // Punainen
+				mlx_put_pixel(data->image, x + i, y + j, RED_COLOR);
 			j++;
 		}
 		i++;
@@ -104,7 +104,7 @@ void	draw_mini_rays(t_data *data)
 			screen_y = ray_y * TILE_SIZE * MINIMAP_SCALE;
 			if (screen_x >= 0 && screen_x < data->width
 				&& screen_y >= 0 && screen_y < data->height)
-				mlx_put_pixel(data->image, screen_x, screen_y, GRAY_COLOR);
+				mlx_put_pixel(data->image, screen_x, screen_y, YELLOW_COLOR);
 		}
 		angle += 0.01;
 		//angle = normalize_angle(angle);

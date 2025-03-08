@@ -96,10 +96,11 @@ int calculate_hit_side(t_data *data, double angle, t_ray *ray)
 			break;
 		else if (cell == 'D') //this is a door
 		{
-			if (lookup_door_progress(data, map_x, map_y) < 0.8)
+			double progress = lookup_door_progress(data, map_x, map_y);
+			if (progress < 0.8)
 			{
 				ray->is_door = true;
-				ray->door_progress = lookup_door_progress(data, map_x, map_y);
+				ray->door_progress = progress;
 				break;
 			}
 		}

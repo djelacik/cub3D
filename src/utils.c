@@ -47,7 +47,7 @@ void update_doors(t_data *data)
 		// Animate door opening/closing
 		if (door->state == OPENING)
 		{
-			door->progress += 0.02; // adjust speed as needed
+			door->progress += 0.01; // adjust speed as needed
 			if (door->progress >= 1.0)
 			{
 				door->progress = 1.0;
@@ -62,7 +62,7 @@ void update_doors(t_data *data)
 		}
 		else if (door->state == CLOSING)
 		{
-			door->progress -= 0.02;
+			door->progress -= 0.01;
 			if (door->progress <= 0.0)
 			{
 				door->progress = 0.0;

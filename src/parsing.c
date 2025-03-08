@@ -15,7 +15,8 @@
 
 static bool	valid_character(char c)
 {
-	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == 'D'); //door?
+	return (c == '0' || c == '1' || c == 'N' || c == 'S'
+		|| c == 'E' || c == 'W' || c == 'D');
 }
 
 bool	is_map_line(char *line)
@@ -46,52 +47,27 @@ bool	remove_spaces(char *line)
 	return (true);
 }
 
-bool	parse_texture_line(const char *line, t_data *data)
+bool	load_texture(char *path, mlx_texture_t **texture)
+{
+	*texture = mlx_load_png(path);
+	if (!*texture)
+	{
+		ft_putstr_fd("Failed to load texture\n", 2);
+		return (false);
+	}
+	return (true);
+}
+
+bool	parse_texture_line(char *line, t_data *data)
 {
 	if (ft_strncmp(line, "NO", 2) == 0)
-	{
-		//hardcoded jump of 2
-		data->textures->north = mlx_load_png(line + 2);
-		if (!data->textures->north)
-		{
-			ft_putstr_fd("Failed to load texture\n", 2);
-			return (false);
-		}
-		return (true);
-	}
+		return (load_texture(line + 2, &data->textures->north));
 	else if (ft_strncmp(line, "SO", 2) == 0)
-	{
-		data->textures->south = mlx_load_png(line + 2);
-		if (!data->textures->south)
-		{
-			ft_putstr_fd("Failed to load texture\n", 2);
-			//free_textures
-			return (false);
-		}
-		return (true);
-	}
+		return (load_texture(line + 2, &data->textures->south));
 	else if (ft_strncmp(line, "WE", 2) == 0)
-	{
-		data->textures->west = mlx_load_png(line + 2);
-		if (!data->textures->west)
-		{
-			ft_putstr_fd("Failed to load texture\n", 2);
-			//free_textures
-			return (false);
-		}
-		return (true);
-	}
+		return (load_texture(line + 2, &data->textures->west));
 	else if (ft_strncmp(line, "EA", 2) == 0)
-	{
-		data->textures->east = mlx_load_png(line + 2);
-		if (!data->textures->east)
-		{
-			ft_putstr_fd("Failed to load texture\n", 2);
-			//free_textures
-			return (false);
-		}
-		return (true);
-	}
+		return (load_texture(line + 2, &data->textures->east));
 	return (false);
 }
 
@@ -125,15 +101,6 @@ bool	parse_color_values(char *str, uint32_t *color)
 			return (false);
 		copy++;
 	}
-	/*
-	color->r = ft_atoi(split[0]);
-	color->g = ft_atoi(split[1]);
-	color->b = ft_atoi(split[2]);
-	color->a = 255;
-	printf("color->r = %d\n", color->r);
-	printf("color->g = %d\n", color->g);
-	printf("color->b = %d\n", color->b);
-	*/
 	*color = get_rgba(ft_atoi(split[0]), ft_atoi(split[1]), ft_atoi(split[2]), 255);
 	return (true);
 }
@@ -173,16 +140,14 @@ bool	parse_player_pos(t_data *data)
 		{
 			if ((data->map.grid[i][j] == 'N' || data->map.grid[i][j] == 'S' || data->map.grid[i][j] == 'E' || data->map.grid[i][j] == 'W') && !already_assigned)
 			{
-				/*
 				if (data->map.grid[i][j] == 'N')
-					data->player.angle = 270 * DEGREE;
+					data->player.angle = 3 * M_PI / 2; // 270 degrees
 				else if (data->map.grid[i][j] == 'S')
-					data->player.angle = 90 * DEGREE;
+					data->player.angle = M_PI / 2; // 90 degrees
 				else if (data->map.grid[i][j] == 'E')
 					data->player.angle = 0;
 				else if (data->map.grid[i][j] == 'W')
-					data->player.angle = 180 * DEGREE;
-				*/
+					data->player.angle = M_PI;
 				data->player.x = j + 0.5;
 				data->player.y = i + 0.5;
 				//printf("--->%c becomes ", data->map.grid[i][j]);
@@ -384,14 +349,15 @@ int	parse_cubfile(char *filepath, t_data *data)
 				i++;
 			}
 			data->doors = malloc(doors_count * sizeof(t_door));
-			ft_memset(data->doors, 0, sizeof(t_door));
+			ft_memset(data->doors, 0, doors_count * sizeof(t_door));
 			data->map.grid[map_vec.len] = NULL;
 		}
 	}
 	if (!status)
 	{
-		if (parse_player_pos(data))
-			status = 1;
+		printf("angle is: %f\n", data->player.angle);
+		status = parse_player_pos(data);
+		printf("angle is: %f\n", data->player.angle);
 	}
 	/*
 	if (!status && is_map_closed(data))
