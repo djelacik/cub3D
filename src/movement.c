@@ -156,6 +156,7 @@ static void	render(t_data *data)
 	mlx_image_to_window(data->mlx, data->image, 0, 0);
 	draw_floor_and_ceiling(data);
 	draw_rays(data);
+	render_sprites(data);
 	draw_mini_map(data);
 	draw_mini_player(data);
 	draw_mini_rays(data);

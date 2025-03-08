@@ -19,18 +19,18 @@ uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y)
 
 mlx_texture_t *get_wall_texture(t_data *data, double dir_x, double dir_y, int side)
 {
-	if (side == 0) // X-seinä
+	if (side == 0)
 	{
-		if (dir_x > 0) // Itään
+		if (dir_x > 0)
 			return data->textures->east;
-		else // Länteen
+		else
 			return data->textures->west;
 	}
-	else // Y-seinä
+	else
 	{
-		if (dir_y > 0) // Etelään
+		if (dir_y > 0)
 			return data->textures->south;
-		else // Pohjoiseen
+		else
 			return data->textures->north;
 	}
 }

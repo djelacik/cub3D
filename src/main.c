@@ -71,6 +71,24 @@ bool	initializer(t_data *data)
 		free_textures(data->textures);
 		return (EXIT_FAILURE);
 	}
+	/* sprite try */
+	data->sprites = malloc(sizeof(t_sprite) * 3);
+	data->num_sprites = 3;
+	data->sprites[0].x = 2.5;
+	data->sprites[0].y = 2.5;
+	data->sprites[0].texture = 0;
+	data->sprites[1].x = 5.5;
+	data->sprites[1].y = 5.5;
+	data->sprites[1].texture = 1;
+	data->sprites[2].x = 2.5;
+	data->sprites[2].y = 5.5;
+	data->sprites[2].texture = 2;
+	data->zBuffer = malloc(sizeof(double) * data->width);
+	data->sprite_textures = malloc(sizeof(mlx_texture_t *) * 3);
+	data->sprite_textures[0] = mlx_load_png("textures/pics/pillar.png");
+	data->sprite_textures[1] = mlx_load_png("textures/pics/greenlight.png");
+	data->sprite_textures[2] = mlx_load_png("textures/pics/barrel.png");
+	/* sprite try */
 	if (is_wall(data, data->player.x, data->player.y))
 	{
 		printf("Error: Player starts inside a wall\n");

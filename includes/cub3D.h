@@ -38,6 +38,9 @@
 #define SKY_COLOR 0x87CEEBFF
 #define FLOOR_COLOR 0x8B4513FF
 
+#define SPRITE_TEX_WIDTH  64
+#define SPRITE_TEX_HEIGHT 64
+
 #define MIN_WIDTH 384
 #define MIN_HEIGHT 216
 #define MINIMAP_SCALE 0.2
@@ -100,6 +103,12 @@ typedef struct s_door {
 	double	progress;
 }	t_door;
 
+typedef struct s_sprite {
+	double	x;
+	double	y;
+	int		texture;
+}	t_sprite;
+
 typedef struct s_map {
 	char	**grid;
 	int		width;
@@ -135,7 +144,10 @@ typedef struct s_data {
 	//t_color		ceiling;
 	t_door		*doors;
 	int			door_count;
-
+	t_sprite		*sprites;
+	int				num_sprites;
+	double			*zBuffer;
+	mlx_texture_t	**sprite_textures;
 }	t_data;
 
 //color_utils.c
@@ -185,6 +197,9 @@ int		parse_cubfile(char *filepath, t_data *data);
 //free.c
 void	free_and_exit(void);
 void	free_and_exit_with(int exit_code);
+
+//sprites.c
+void	render_sprites(t_data *data);
 
 //void	handle_keys(mlx_key_data_t keydata, void *param);
 //int	load_textures(t_data *data);

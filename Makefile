@@ -20,6 +20,7 @@ src/rays.c \
 src/utils.c \
 src/minimap.c \
 src/movement.c \
+src/sprites.c \
 src/free.c
 
 OBJ = $(SRC:.c=.o)
