@@ -127,7 +127,8 @@ void	render_sprites(t_data *data)
 		int stripe = draw_start_x;
 		while (stripe < draw_end_x)
 		{
-			int tex_x = (int)(256 * (stripe - (-sprite_width / 2 + sprite_screen_x)) * SPRITE_TEX_WIDTH / sprite_width) / 256;
+			mlx_texture_t *tex = data->sprite_textures[spr->texture];
+			int tex_x = (int)(256 * (stripe - (-sprite_width / 2 + sprite_screen_x)) * tex->width / sprite_width) / 256;
 			// Proceed if the sprite is in front of the camera and the stripe is on screen,
 			// and if the sprite is closer than the wall at this stripe (using the ZBuffer)
 			if (transform_y > 0 && stripe >= 0 && stripe < data->width && transform_y < data->zBuffer[stripe])
@@ -136,8 +137,7 @@ void	render_sprites(t_data *data)
 				while (y < draw_end_y)
 				{
 					int d = (y) * 256 - data->height * 128 + sprite_height * 128;
-					int tex_y = ((d * SPRITE_TEX_HEIGHT) / sprite_height) / 256;
-					mlx_texture_t *tex = data->sprite_textures[spr->texture];
+					int tex_y = ((d * tex->height) / sprite_height) / 256;
 					uint32_t color = get_texture_color(tex, tex_x, tex_y);
 					    if ((color & 0x00FFFFFF) != 0)
 						{
