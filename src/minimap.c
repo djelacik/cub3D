@@ -73,6 +73,8 @@ double	normalize_angle(double angle)
 }
 
 //limit angle to 0 - 2 * M_PI
+//rays look more like waves wtf
+//make this dynamic (portion of the map depending on player's position)
 void	draw_mini_rays(t_data *data)
 {
 	double	ray_x;

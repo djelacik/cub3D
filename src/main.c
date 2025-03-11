@@ -26,8 +26,11 @@ void	free_textures(t_textures *textures)
 		mlx_delete_texture(textures->door);
 }
 
-//many doors
+//try many doors
 //use argv[1] as cubfile
+//fix N, S, W, E
+//animate sprite
+//add sprite to map
 bool	initializer(t_data *data)
 {
 	int	monitor_width;
@@ -40,7 +43,7 @@ bool	initializer(t_data *data)
 		assign N, S, W, E to player.angle and set player.x, player.y
 	*/
 	data->camera.toggle = 1;
-	data->player.speed = 0.01;
+	data->player.speed = 0.025;
 	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	if (!data->mlx)
 		return (EXIT_FAILURE);
@@ -71,7 +74,7 @@ bool	initializer(t_data *data)
 		free_textures(data->textures);
 		return (EXIT_FAILURE);
 	}
-	/* sprite try */
+	/* sprite hardcoded try */
 	data->sprites = malloc(sizeof(t_sprite) * 3);
 	data->num_sprites = 3;
 	data->sprites[0].x = 2.5;
@@ -88,7 +91,7 @@ bool	initializer(t_data *data)
 	data->sprite_textures[0] = mlx_load_png("textures/pics/pillar.png");
 	data->sprite_textures[1] = mlx_load_png("textures/pics/greenlight.png");
 	data->sprite_textures[2] = mlx_load_png("textures/pics/barrel.png");
-	/* sprite try */
+	/* sprite hardcoded try */
 	if (is_wall(data, data->player.x, data->player.y))
 	{
 		printf("Error: Player starts inside a wall\n");

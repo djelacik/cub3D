@@ -38,6 +38,7 @@ static int can_move_to(t_data *data, double new_x, double new_y)
 	return 1; // No collisions, movement allowed
 }
 
+//normalize diagonal movement
 static void handle_movement(t_data *data)
 {
 	double orig_x;

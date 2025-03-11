@@ -38,16 +38,12 @@
 #define SKY_COLOR 0x87CEEBFF
 #define FLOOR_COLOR 0x8B4513FF
 
-#define SPRITE_TEX_WIDTH  64
-#define SPRITE_TEX_HEIGHT 64
-
 #define MIN_WIDTH 384
 #define MIN_HEIGHT 216
-#define MINIMAP_SCALE 0.2
+#define MINIMAP_SCALE 0.15
 #define TILE_SIZE 64
-#define STEP_SIZE 0.01
-//#define DEGREE (M_PI / 180)
-#define FOV (M_PI / 180) * 45
+#define STEP_SIZE 0.5
+#define FOV M_PI / 3
 
 #define COLLISION_LIMIT 0.15
 #define MOUSE_SENSITIVITY 0.001
@@ -87,20 +83,11 @@ typedef struct s_textures {
 	mlx_texture_t *door;
 }	t_textures;
 
-/*
-typedef struct s_color {
-	uint8_t	r;
-	uint8_t	g;
-	uint8_t	b;
-	uint8_t	a;
-}	t_color;
-*/
-
 typedef struct s_door {
-	int	x;
-	int	y;
-	t_door_state state;
-	double	progress;
+	int				x;
+	int				y;
+	t_door_state	state;
+	double			progress;
 }	t_door;
 
 typedef struct s_sprite {
@@ -129,47 +116,49 @@ typedef struct s_ray {
 }	t_ray;
 
 typedef struct s_data {
-	int			width; //window width
-	int			height; //window height
-	t_map		map;
-	mlx_t		*mlx;
-	mlx_image_t	*image;
-	t_ray		*ray;
-	t_player	player;
-	t_view		camera;
-	t_textures	*textures;
-	uint32_t	floor;
-	//t_color		floor;
-	uint32_t	ceiling;
-	//t_color		ceiling;
-	t_door		*doors;
-	int			door_count;
+	int				width; //window width
+	int				height; //window height
+	t_map			map;
+	mlx_t			*mlx;
+	mlx_image_t		*image;
+	t_ray			*ray;
+	t_player		player;
+	t_view			camera;
+	t_textures		*textures;
+	uint32_t		floor;
+	uint32_t		ceiling;
+	t_door			*doors;
+	int				door_count;
 	t_sprite		*sprites;
 	int				num_sprites;
 	double			*zBuffer;
 	mlx_texture_t	**sprite_textures;
 }	t_data;
 
+/* 
+
+					CLEAN PROTOTYPES, SOME OF THIS DONT EVEN EXIST ANYMORE 
+
+*/
+
 //color_utils.c
-uint8_t	get_r(uint32_t rgba);
-uint8_t	get_g(uint32_t rgba);
-uint8_t	get_b(uint32_t rgba);
-uint8_t	get_a(uint32_t rgba);
+uint8_t		get_r(uint32_t rgba);
+uint8_t		get_g(uint32_t rgba);
+uint8_t		get_b(uint32_t rgba);
+uint8_t		get_a(uint32_t rgba);
 uint32_t	get_rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 //shading.c
 uint32_t	simple_shading(uint32_t color, double distance);
 
 //texture.c
-uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y);
-mlx_texture_t *get_wall_texture(t_data *data, double dir_x, double dir_y, int side);
-void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int start_y, int end_y);
+uint32_t		get_texture_color(mlx_texture_t *texture, int x, int y);
+mlx_texture_t 	*get_wall_texture(t_data *data, t_ray *ray);
+void			draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, int vis_end_y, int orig_start_y, int wall_height);
 
 //ray.c
 double	calculate_distance(t_data *data, double angle, t_ray *ray);
-int		calculate_hit_side(t_data *data, double angle, t_ray *ray);
-double	get_wall_x(t_ray *ray);
-bool	calculate_ray(t_data *data, double angle, t_ray *ray);
+void	calculate_ray_data(t_data *data, double angle, t_ray *ray);
 
 //rays.c
 double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
@@ -200,8 +189,5 @@ void	free_and_exit_with(int exit_code);
 
 //sprites.c
 void	render_sprites(t_data *data);
-
-//void	handle_keys(mlx_key_data_t keydata, void *param);
-//int	load_textures(t_data *data);
 
 #endif

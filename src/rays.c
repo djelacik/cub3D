@@ -12,41 +12,6 @@
 
 #include "cub3D.h"
 
-static void	calculate_wall_limits(t_data *data, int *start_y, int *end_y, double corrected_distance)
-{
-	int wall_height;
-
-	wall_height = (int)(data->height / corrected_distance);
-	*start_y = (data->height / 2) - (wall_height / 2);
-	*end_y = (data->height / 2) + (wall_height / 2);
-
-	if (*start_y < 0)
-		*start_y = 0;
-	if (*end_y >= data->height)
-		*end_y = data->height - 1;
-}
-
-double	calculate_corrected_distance(double distance, double ray_angle, double player_angle)
-{
-	return (distance * cos(ray_angle - player_angle));
-}
-
-void	draw_single_ray(t_data *data, double angle, int screen_x)
-{
-	t_ray	ray;
-	int		start_y;
-	int		end_y;
-	double	corrected_distance;
-
-	ft_memset(&ray, 0, sizeof(t_ray));
-	calculate_ray(data, angle, &ray);
-	corrected_distance = calculate_corrected_distance(ray.distance, angle, data->player.angle);
-	data->zBuffer[screen_x] = corrected_distance;
-	calculate_wall_limits(data, &start_y, &end_y, corrected_distance);
-	//draw_wall_column(data->image, screen_x, start_y, end_y, simple_shading(0xFFB6C1, corrected_distance));
-	draw_wall_texture(data, &ray, screen_x, start_y, end_y);
-}
-
 void	draw_rays(t_data *data)
 {
 	double	distToPlane;
@@ -62,8 +27,77 @@ void	draw_rays(t_data *data)
 		offset = (screen_x + 0.5) - ((double)data->width / 2.0);
 		angle_offset = atan(offset / distToPlane);
 		ray_angle = data->player.angle + angle_offset;
-		//data->player.angle = data->player.angle + angle_offset;
 		draw_single_ray(data, ray_angle, screen_x);
 		screen_x++;
+	}
+}
+
+void	draw_single_ray(t_data *data, double ray_angle, int screen_x)
+{
+	t_ray	ray;
+	int		orig_start_y;
+	int		orig_end_y;
+	int		vis_start_y;
+	int		vis_end_y;
+	int		wall_height;
+
+	// Calculate ray properties
+	calculate_ray_data(data, ray_angle, &ray);
+	data->zBuffer[screen_x] = ray.distance;
+
+	// Compute the full (virtual) wall height and its starting/ending positions
+	wall_height = (int)(data->height / ray.distance);
+	orig_start_y = (data->height / 2) - (wall_height / 2);
+	orig_end_y = (data->height / 2) + (wall_height / 2);
+
+	// Clip the drawing area to the visible screen (but keep the original positions for texture mapping)
+	vis_start_y = orig_start_y;
+	vis_end_y = orig_end_y;
+	if (vis_start_y < 0)
+		vis_start_y = 0;
+	if (vis_end_y >= data->height)
+		vis_end_y = data->height - 1;
+
+	// Pass both the visible drawing range and the original wall info
+	draw_wall_texture(data, &ray, screen_x, vis_start_y, vis_end_y, orig_start_y, wall_height);
+}
+
+void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, int vis_end_y, int orig_start_y, int wall_height)
+{
+	int			y;
+	uint32_t	tex_x;
+	uint32_t	tex_y;
+	uint32_t	color;
+	uint32_t	shaded_color;
+	bool		invisible;
+
+	invisible = false;
+	tex_x = ray->wall_x * ray->texture->width;
+	if (tex_x >= ray->texture->width)
+		tex_x = ray->texture->width - 1;
+	if (ray->is_door)
+	{
+		int offset = (int)(ray->door_progress * ray->texture->width);
+		tex_x = (tex_x + offset) % ray->texture->width;
+		if (tex_x < (uint32_t)offset)
+		{
+			invisible = true;
+			(void)invisible;
+			ray->is_door = false;
+			ray->texture = get_wall_texture(data, ray);
+			ray->is_door = true; // Necessary?
+		}
+	}
+	y = vis_start_y;
+	while (y <= vis_end_y)
+	{
+		// Compute the texture y-coordinate using the original (unclipped) wall parameters.
+		tex_y = (uint32_t)(((y - orig_start_y) / (double)wall_height) * ray->texture->height);
+		if (tex_y >= ray->texture->height)
+			tex_y = ray->texture->height - 1;
+		color = get_texture_color(ray->texture, tex_x, tex_y);
+		shaded_color = simple_shading(color, ray->distance);
+		mlx_put_pixel(data->image, screen_x, y, shaded_color);
+		y++;
 	}
 }
