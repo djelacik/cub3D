@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 15:40:09 by djelacik          #+#    #+#             */
-/*   Updated: 2025/02/21 17:58:18 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/03/13 17:52:11 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,12 @@ static void handle_mouse_rotation(t_data *data)
 	int32_t aux_y = 0;
 	int32_t dx = 0;
 	//int32_t dy = 0;
-
+	
+	if (!data->flag)
+	{
+		mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
+		return ;
+	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_TAB))
 		data->camera.toggle = 0;
 	if (!data->camera.toggle && mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
@@ -128,6 +133,11 @@ void my_resize_callback(int width, int height, void* param)
 	t_data *data = (t_data *)param;
 
 	//debug print
+	if (!data->flag)
+	{
+		data->flag = 1;
+		mlx_set_cursor_mode(data->mlx, MLX_MOUSE_NORMAL);
+	}
 	printf("Window resized to %dx%d\n", data->width, data->height);
 	if (width <= MIN_WIDTH || height <= MIN_HEIGHT)
 	{
@@ -157,7 +167,6 @@ static void	render(t_data *data)
 	mlx_image_to_window(data->mlx, data->image, 0, 0);
 	draw_floor_and_ceiling(data);
 	draw_rays(data);
-	render_sprites(data);
 	draw_mini_map(data);
 	draw_mini_player(data);
 	draw_mini_rays(data);
@@ -167,11 +176,12 @@ void	loop_hook(void *param)
 {
 	t_data	*data;
 	data = (t_data *)param;
+	render(data);
+	render_sprites(data);
 	handle_movement(data);
 	handle_mouse_rotation(data);
 	handle_rotation(data);
 	update_doors(data);
-	render(data);
 	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(data->mlx);
 }

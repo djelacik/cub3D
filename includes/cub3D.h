@@ -133,6 +133,7 @@ typedef struct s_data {
 	int				num_sprites;
 	double			*zBuffer;
 	mlx_texture_t	**sprite_textures;
+	bool			flag;
 }	t_data;
 
 /* 

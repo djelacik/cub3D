@@ -15,16 +15,16 @@
 void	draw_rays(t_data *data)
 {
 	double	distToPlane;
-	int		screen_x;
+	double	screen_x; //mmmmmm
 	double	offset;
 	double	angle_offset;
 	double	ray_angle;
 
-	distToPlane = ((double)data->width / 2) / tan(FOV / 2);
+	distToPlane = ((double)data->width / 2.0) / tan(FOV / 2.0);
 	screen_x = 0;
-	while (screen_x < data->width)
+	while ((int)screen_x < data->width)
 	{
-		offset = (screen_x + 0.5) - ((double)data->width / 2.0);
+		offset = (screen_x + 0.5) - (double)((double)data->width / 2.0);
 		angle_offset = atan(offset / distToPlane);
 		ray_angle = data->player.angle + angle_offset;
 		draw_single_ray(data, ray_angle, screen_x);
