@@ -3,8 +3,8 @@ EA ./textures/pics/redbrick.png
 WE ./textures/pics/greystone.png
 SO ./textures/pics/mossy.png
 
-F 0,255,0
-C 255,0,255
+F 127,127,127
+C 0,100,200
 
 1111111111
 1100000001

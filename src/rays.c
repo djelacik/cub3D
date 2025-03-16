@@ -12,13 +12,19 @@
 
 #include "cub3D.h"
 
-void	draw_rays(t_data *data)
+void	draw_walls_and_sprites(t_data *data)
 {
 	double	distToPlane;
 	double	screen_x; //mmmmmm
+
 	double	offset;
 	double	angle_offset;
 	double	ray_angle;
+
+	double	dir_x = cos(data->player.angle);
+	double	dir_y = sin(data->player.angle);
+	double	plane_x = -dir_y * tan(FOV / 2.0);
+	double	plane_y = dir_x * tan(FOV / 2.0);
 
 	distToPlane = ((double)data->width / 2.0) / tan(FOV / 2.0);
 	screen_x = 0;
@@ -27,12 +33,13 @@ void	draw_rays(t_data *data)
 		offset = (screen_x + 0.5) - (double)((double)data->width / 2.0);
 		angle_offset = atan(offset / distToPlane);
 		ray_angle = data->player.angle + angle_offset;
-		draw_single_ray(data, ray_angle, screen_x);
+		draw_wall_column(data, ray_angle, (int)screen_x);
+		draw_sprite_column(data, (int)screen_x, dir_x, dir_y, plane_x, plane_y);
 		screen_x++;
 	}
 }
 
-void	draw_single_ray(t_data *data, double ray_angle, int screen_x)
+void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
 {
 	t_ray	ray;
 	int		orig_start_y;

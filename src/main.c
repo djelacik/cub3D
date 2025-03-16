@@ -39,10 +39,7 @@ bool	initializer(t_data *data)
 
 	status = 0;
 	ft_memset(data, 0, sizeof(t_data));
-	/*
-		assign N, S, W, E to player.angle and set player.x, player.y
-	*/
-	data->camera.toggle = 1;
+	data->camera.toggle = 0;
 	data->player.speed = 0.025;
 	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	if (!data->mlx)

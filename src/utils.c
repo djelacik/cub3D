@@ -24,6 +24,7 @@ double	lookup_door_progress(t_data *data, int x, int y)
 	return 0;
 }
 
+//make smoother, currently it's buggy if moving in a distance == 2
 void update_doors(t_data *data)
 {
 	int	i = 0;
@@ -35,7 +36,7 @@ void update_doors(t_data *data)
 		double distance = sqrt(dx * dx + dy * dy);
 
 		// If player is close enough and roughly facing the door, trigger it
-		if (distance < 2 /* adjust threshold */)
+		if (distance < 2) /* adjust threshold */
 		{
 			// Check the angle between player direction and the door
 			// (For simplicity, you might compare the player's angle with the angle to the door)

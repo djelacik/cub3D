@@ -75,12 +75,22 @@ typedef struct s_view {
 	int8_t		toggle;
 }	t_view;
 
+// typedef struct s_sprite {
+// 	double		x;
+// 	double		y;
+// 	double		distance;
+// 	double		angle;
+// 	mlx_texture_t	*texture;
+// }	t_sprite;
+
 typedef struct s_textures {
 	mlx_texture_t *north;
 	mlx_texture_t *south;
 	mlx_texture_t *west;
 	mlx_texture_t *east;
 	mlx_texture_t *door;
+	//mlx_texture_t *barrel;
+	//mlx_texture_t **sprite; //array of sprites
 }	t_textures;
 
 typedef struct s_door {
@@ -163,8 +173,9 @@ void	calculate_ray_data(t_data *data, double angle, t_ray *ray);
 
 //rays.c
 double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
-void	draw_single_ray(t_data *data, double angle, int screen_x);
-void	draw_rays(t_data *data);
+void	draw_wall_column(t_data *data, double angle, int screen_x);
+//void	draw_walls(t_data *data);
+void	draw_walls_and_sprites(t_data *data);
 
 //movement.c
 void	loop_hook(void *param);
@@ -189,6 +200,7 @@ void	free_and_exit(void);
 void	free_and_exit_with(int exit_code);
 
 //sprites.c
-void	render_sprites(t_data *data);
+//void	draw_sprites(t_data *data);
+void 	draw_sprite_column(t_data *data, int x, double dir_x, double dir_y, double plane_x, double plane_y);
 
 #endif
