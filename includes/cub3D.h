@@ -137,13 +137,21 @@ typedef struct s_data {
 	t_textures		*textures;
 	uint32_t		floor;
 	uint32_t		ceiling;
+
 	t_door			*doors;
 	int				door_count;
+
 	t_sprite		*sprites;
 	int				num_sprites;
 	double			*zBuffer;
 	mlx_texture_t	**sprite_textures;
-	bool			flag;
+
+	mlx_texture_t **hud_hands;
+	int hud_frame;
+	int hud_frame_count;
+	int hud_frame_timer;
+
+	bool			is_player_moving;
 }	t_data;
 
 /* 
@@ -202,5 +210,6 @@ void	free_and_exit_with(int exit_code);
 //sprites.c
 //void	draw_sprites(t_data *data);
 void 	draw_sprite_column(t_data *data, int x, double dir_x, double dir_y, double plane_x, double plane_y);
+void	draw_hud_hands(t_data *data);
 
 #endif

@@ -89,6 +89,16 @@ bool	initializer(t_data *data)
 	data->sprite_textures[1] = mlx_load_png("textures/pics/greenlight.png");
 	data->sprite_textures[2] = mlx_load_png("textures/pics/barrel.png");
 	/* sprite hardcoded try */
+
+	/* hands */
+	data->hud_hands = malloc(sizeof(mlx_texture_t *) * 5);
+	data->hud_hands[0] = mlx_load_png("textures/hand/hand1.png");
+	data->hud_hands[1] = mlx_load_png("textures/hand/hand2.png");
+	data->hud_hands[2] = mlx_load_png("textures/hand/hand3.png");
+	data->hud_hands[3] = mlx_load_png("textures/hand/hand4.png");
+	data->hud_hands[4] = mlx_load_png("textures/hand/hand5.png");
+	data->hud_frame_count = 5;
+	/* hands */
 	if (is_wall(data, data->player.x, data->player.y))
 	{
 		printf("Error: Player starts inside a wall\n");

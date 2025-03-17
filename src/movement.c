@@ -69,22 +69,32 @@ static void handle_movement(t_data *data)
 		new_y = orig_y - cos(data->player.angle) * data->player.speed;
 	}
 	else
+	{
+		data->is_player_moving = false;
 		return; // No forward/backward movement
+	}
 
 	// Try moving diagonally first
 	if (can_move_to(data, new_x, new_y))
 	{
 		data->player.x = new_x;
 		data->player.y = new_y;
+		data->is_player_moving = true;
 	}
 	else
 	{
 		// If blocked, try moving along X only
 		if (can_move_to(data, new_x, orig_y))
+		{
 			data->player.x = new_x;
+			data->is_player_moving = true;
+		}
 		// And try moving along Y only
 		if (can_move_to(data, orig_x, new_y))
+		{
 			data->player.y = new_y;
+			data->is_player_moving = true;
+		}
 	}
 }
 
@@ -157,6 +167,8 @@ void my_resize_callback(int width, int height, void* param)
 	data->width = width;
 	data->height = height;
 	data->player.speed = (double)height * 0.00002;
+	free(data->zBuffer);
+	data->zBuffer = malloc(sizeof(double) * data->width);
 }
 
 static void	render(t_data *data)
@@ -173,13 +185,30 @@ static void	render(t_data *data)
 	draw_mini_map(data);
 	draw_mini_player(data);
 	draw_mini_rays(data);
+
+	// Draw HUD hands
+	draw_hud_hands(data);
+    // Hud animation
+	if (data->is_player_moving)
+	{
+		data->hud_frame_timer++;
+		if (data->hud_frame_timer >= 5)
+		{
+			data->hud_frame = (data->hud_frame + 1) % data->hud_frame_count;
+			data->hud_frame_timer = 0;
+		}
+	}
+	else
+	{
+		data->hud_frame = 0;
+		data->hud_frame_timer = 0;
+	}
 }
 
 void	loop_hook(void *param)
 {
 	t_data	*data;
 	data = (t_data *)param;
-
 
 	handle_movement(data);
 	handle_mouse_rotation(data);
