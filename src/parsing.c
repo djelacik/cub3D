@@ -127,7 +127,6 @@ bool	parse_color_line(char *line, t_data *data)
 	return false;
 }
 
-//not working!!!
 bool	parse_player_pos(t_data *data)
 {
 	int i, j, already_assigned = 0;
@@ -150,9 +149,7 @@ bool	parse_player_pos(t_data *data)
 					data->player.angle = M_PI;
 				data->player.x = j + 0.5;
 				data->player.y = i + 0.5;
-				//printf("--->%c becomes ", data->map.grid[i][j]);
 				data->map.grid[i][j] = '0';
-				//printf("%c<---\n", data->map.grid[i][j]);
 				already_assigned = 1;
 			}
 			else if((data->map.grid[i][j] == 'N' || data->map.grid[i][j] == 'S' || data->map.grid[i][j] == 'E' || data->map.grid[i][j] == 'W') && already_assigned)
@@ -168,6 +165,7 @@ bool	parse_player_pos(t_data *data)
 				data->doors[data->door_count].progress = 0;
 				data->door_count++;
 			}
+			//neccessary?
 			else if (data->map.grid[i][j] != '0' && data->map.grid[i][j] != '1')
 			{
 				ft_putstr_fd("Error, invalid character in map\n", 2);
@@ -187,32 +185,29 @@ bool	parse_player_pos(t_data *data)
 
 bool is_map_closed(t_data *data)
 {
-	int i, j;
+    int i, j;
+    int width = data->map.width;
+    int height = data->map.height;
 
-	// Check first and last row
-	for (j = 0; j < data->map.width; j++)
-	{
-		// If we are beyond row's length, we consider it 'space' => error
-		if (j >= (int)ft_strlen(data->map.grid[0]) || data->map.grid[0][j] != '1')
-			return (false);
-		if (j >= (int)ft_strlen(data->map.grid[data->map.height - 1]) 
-			|| data->map.grid[data->map.height - 1][j] != '1')
-			return (false);
-	}
+    // Check top and bottom rows
+    for (j = 0; j < width; j++)
+    {
+        if (data->map.grid[0][j] != '1')
+            return false;
+        if (data->map.grid[height - 1][j] != '1')
+            return false;
+    }
 
-	// Check left and right walls
-	for (i = 1; i < data->map.height - 1; i++)
-	{
-		int len = (int)ft_strlen(data->map.grid[i]);
-		if (len == 0)
-			return (false);
-		if (data->map.grid[i][0] != '1')
-			return (false);
-		// The last visible character in the row
-		if (data->map.grid[i][len - 1] != '1')
-			return (false);
-	}
-	return (true);
+    // Check left and right walls in intermediate rows
+    for (i = 1; i < height - 1; i++)
+    {
+        int row_len = ft_strlen(data->map.grid[i]);
+        if (row_len < width) // or if row is empty
+            return false;
+        if (data->map.grid[i][0] != '1' || data->map.grid[i][width - 1] != '1')
+            return false;
+    }
+    return true;
 }
 
 int	parse_cubfile(char *filepath, t_data *data)
@@ -235,7 +230,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		return (1);
 	}
 	t_vec	map_vec;
-	if (vec_new(&map_vec, 16, sizeof(char *)) < 0)
+	if (vec_new(&map_vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
 	{
 		ft_putstr_fd("Vec alloc failed\n", 2);
 		close(fd);
@@ -325,7 +320,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 			while (i < map_vec.len)
 			{
 				data->map.grid[i] = *(char **)vec_get(&map_vec, i);
-				printf("->%s<-\n", data->map.grid[i]);
+				//printf("->%s<-\n", data->map.grid[i]);
 				/*should this be here?*/
 				int j = 0;
 				while (data->map.grid[i][j])
@@ -355,17 +350,19 @@ int	parse_cubfile(char *filepath, t_data *data)
 	}
 	if (!status)
 	{
-		printf("angle is: %f\n", data->player.angle);
 		status = parse_player_pos(data);
-		printf("angle is: %f\n", data->player.angle);
 	}
-	/*
 	if (!status && is_map_closed(data))
 	{
+		i = 0;
+		while (i < map_vec.len)
+		{
+			printf("->%s<-\n", data->map.grid[i]);
+			i++;
+		}
 		ft_putstr_fd("Map is not closed\n", 2);
 		status = 1;
 	}
-	*/
 	vec_free(&map_vec);
 	return (status);
 }

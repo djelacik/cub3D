@@ -37,7 +37,7 @@ void draw_hud_hands(t_data *data)
 
 			uint32_t color = get_texture_color(hand_tex, src_x, src_y);
 			color = simple_shading(color, 1.0);
-			// Skip fully transparent pixels (assumes transparency is indicated in the lower 24 bits)
+			// skip transparent pixels? syncronize to erase residual pixels
 			if ((color & 0xFF000000) != 0)
 			{
 				mlx_put_pixel(data->image, pos_x + x, pos_y + y, color);

@@ -47,6 +47,7 @@
 
 #define COLLISION_LIMIT 0.15
 #define MOUSE_SENSITIVITY 0.001
+#define VEC_INIT_SIZE 4
 
 //# define DEBUG
 #ifdef DEBUG 
