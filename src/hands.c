@@ -36,10 +36,10 @@ void draw_hud_hands(t_data *data)
 			int	src_y = y / scale_factor;
 
 			uint32_t color = get_texture_color(hand_tex, src_x, src_y);
-			color = simple_shading(color, 1.0);
-			// skip transparent pixels? syncronize to erase residual pixels
-			if ((color & 0xFF000000) != 0)
+			// skip black pixels
+			if ((color & 0x00FFFFFF) != 0)
 			{
+				color = simple_shading(color, 1.0);
 				mlx_put_pixel(data->image, pos_x + x, pos_y + y, color);
 			}
 			x++;

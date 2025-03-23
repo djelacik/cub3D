@@ -192,7 +192,7 @@ static void	render(t_data *data)
 	if (data->is_player_moving)
 	{
 		data->hud_frame_timer++;
-		if (data->hud_frame_timer >= 5)
+		if (data->hud_frame_timer >= 15)
 		{
 			data->hud_frame = (data->hud_frame + 1) % data->hud_frame_count;
 			data->hud_frame_timer = 0;
