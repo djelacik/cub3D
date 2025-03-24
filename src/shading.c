@@ -19,9 +19,11 @@ uint32_t	simple_shading(uint32_t color, double distance)
 	uint8_t		b;
 	double		factor;
 
-	factor = 1 / (1 + distance * 0.2);
-	if (factor < 0.2)
-		factor = 0.2;
+	factor = distance * 0.4;
+	if (factor < 1)
+		factor = 1;
+	else
+		factor = 1 / factor;
 
 	r = (uint8_t)(get_r(color) * factor);
 	g = (uint8_t)(get_g(color) * factor);

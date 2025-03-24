@@ -109,17 +109,10 @@ void draw_sprite_column(t_data *data, int x, double dir_x, double dir_y, double 
             int tex_y = ((d * tex->height) / sp->sprite_height) / 256;
             uint32_t color = get_texture_color(tex, tex_x, tex_y);
 
-            // Only draw non-transparent pixels and only if the sprite pixel is in front of the wall
+            // Only draw non-black pixels and only if the sprite pixel is in front of the wall
             if ((color & 0x00FFFFFF) != 0 && sp->transform_y < data->zBuffer[x])
             {
-                uint8_t a = get_a(color);
-                uint8_t orig_r = get_r(color);
-                uint8_t g = get_g(color);
-                uint8_t orig_b = get_b(color);
-                // Optionally swap red and blue channels if needed
-                uint8_t r = orig_b;
-                uint8_t b = orig_r;
-                uint32_t fixed_color = get_rgba(r, g, b, a);
+				uint32_t fixed_color = simple_shading(color, sp->transform_y);
                 mlx_put_pixel(data->image, x, y, fixed_color);
             }
         }
