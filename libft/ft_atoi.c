@@ -3,47 +3,72 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 17:11:21 by djelacik          #+#    #+#             */
-/*   Updated: 2024/09/06 13:31:57 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/24 12:55:08 by aapadill          #+#    #+#             */
+/*   Updated: 2024/08/06 17:53:47 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static long	ft_convert(const char *str, int sign)
+static const char	*ft_jump_spaces(const char *str)
 {
-	long long	ans;
-
-	ans = 0;
-	while (*str >= '0' && *str <= '9')
-	{
-		if (ans > INT_MAX || ans < INT_MIN)
-		{
-			if (sign == 1)
-				return (2147483649);
-			else
-				return (2147483649);
-		}
-		ans = ans * 10 + *str - '0';
+	while (((*str >= 9 && *str <= 13) || (*str == 32)) && str)
 		str++;
-	}
-	return (ans * sign);
+	return (str);
 }
 
-long	ft_atoi(const char *str)
+static int	ft_signer(const char c)
 {
-	int			sign;
+	if (c == '-')
+		return (-1);
+	if (ft_isdigit(c) || c == '+')
+		return (1);
+	return (0);
+}
 
-	sign = 1;
-	while (ft_isspace(*str))
-		str++;
-	if (*str == '-' || *str == '+')
+/*
+** @error
+** -9223372036854775808 might be wrong
+*/
+
+static int	ft_overflow_check(long value, int digit, int sign)
+{
+	if (value > LONG_MAX / 10 || (value == LONG_MAX / 10 && digit > 7))
 	{
-		if (*str == '-')
-			sign *= -1;
-		str++;
+		if (sign == 1)
+			return (1);
+		else
+			return (-1);
 	}
-	return (ft_convert(str, sign));
+	return (0);
+}
+
+int	ft_atoi(const char *str)
+{
+	const char	*start;
+	int			sign;
+	long long	pre;
+	int			digit;
+	int			overflow;
+
+	start = ft_jump_spaces(str);
+	sign = ft_signer(*start);
+	if (sign && !ft_isdigit(*start))
+		start++;
+	pre = 0;
+	while (ft_isdigit(*start))
+	{
+		digit = *start - '0';
+		overflow = ft_overflow_check(pre, digit, sign);
+		if (overflow == 1)
+			return ((int)LLONG_MAX);
+		if (overflow == -1)
+			return ((int)LLONG_MIN);
+		pre = pre * 10 + digit;
+		start++;
+	}
+	pre = pre * sign;
+	return ((int)pre);
 }

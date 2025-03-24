@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3D.h"
+#include "cub3D.h"
 
 void	draw_mini_map(t_data *data)
 {
@@ -20,17 +20,17 @@ void	draw_mini_map(t_data *data)
 	int	screen_y;
 
 	y = 0;
-	while (data->map[y])
+	while (data->map.grid[y])
 	{
 		x = 0;
-		while (data->map[y][x])
+		while (data->map.grid[y][x])
 		{
 			screen_x = x * TILE_SIZE * MINIMAP_SCALE;
 			screen_y = y * TILE_SIZE * MINIMAP_SCALE;
-			if (data->map[y][x] == '1') // Seinät
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xAAAAAA);
+			if (data->map.grid[y][x] == '1')
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR);
 			else // Lattia
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, 0xCCCCCC);
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR_2);
 			x++;
 		}
 		y++;
@@ -47,22 +47,34 @@ void	draw_mini_player(t_data *data)
 
 	x = (int)(data->player.x * TILE_SIZE * MINIMAP_SCALE);
 	y = (int)(data->player.y * TILE_SIZE * MINIMAP_SCALE);
-	size = 5; // Pelaajan koko minimapilla
+	size = 5; //size of player
 	i = -size / 2;
 	while (i <= size / 2)
 	{
 		j = -size / 2;
 		while (j <= size / 2)
 		{
-			if (x + i >= 0 && x + i < WIN_WIDTH &&
-				y + j >= 0 && y + j < WIN_HEIGHT)
-				mlx_put_pixel(data->image, x + i, y + j, 0xFF0000); // Punainen
+			if (x + i >= 0 && x + i < data->width &&
+				y + j >= 0 && y + j < data->height)
+				mlx_put_pixel(data->image, x + i, y + j, RED_COLOR);
 			j++;
 		}
 		i++;
 	}
 }
 
+double	normalize_angle(double angle)
+{
+	while (angle >= 2 * M_PI)
+		angle -= 2 * M_PI;
+	while (angle < 0)
+		angle += 2 * M_PI;
+	return (angle);
+}
+
+//limit angle to 0 - 2 * M_PI
+//rays look more like waves wtf
+//make this dynamic (portion of the map depending on player's position)
 void	draw_mini_rays(t_data *data)
 {
 	double	ray_x;
@@ -70,23 +82,34 @@ void	draw_mini_rays(t_data *data)
 	double	angle;
 	int		screen_x;
 	int		screen_y;
+	double	max_angle;
 
+	//data->player.angle = normalize_angle(data->player.angle);
+	//printf("player.angle: %f\n", data->player.angle);
+	//angle = normalize_angle(data->player.angle - FOV / 2);
 	angle = data->player.angle - FOV / 2;
-	while (angle <= data->player.angle + FOV / 2)
+	//max_angle = normalize_angle(data->player.angle + FOV / 2);
+	max_angle = data->player.angle + FOV / 2;
+	//assert(data->player.angle >= 0 && data->player.angle < 2 * M_PI);
+	while (angle <= max_angle)
 	{
+		//assert(angle >= 0 && angle < 2 * M_PI);
 		ray_x = data->player.x;
 		ray_y = data->player.y;
-		while (data->map[(int)ray_y][(int)ray_x] != '1')
+		while (data->map.grid[(int)ray_y][(int)ray_x] != '1')
 		{
+			//assert(ray_x >= 0 && ray_x < data->map.width);
+			//assert(ray_y >= 0 && ray_y < data->map.height);
 			ray_x += cos(angle) * STEP_SIZE;
 			ray_y += sin(angle) * STEP_SIZE;
 			screen_x = ray_x * TILE_SIZE * MINIMAP_SCALE;
 			screen_y = ray_y * TILE_SIZE * MINIMAP_SCALE;
-			if (screen_x >= 0 && screen_x < WIN_WIDTH
-				&& screen_y >= 0 && screen_y < WIN_HEIGHT)
-				mlx_put_pixel(data->image, screen_x, screen_y, 0x444444);
+			if (screen_x >= 0 && screen_x < data->width
+				&& screen_y >= 0 && screen_y < data->height)
+				mlx_put_pixel(data->image, screen_x, screen_y, YELLOW_COLOR);
 		}
 		angle += 0.01;
+		//angle = normalize_angle(angle);
 	}
 }
 

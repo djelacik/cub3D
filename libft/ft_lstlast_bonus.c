@@ -3,18 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/28 20:13:08 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/03 10:37:00 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/30 15:13:08 by aapadill          #+#    #+#             */
+/*   Updated: 2024/04/30 16:23:35 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*
+** @description
+** Returns the last node of the list
+**
+** @param
+** lst: The beginning of the list
+**
+** @return
+** Last node of the lis 
+*/
 
 #include "libft.h"
 
 t_list	*ft_lstlast(t_list *lst)
 {
-	if (!lst)
+	if (lst == NULL)
 		return (NULL);
 	while (lst->next != NULL)
 		lst = lst->next;

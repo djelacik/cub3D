@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcat.c                                        :+:      :+:    :+:   */
+/*   vec_get.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/13 09:27:22 by djelacik          #+#    #+#             */
-/*   Updated: 2024/06/13 09:28:40 by djelacik         ###   ########.fr       */
+/*   Created: 2025/02/21 13:20:19 by aapadill          #+#    #+#             */
+/*   Updated: 2025/02/21 13:26:09 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strcat(char *dest, char *src)
-{
-	int	i;
-	int	j;
+#include "vec.h"
 
-	i = 0;
-	while (dest[i] != '\0')
-		i++;
-	j = 0;
-	while (src[j] != '\0')
-	{
-		dest[i + j] = src[j];
-		j++;
-	}
-	dest[i + j] = '\0';
-	return (dest);
+void	*vec_get(t_vec *src, size_t index)
+{
+	unsigned char	*ptr;
+
+	if (index >= src->len || !src || !src->memory)
+		return (NULL);
+	ptr = &src->memory[src->elem_size * index];
+	return (ptr);
 }

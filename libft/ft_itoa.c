@@ -3,58 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/23 15:03:48 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/03 10:36:18 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/26 08:23:37 by aapadill          #+#    #+#             */
+/*   Updated: 2024/04/29 17:22:03 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	get_len(int n)
+static int	ft_exp(int base, int exp)
 {
-	unsigned int	len;
+	int	i;
+	int	result;
 
-	len = 1;
-	if (n == 0)
-		return (1);
+	i = 0;
+	result = 1;
+	while (i < exp)
+	{
+		result *= base;
+		i++;
+	}
+	return (result);
+}
+
+static int	ft_digit_counter(int j)
+{
+	int	i;
+
+	i = 1;
+	while (j >= 10)
+	{
+		j /= 10;
+		i++;
+	}
+	return (i);
+}
+
+static int	signer(int n)
+{
+	int	sign;
+
+	sign = 0;
 	if (n < 0)
-	{
-		n *= -1;
-		len++;
-	}
-	while (n >= 10)
-	{
-		n /= 10;
-		len++;
-	}
-	return (len);
+		sign = 1;
+	return (sign);
 }
 
 char	*ft_itoa(int n)
 {
-	char	*buffer;
-	int		i;
+	int		digits;
+	int		sign;
+	char	*str;
+	int		j;
 
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
-	buffer = ft_calloc(get_len(n) + 1, sizeof(char));
-	if (!buffer)
+	sign = signer(n);
+	if (sign)
+		n = -n;
+	digits = ft_digit_counter(n);
+	str = malloc((digits + sign + 1) * sizeof(char));
+	if (!str)
 		return (NULL);
-	if (n == 0)
-		buffer[0] = '0';
-	i = get_len(n);
-	if (n < 0)
+	if (sign)
+		str[0] = '-';
+	j = 0;
+	while (j < digits)
 	{
-		*buffer = '-';
-		n *= -1;
+		str[j + sign] = (n / ft_exp(10, digits - j - 1)) % 10 + '0';
+		n %= ft_exp(10, digits - j - 1);
+		j++;
 	}
-	buffer[get_len(n)] = 0;
-	while (n > 0)
-	{
-		buffer[--i] = n % 10 + '0';
-		n /= 10;
-	}
-	return (buffer);
+	str[digits + sign] = 0;
+	return (str);
 }

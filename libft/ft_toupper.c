@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 09:44:33 by djelacik          #+#    #+#             */
-/*   Updated: 2024/04/18 09:52:49 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/22 17:34:38 by aapadill          #+#    #+#             */
+/*   Updated: 2024/04/24 12:41:09 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_toupper(int c)
 {
 	if (c >= 'a' && c <= 'z')
-		return (c - 32);
-	else
-		return (c);
+		return (c - 'a' + 'A');
+	return (c);
 }

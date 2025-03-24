@@ -1,30 +1,39 @@
 NAME = cub3D
+
+CC = cc
+CFLAGS =  -Wall -Werror -Wextra -g -O2  #-fPIE
+LDFLAGS = -lglfw -pthread -lm -L./MLX42/include/MLX42 -L./includes -L"/opt/homebrew/Cellar/glfw/3.4/lib/" #-ldl #-pie -lft 
+
 LIBMLX = ./MLX42
 MLX_42 = $(LIBMLX)/build/libmlx42.a
-CC = gcc
-CFLAGS =  -g -O2 -fPIE -I$(LIBMLX)/include -I./libft -I./get_next_line -I./include
-LDFLAGS = -L$(LIBMLX)/build -lmlx42 -lglfw -pthread -lm -L./libft -lft -pie
+
+INCLUDES = -Iincludes -I$(LIBMLX)/include
 
 SRC = \
+src/parsing.c \
+src/color_utils.c \
 src/main.c \
+src/shading.c \
+src/texture.c \
+src/ray.c \
 src/rays.c \
-src/hooks.c \
 src/utils.c \
 src/minimap.c \
-src/movement.c
+src/movement.c \
+src/sprites.c \
+src/hands.c \
+src/free.c
 
 OBJ = $(SRC:.c=.o)
 
 # Rule for building the final executable
 all: $(NAME)
 
-# Compile the project and link it with libft and MLX42
-$(NAME): $(OBJ) libft/libft.a $(MLX_42)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
-
 # Compile libft library with -fPIE
 libft/libft.a:
-	@make CFLAGS="-Wall -Wextra -Werror -fPIE" -C libft
+	#@make CFLAGS="-Wall -Wextra -Werror -fPIE" -C libft
+	make -C ./libft
+	make bonus -C ./libft
 
 # Clone MLX42 if it does not exist
 mlx_clone: 
@@ -41,15 +50,19 @@ $(MLX_42): mlx_clone
 	fi
 
 # Compile object files from source
-%.o: %.c $(MLX_42)
-	$(CC) $(CFLAGS) -o $@ -c $<
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
+
+# Compile the project and link it with libft and MLX42
+$(NAME): $(OBJ) libft/libft.a $(MLX_42)
+	$(CC) $(CFLAGS) $(OBJ) libft/libft.a $(MLX_42) -o $(NAME) $(LDFLAGS)	
 
 # Clean object files
 clean:
-	rm -f $(OBJ)
-	@make clean -C libft
+	rm -rf $(OBJ)
 	rm -rf $(LIBMLX)/build
-
+	@make -C libft clean
+	
 # Full clean (removes executable and object files)
 fclean: clean
 	rm -f $(NAME)

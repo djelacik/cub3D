@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lower.c                                         :+:      :+:    :+:   */
+/*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 09:54:03 by djelacik          #+#    #+#             */
-/*   Updated: 2024/04/18 09:55:30 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/22 17:44:16 by aapadill          #+#    #+#             */
+/*   Updated: 2024/04/24 12:40:42 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_tolower(int c)
 {
 	if (c >= 'A' && c <= 'Z')
-		return (c + 32);
-	else
-		return (c);
+		return (c - 'A' + 'a');
+	return (c);
 }

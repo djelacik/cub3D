@@ -3,48 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/17 11:22:14 by djelacik          #+#    #+#             */
-/*   Updated: 2024/05/03 10:37:31 by djelacik         ###   ########.fr       */
+/*   Created: 2024/04/22 08:07:06 by aapadill          #+#    #+#             */
+/*   Updated: 2024/04/30 09:33:49 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	move_forward(unsigned char *d, const unsigned char *s, size_t len)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < len)
-	{
-		d[i] = s[i];
-		i++;
-	}
-}
-
-static void	move_backward(unsigned char *d, const unsigned char *s, size_t len)
-{
-	while (len > 0)
-	{
-		len--;
-		d[len] = s[len];
-	}
-}
-
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	unsigned char		*d;
-	const unsigned char	*s;
+	char		*temp_dst;
+	const char	*temp_src;
 
-	if (!dst && !src)
-		return (NULL);
-	d = (unsigned char *)dst;
-	s = (unsigned char *)src;
-	if (d < s)
-		move_forward(d, s, len);
+	if (!src && !dst)
+		return (dst);
+	temp_dst = (char *)dst;
+	temp_src = (const char *)src;
+	if ((const char *)src < (char *)dst)
+		while (len--)
+			*(temp_dst + len) = *(temp_src + len);
 	else
-		move_backward(d, s, len);
+		while (len--)
+			*temp_dst++ = *temp_src++;
 	return (dst);
 }
