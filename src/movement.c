@@ -184,8 +184,8 @@ static void	render(t_data *data)
 	draw_walls_and_sprites(data);
 	draw_mini_map(data);
 	draw_mini_player(data);
-	draw_mini_rays(data);
-
+	//draw_mini_rays(data); //this segfaults in weird maps
+	
 	// Draw HUD hands
 	draw_hud_hands(data);
     // Hud animation

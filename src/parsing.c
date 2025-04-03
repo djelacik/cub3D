@@ -60,20 +60,26 @@ bool	load_texture(char *path, mlx_texture_t **texture)
 
 bool	parse_texture_line(char *line, t_data *data)
 {
-	if (ft_strncmp(line, "NO", 2) == 0)
-		return (load_texture(line + 2, &data->textures->north));
-	else if (ft_strncmp(line, "SO", 2) == 0)
-		return (load_texture(line + 2, &data->textures->south));
-	else if (ft_strncmp(line, "WE", 2) == 0)
-		return (load_texture(line + 2, &data->textures->west));
-	else if (ft_strncmp(line, "EA", 2) == 0)
-		return (load_texture(line + 2, &data->textures->east));
+	t_textures		*t;
+
+	t = data->textures;
+	if (!ft_strncmp(line, "NO", 2) && !t->north)
+		return (load_texture(line + 2, &t->north));
+	else if (!ft_strncmp(line, "SO", 2)  && !t->south)
+		return (load_texture(line + 2, &t->south));
+	else if (!ft_strncmp(line, "WE", 2) && !t->west)
+		return (load_texture(line + 2, &t->west));
+	else if (!ft_strncmp(line, "EA", 2) && !t->east)
+		return (load_texture(line + 2, &t->east));
 	return (false);
 }
 
 bool	textures_ready(t_data *data)
 {
-	return (data->textures->north && data->textures->south && data->textures->west && data->textures->east);
+	t_textures		*t;
+
+	t = data->textures;
+	return (t->north && t->south && t->west && t->east);
 }
 
 bool	is_number(char *str)
@@ -218,7 +224,7 @@ bool is_map_closed(t_data *data)
 			{
 				if (data->map.grid[i - 1][j] == '\0' || data->map.grid[i + 1][j] == '\0' || data->map.grid[i][j - 1] == '\0' || data->map.grid[i][j + 1] == '\0')
 				{
-					ft_putstr_fd("Error, map is not closed\n", 2);
+					ft_putstr_fd("Error, map is not closed (intermediate)\n", 2);
 					return (false);
 				}
 			}
