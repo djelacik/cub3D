@@ -71,6 +71,11 @@ bool	parse_texture_line(char *line, t_data *data)
 	return (false);
 }
 
+bool	textures_ready(t_data *data)
+{
+	return (data->textures->north && data->textures->south && data->textures->west && data->textures->east);
+}
+
 bool	is_number(char *str)
 {
 	while (*str)
@@ -108,20 +113,24 @@ bool	parse_color_values(char *str, uint32_t *color)
 bool	parse_color_line(char *line, t_data *data)
 {
 	bool	status;
-	if (line[0] == 'F')
+	if (!data->f_color_found && line[0] == 'F')
 	{
 		//hardcoded jump of 1
 		printf("Floor color:\n");
 		status = parse_color_values(line + 1, &data->floor);
 		printf("data->floor_color = 0x%08x\n", data->floor);
+		if (status)
+			data->f_color_found = 1;
 		return (status);
 	}
-	if (line[0] == 'C')
+	if (!data->c_color_found && line[0] == 'C')
 	{
 		//hardcoded jump of 1
 		printf("Ceiling color:\n");
 		status = parse_color_values(line + 1, &data->ceiling);
 		printf("data->ceiling_color = 0x%08x\n", data->ceiling);
+		if (status)
+			data->c_color_found = 1;
 		return (status);
 	}
 	return false;
@@ -286,6 +295,12 @@ int	parse_cubfile(char *filepath, t_data *data)
 		*/
 		if (is_map_line(line))
 		{
+			if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
+			{
+				ft_putstr_fd("You're trying to initialize map before colors or textures, exiting\n", 2);
+				status = 1;
+				break ;
+			}
 			if (!map_started)
 				map_started = true;
 			if (vec_push(&map_vec, &line) < 0)
@@ -309,7 +324,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		{
 			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
 			{
-				ft_putstr_fd("Invalid config line\n", 2);
+				ft_putstr_fd("Either some invalid line or trying to define the same thing twice\n", 2);
 				free(line);
 				status = 1;
 				break ;

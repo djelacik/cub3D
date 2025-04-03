@@ -130,6 +130,10 @@ typedef struct s_data {
 	int				width; //window width
 	int				height; //window height
 	t_map			map;
+
+	bool 			f_color_found;
+	bool			c_color_found;
+
 	mlx_t			*mlx;
 	mlx_image_t		*image;
 	t_ray			*ray;
