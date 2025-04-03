@@ -28,9 +28,6 @@ void	free_textures(t_textures *textures)
 
 //try many doors
 //use argv[1] as cubfile
-//fix N, S, W, E
-//animate sprite
-//add sprite to map
 bool	initializer(t_data *data)
 {
 	int	monitor_width;
