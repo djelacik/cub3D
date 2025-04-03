@@ -6,7 +6,7 @@
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:32:54 by aapadill          #+#    #+#             */
-/*   Updated: 2025/02/21 15:27:09 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/04/03 09:29:49 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,29 +194,54 @@ bool	parse_player_pos(t_data *data)
 
 bool is_map_closed(t_data *data)
 {
-    int i, j;
-    int width = data->map.width;
-    int height = data->map.height;
+	int i, j, line_len;
+	int height = data->map.height;
+	i = 0;
+	line_len = 0;
 
-    // Check top and bottom rows
-    for (j = 0; j < width; j++)
-    {
-        if (data->map.grid[0][j] != '1')
-            return false;
-        if (data->map.grid[height - 1][j] != '1')
-            return false;
-    }
-
-    // Check left and right walls in intermediate rows
-    for (i = 1; i < height - 1; i++)
-    {
-        int row_len = ft_strlen(data->map.grid[i]);
-        if (row_len < width) // or if row is empty
-            return false;
-        if (data->map.grid[i][0] != '1' || data->map.grid[i][width - 1] != '1')
-            return false;
-    }
-    return true;
+	while (i < height)
+	{
+		j = 0;
+		line_len = ft_strlen(data->map.grid[i]);
+		//printf("%i has %i chars---->", i, line_len);
+		while (j < line_len)
+		{
+			if (i == 0 || i == height - 1 || j == 0 || j == line_len - 1)
+			{
+				if (data->map.grid[i][j] != '1')
+				{
+					ft_putstr_fd("Error, map is not closed\n", 2);
+					return (false);
+				}
+			}
+			else if (data->map.grid[i][j] == '0' || data->map.grid[i][j] == 'D')
+			{
+				if (data->map.grid[i - 1][j] == '\0' || data->map.grid[i + 1][j] == '\0' || data->map.grid[i][j - 1] == '\0' || data->map.grid[i][j + 1] == '\0')
+				{
+					ft_putstr_fd("Error, map is not closed\n", 2);
+					return (false);
+				}
+			}
+			else
+			{
+				if (data->map.grid[i][j] != '1')
+				{
+					ft_putstr_fd("Error, map is not closed\n", 2);
+					return (false);
+				}
+			}
+			/*
+			if (data->map.grid[i][j] != '\0')
+				printf("%c", data->map.grid[i][j]);
+			else
+				printf("X");
+			*/
+			j++;
+		}
+		//printf("<----\n");
+		i++;
+	}
+	return true;
 }
 
 int	parse_cubfile(char *filepath, t_data *data)
@@ -367,7 +392,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 	{
 		status = parse_player_pos(data);
 	}
-	if (!status && is_map_closed(data))
+	if (!status && !is_map_closed(data))
 	{
 		i = 0;
 		while (i < map_vec.len)
@@ -379,5 +404,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 		status = 1;
 	}
 	vec_free(&map_vec);
+	printf("reached end of parsing\n");
 	return (status);
 }
