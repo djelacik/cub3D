@@ -16,7 +16,7 @@
 static bool	valid_character(char c)
 {
 	return (c == '0' || c == '1' || c == 'N' || c == 'S'
-		|| c == 'E' || c == 'W' || c == 'D');
+		|| c == 'E' || c == 'W' || c == 'D' || c == ' ');
 }
 
 bool	is_map_line(char *line)
@@ -30,6 +30,24 @@ bool	is_map_line(char *line)
 	return (true);
 }
 
+bool	line_is_only_spaces(char *line)
+{
+	size_t	count;
+	char	*original;
+	
+	count = 0;
+	original = line;
+	while (*line)
+	{
+		if (*line == ' ')
+			count++;
+		line++;
+	}
+	if (ft_strlen(original) == count)
+		return (true);
+	return (false);
+}
+
 bool	remove_spaces(char *line)
 {
 	char	*src;
@@ -39,7 +57,7 @@ bool	remove_spaces(char *line)
 	dst = line;
 	while (*src)
 	{
-		if (*src != ' ' && *src != '\t')
+		if (*src != ' ' && *src != '\t') //tabs?
 			*dst++ = *src;
 		src++;
 	}
@@ -180,6 +198,11 @@ bool	parse_player_pos(t_data *data)
 				data->doors[data->door_count].progress = 0;
 				data->door_count++;
 			}
+			else if (data->map.grid[i][j] == ' ')
+			{
+				data->map.grid[i][j] = '0';
+				printf("ok trying to remove spaces\n");
+			}
 			//neccessary?
 			else if (data->map.grid[i][j] != '0' && data->map.grid[i][j] != '1')
 			{
@@ -236,15 +259,13 @@ bool is_map_closed(t_data *data)
 					return (false);
 				}
 			}
-			/*
 			if (data->map.grid[i][j] != '\0')
 				printf("%c", data->map.grid[i][j]);
 			else
 				printf("X");
-			*/
 			j++;
 		}
-		//printf("<----\n");
+		printf("<----\n");
 		i++;
 	}
 	return true;
@@ -280,7 +301,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 	while (line)
 	{
 		//skip empty lines
-		if (line[0] == '\n')
+		if (line[0] == '\n' && !map_started)
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -289,7 +310,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 		nl = ft_strchr(line, '\n');
 		if (nl)
 			*nl = '\0';
-		remove_spaces(line);
 		//printf("line->%s<-\n", line);
 		/*
 		if (is_map_line(line))
@@ -299,7 +319,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 			printf("is map.grid line\n");
 		}
 		*/
-		if (is_map_line(line))
+		if (is_map_line(line) && !line_is_only_spaces(line))
 		{
 			if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
 			{
@@ -328,6 +348,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		*/
 		else if (!map_started)
 		{
+			remove_spaces(line);
 			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
 			{
 				ft_putstr_fd("Either some invalid line or trying to define the same thing twice\n", 2);
