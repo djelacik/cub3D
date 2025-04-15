@@ -28,7 +28,7 @@ void	free_textures(t_textures *textures)
 
 //try many doors
 //use argv[1] as cubfile
-bool	initializer(t_data *data)
+bool	initializer(t_data *data, char *filename)
 {
 	int	monitor_width;
 	int	monitor_height;
@@ -60,7 +60,7 @@ bool	initializer(t_data *data)
 	}
 	ft_memset(data->textures, 0, sizeof(t_textures));
 	data->textures->door = mlx_load_png("textures/pics/eagle.png");
-	status = parse_cubfile("test.cub", data);
+	status = parse_cubfile(filename, data);
 	if (status)
 	{
 		printf("Parsing error\n");
@@ -106,12 +106,17 @@ bool	initializer(t_data *data)
 	return (EXIT_SUCCESS);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_data	data;
 	int		error;
-
-	error = initializer(&data);
+	
+	if (argc != 2)
+	{
+		printf("Usage: %s <.cub file>\n", argv[0]);
+		return (EXIT_FAILURE);
+	}
+	error = initializer(&data, argv[1]);
 	if (error)
 		return (EXIT_FAILURE);
 	mlx_image_to_window(data.mlx, data.image, 0, 0);

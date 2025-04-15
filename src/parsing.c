@@ -284,7 +284,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 
 	line = NULL;
 	data->player.angle = 0;
-	fd = open(filepath, O_RDONLY);
+	fd = open(filepath, O_RDONLY); //check more errors
 	if (fd < 0)
 	{
 		perror("open failed");
