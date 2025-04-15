@@ -127,6 +127,10 @@ typedef struct s_ray {
 }	t_ray;
 
 typedef struct s_data {
+	bool			resize_pending;
+    int				new_width;
+    int				new_height;
+
 	int				width; //window width
 	int				height; //window height
 	t_map			map;

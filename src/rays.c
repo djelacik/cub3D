@@ -72,21 +72,21 @@ void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
 void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, int vis_end_y, int orig_start_y, int wall_height)
 {
 	int			y;
-	uint32_t	tex_x;
-	uint32_t	tex_y;
+	int			tex_x;
+	int			tex_y;
 	uint32_t	color;
 	uint32_t	shaded_color;
 	bool		invisible;
 
 	invisible = false;
 	tex_x = ray->wall_x * ray->texture->width;
-	if (tex_x >= ray->texture->width)
+	if (tex_x >= (int)ray->texture->width)
 		tex_x = ray->texture->width - 1;
 	if (ray->is_door)
 	{
 		int offset = (int)(ray->door_progress * ray->texture->width);
 		tex_x = (tex_x + offset) % ray->texture->width;
-		if (tex_x < (uint32_t)offset)
+		if (tex_x < offset)
 		{
 			invisible = true;
 			(void)invisible;
@@ -98,9 +98,9 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, 
 	y = vis_start_y;
 	while (y <= vis_end_y)
 	{
-		// Compute the texture y-coordinate using the original (unclipped) wall parameters.
-		tex_y = (uint32_t)(((y - orig_start_y) / (double)wall_height) * ray->texture->height);
-		if (tex_y >= ray->texture->height)
+		// Compute the texture y-coordinate using the original (unclipped) wall parameters
+		tex_y = ((y - orig_start_y) * ray->texture->height) / wall_height;
+		if (tex_y >= (int)ray->texture->height)
 			tex_y = ray->texture->height - 1;
 		color = get_texture_color(ray->texture, tex_x, tex_y);
 		shaded_color = simple_shading(color, ray->distance);

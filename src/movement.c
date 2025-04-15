@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 15:40:09 by djelacik          #+#    #+#             */
-/*   Updated: 2025/03/13 17:52:11 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/04/14 10:20:25 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,49 +142,66 @@ void my_resize_callback(int width, int height, void* param)
 {
 	t_data *data = (t_data *)param;
 
-	// if (!data->flag)
-	// {
-	// 	data->flag = 1;
-	// 	data->camera.toggle = 1;
-	// 	//mlx_set_cursor_mode(data->mlx, MLX_MOUSE_NORMAL);
-	// }
-	printf("Window resized to %dx%d\n", data->width, data->height);
 	if (width <= MIN_WIDTH || height <= MIN_HEIGHT)
 	{
 		if (width == MIN_WIDTH && height == MIN_HEIGHT)
+		{
 			printf("Reached smallest resolution: %i x %i\n", width, height);
-		//mlx_set_window_size(data->mlx, data->width, data->height);
+			return ;
+		}
 		if (width <= MIN_WIDTH)
-			data->width = MIN_WIDTH;
+			data->new_width = MIN_WIDTH;
 		else
-			data->width = width;
+			data->new_width = width;
 		if (height <= MIN_HEIGHT)
-			data->height = MIN_HEIGHT;
+			data->new_height = MIN_HEIGHT;
 		else
-			data->height = height;
-		return ;
+			data->new_height = height;
 	}
-	data->width = width;
-	data->height = height;
-	data->player.speed = (double)height * 0.00002;
-	free(data->zBuffer);
-	data->zBuffer = malloc(sizeof(double) * data->width);
+	else
+	{
+		data->new_width = width;
+		data->new_height = height;
+	}
+	data->resize_pending = true;
+	printf("Resize Callback: new dimensions set to %i x %i\n", data->new_width, data->new_height);
 }
 
 static void	render(t_data *data)
 {
-	mlx_delete_image(data->mlx, data->image);
+	// mlx_delete_image(data->mlx, data->image);
 	mlx_resize_hook(data->mlx, &my_resize_callback, (void *)data);
-	data->image = mlx_new_image(data->mlx, data->width, data->height);
-	mlx_image_to_window(data->mlx, data->image, 0, 0);
-
+	// data->image = mlx_new_image(data->mlx, data->width, data->height);
+	// mlx_image_to_window(data->mlx, data->image, 0, 0);
+	if (data->resize_pending)
+	{
+		data->width = data->new_width;
+		data->height = data->new_height;
+		free(data->zBuffer);
+		data->zBuffer = malloc(sizeof(double) * data->width);
+		if (!data->zBuffer)
+		{
+			printf("Error: Failed to allocate memory for zBuffer\n");
+			return; //exit if possible
+		}
+		//if (data->image)
+		mlx_delete_image(data->mlx, data->image);
+		data->image = mlx_new_image(data->mlx, data->new_width, data->new_height);
+		mlx_image_to_window(data->mlx, data->image, 0, 0);
+		//if (!data->image)
+		data->player.speed = (double)data->height * 0.00002;
+		data->camera.x = data->width / 2;
+		data->camera.y = data->height / 2;
+		printf("Render will now happen with %dx%d\n", data->width, data->height);
+		data->resize_pending = false;
+	}
 	draw_floor_and_ceiling(data);
 	//draw_walls(data);
 	//draw_sprites(data);
 	draw_walls_and_sprites(data);
 	draw_mini_map(data);
 	draw_mini_player(data);
-	//draw_mini_rays(data); //this segfaults in weird maps
+	draw_mini_rays(data); //this segfaults in weird maps
 	
 	// Draw HUD hands
 	draw_hud_hands(data);

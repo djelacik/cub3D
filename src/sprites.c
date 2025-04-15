@@ -100,8 +100,7 @@ void draw_sprite_column(t_data *data, int x, double dir_x, double dir_y, double 
         t_sprite_proj *sp = &colSprites[i];
         mlx_texture_t *tex = data->sprite_textures[data->sprites[sp->index].texture];
 
-        int tex_x = (int)(256 * (x - (-sp->sprite_width / 2 + sp->sprite_screen_x))
-                        * tex->width / sp->sprite_width) / 256;
+        int tex_x = (int)(256 * (x - (-sp->sprite_width / 2 + sp->sprite_screen_x)) * tex->width / sp->sprite_width) / 256;
 
         for (int y = sp->draw_start_y; y < sp->draw_end_y; y++)
         {
