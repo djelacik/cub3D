@@ -50,7 +50,7 @@ $(MLX_42): mlx_clone
 	fi
 
 # Compile object files from source
-%.o: %.c
+%.o: %.c | mlx_clone
 	$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
 
 # Compile the project and link it with libft and MLX42
