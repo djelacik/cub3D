@@ -119,7 +119,7 @@ bool	parse_color_values(char *str, uint32_t *color)
 	char **copy;
 	int number;
 
-	split = ft_split(str, ',', &count);
+	split = gc_split(str, ',', &count);
 	if (count != 3)
 		return (false);
 	copy = split;
@@ -283,7 +283,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 	int		doors_count = 0;
 
 	line = NULL;
-	data->player.angle = 0;
+	//data->player.angle = 0;
 	fd = open(filepath, O_RDONLY); //check more errors
 	if (fd < 0)
 	{
@@ -297,14 +297,14 @@ int	parse_cubfile(char *filepath, t_data *data)
 		close(fd);
 		return (1);
 	}
-	line = get_next_line(fd);
+	line = gc_next_line(fd, READ_LINE);
 	while (line)
 	{
 		//skip empty lines
 		if (line[0] == '\n' && !map_started)
 		{
-			free(line);
-			line = get_next_line(fd);
+			//free(line);
+			line = gc_next_line(fd, READ_LINE);
 			continue ;
 		}
 		nl = ft_strchr(line, '\n');
@@ -332,7 +332,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 			if (vec_push(&map_vec, &line) < 0)
 			{
 				ft_putstr_fd("Vec push failed\n", 2);
-				free(line);
+				//free(line);
 				status = 1;
 				break ;
 			}
@@ -352,7 +352,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
 			{
 				ft_putstr_fd("Either some invalid line or trying to define the same thing twice\n", 2);
-				free(line);
+				//free(line);
 				status = 1;
 				break ;
 			}
@@ -364,18 +364,19 @@ int	parse_cubfile(char *filepath, t_data *data)
 		else
 		{
 			ft_putstr_fd("Map must be the last thing in file\n", 2);
-			free(line);
+			//free(line);
 			status = 1;
 			break ;
 		}
-		line = get_next_line(fd);
+		line = gc_next_line(fd, READ_LINE);
 	}
+	gc_next_line(fd, CLEAN_LINE);
 	close(fd);
 	//clean static buffer from gnl
 	if (!status)
 	{
 		data->map.height = map_vec.len;
-		data->map.grid = malloc((map_vec.len + 1) * sizeof(char *));
+		data->map.grid = gc_alloc((map_vec.len + 1) * sizeof(char *));
 		if (!data->map.grid)
 		{
 			ft_putstr_fd("Map alloc failed\n", 2);
@@ -410,7 +411,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 					data->map.width = row_len;
 				i++;
 			}
-			data->doors = malloc(doors_count * sizeof(t_door));
+			data->doors = gc_alloc(doors_count * sizeof(t_door));
 			ft_memset(data->doors, 0, doors_count * sizeof(t_door));
 			data->map.grid[map_vec.len] = NULL;
 		}

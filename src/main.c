@@ -36,23 +36,11 @@ bool	initializer(t_data *data, char *filename)
 
 	status = 0;
 	ft_memset(data, 0, sizeof(t_data));
-	data->camera.toggle = 0;
 	data->player.speed = 0.025;
 	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	if (!data->mlx)
 		return (EXIT_FAILURE);
-	mlx_get_monitor_size(0, &monitor_width, &monitor_height);
-	data->width = monitor_width * 0.5;
-	data->height = monitor_height * 0.5;
-	mlx_set_window_size(data->mlx, data->width, data->height);
-	mlx_set_window_limit(data->mlx, MIN_WIDTH, MIN_HEIGHT, monitor_width, monitor_height);
-	mlx_set_window_pos(data->mlx, (monitor_width - data->width) / 2, (monitor_height - data->height) / 2);
-	data->camera.x = data->width / 2;
-	data->camera.y = data->height / 2;
-	data->image = mlx_new_image(data->mlx, data->width, data->height);
-	if (!data->image)
-		return (EXIT_FAILURE);
-	data->textures = malloc(sizeof(t_textures));
+	data->textures = gc_alloc(sizeof(t_textures));
 	if (!data->textures)
 	{
 		printf("Error: Failed to allocate memory for textures\n");
@@ -64,12 +52,24 @@ bool	initializer(t_data *data, char *filename)
 	if (status)
 	{
 		printf("Parsing error\n");
-		mlx_terminate(data->mlx);
-		free_textures(data->textures);
+		//mlx_terminate(data->mlx); //if window
+		if (data->textures)
+			free_textures(data->textures);
 		return (EXIT_FAILURE);
 	}
+	mlx_get_monitor_size(0, &monitor_width, &monitor_height);
+	data->width = monitor_width * 0.5;
+	data->height = monitor_height * 0.5;
+	mlx_set_window_size(data->mlx, data->width, data->height);
+	mlx_set_window_limit(data->mlx, MIN_WIDTH, MIN_HEIGHT, monitor_width, monitor_height);
+	mlx_set_window_pos(data->mlx, (monitor_width - data->width) / 2, (monitor_height - data->height) / 2);
+	data->camera.x = data->width / 2;
+	data->camera.y = data->height / 2;
+	data->image = mlx_new_image(data->mlx, data->width, data->height);
+	if (!data->image)
+		return (EXIT_FAILURE);
 	/* sprite hardcoded try */
-	data->sprites = malloc(sizeof(t_sprite) * 3);
+	data->sprites = gc_alloc(sizeof(t_sprite) * 3);
 	data->num_sprites = 3;
 	data->sprites[0].x = 2.5;
 	data->sprites[0].y = 2.5;
@@ -80,15 +80,15 @@ bool	initializer(t_data *data, char *filename)
 	data->sprites[2].x = 2.5;
 	data->sprites[2].y = 5.5;
 	data->sprites[2].texture = 2;
-	data->zBuffer = malloc(sizeof(double) * data->width);
-	data->sprite_textures = malloc(sizeof(mlx_texture_t *) * 3);
+	data->zBuffer = gc_alloc(sizeof(double) * data->width);
+	data->sprite_textures = gc_alloc(sizeof(mlx_texture_t *) * 3);
 	data->sprite_textures[0] = mlx_load_png("textures/pics/pillar.png");
 	data->sprite_textures[1] = mlx_load_png("textures/pics/greenlight.png");
 	data->sprite_textures[2] = mlx_load_png("textures/pics/barrel.png");
 	/* sprite hardcoded try */
 
 	/* hands */
-	data->hud_hands = malloc(sizeof(mlx_texture_t *) * 5);
+	data->hud_hands = gc_alloc(sizeof(mlx_texture_t *) * 5);
 	data->hud_hands[0] = mlx_load_png("textures/hand/hand111.png");
 	data->hud_hands[1] = mlx_load_png("textures/hand/hand222.png");
 	data->hud_hands[2] = mlx_load_png("textures/hand/hand333.png");
@@ -124,6 +124,15 @@ int	main(int argc, char **argv)
 	mlx_loop(data.mlx);
 	mlx_terminate(data.mlx);
 	free_textures(data.textures);
-	free(data.textures);
+	mlx_delete_texture(data.sprite_textures[0]);
+	mlx_delete_texture(data.sprite_textures[1]);
+	mlx_delete_texture(data.sprite_textures[2]);
+	mlx_delete_texture(data.hud_hands[0]);
+	mlx_delete_texture(data.hud_hands[1]);
+	mlx_delete_texture(data.hud_hands[2]);
+	mlx_delete_texture(data.hud_hands[3]);
+	mlx_delete_texture(data.hud_hands[4]);
+	//gc_free(data.textures);
+	gc_free_all();
 	return (EXIT_SUCCESS);
 }

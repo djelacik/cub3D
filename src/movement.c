@@ -177,8 +177,9 @@ static void	render(t_data *data)
 	{
 		data->width = data->new_width;
 		data->height = data->new_height;
-		free(data->zBuffer);
-		data->zBuffer = malloc(sizeof(double) * data->width);
+		gc_free(data->zBuffer);
+		//free(data->zBuffer);
+		data->zBuffer = gc_alloc(sizeof(double) * data->width);
 		if (!data->zBuffer)
 		{
 			printf("Error: Failed to allocate memory for zBuffer\n");
