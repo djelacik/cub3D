@@ -82,8 +82,8 @@ void	draw_mini_rays(t_data *data)
 	double	ray_x;
 	double	ray_y;
 	double	angle;
-	int		screen_x;
-	int		screen_y;
+	double	screen_x;
+	double	screen_y;
 	double	max_angle;
 
 	//data->player.angle = normalize_angle(data->player.angle);
@@ -98,7 +98,7 @@ void	draw_mini_rays(t_data *data)
 		//assert(angle >= 0 && angle < 2 * M_PI);
 		ray_x = data->player.x;
 		ray_y = data->player.y;
-		while (data->map.grid[(int)ray_y][(int)ray_x] && !is_wall(data, (double)ray_x, (double)ray_y)) //data->map.grid[(int)ray_y][(int)ray_x] == '0')
+		while (!is_wall(data, ray_x, ray_y)) //data->map.grid[(int)ray_y][(int)ray_x] == '0') //data->map.grid[(int)ray_y][(int)ray_x]
 		{
 			//assert(ray_x >= 0 && ray_x < data->map.width);
 			//assert(ray_y >= 0 && ray_y < data->map.height);
@@ -108,7 +108,7 @@ void	draw_mini_rays(t_data *data)
 			screen_y = ray_y * TILE_SIZE * MINIMAP_SCALE;
 			if (screen_x >= 0 && screen_x < data->width
 				&& screen_y >= 0 && screen_y < data->height)
-				mlx_put_pixel(data->image, screen_x, screen_y, YELLOW_COLOR);
+				mlx_put_pixel(data->image, (int)screen_x, (int)screen_y, YELLOW_COLOR);
 		}
 		angle += 0.01;
 		//angle = normalize_angle(angle);

@@ -1,0 +1,12 @@
+NO ./textures/pics/mossy.png
+EA ./textures/pics/redbrick.png
+WE ./textures/pics/greystone.png
+SO ./textures/pics/mossy.png
+
+F 127,127,127
+C 127,127,127
+
+111111
+1D0001
+1E0001
+1111110

@@ -201,7 +201,7 @@ bool	parse_player_pos(t_data *data)
 			else if (data->map.grid[i][j] == ' ')
 			{
 				data->map.grid[i][j] = '0';
-				printf("ok trying to remove spaces\n");
+				//printf("ok trying to remove spaces\n");
 			}
 			//neccessary?
 			else if (data->map.grid[i][j] != '0' && data->map.grid[i][j] != '1')
@@ -221,13 +221,14 @@ bool	parse_player_pos(t_data *data)
 	return (false);
 }
 
-bool is_map_closed(t_data *data)
+bool is_map_closed_strict(t_data *data)
 {
 	int i, j, line_len;
 	int height = data->map.height;
 	i = 0;
 	line_len = 0;
 
+	//printf("player position: %f %f\n", data->player.x, data->player.y);
 	while (i < height)
 	{
 		j = 0;
@@ -239,7 +240,8 @@ bool is_map_closed(t_data *data)
 			{
 				if (data->map.grid[i][j] != '1')
 				{
-					ft_putstr_fd("Error, map is not closed\n", 2);
+					//ft_putstr_fd("Error, map is not closed\n", 2);
+					printf("X\n");
 					return (false);
 				}
 			}
@@ -247,7 +249,8 @@ bool is_map_closed(t_data *data)
 			{
 				if (data->map.grid[i - 1][j] == '\0' || data->map.grid[i + 1][j] == '\0' || data->map.grid[i][j - 1] == '\0' || data->map.grid[i][j + 1] == '\0')
 				{
-					ft_putstr_fd("Error, map is not closed (intermediate)\n", 2);
+					//ft_putstr_fd("Error, map is not closed (intermediate)\n", 2);
+					printf("X\n");
 					return (false);
 				}
 			}
@@ -255,20 +258,105 @@ bool is_map_closed(t_data *data)
 			{
 				if (data->map.grid[i][j] != '1')
 				{
-					ft_putstr_fd("Error, map is not closed\n", 2);
+					//ft_putstr_fd("Error, map is not closed\n", 2);
+					printf("X\n");
 					return (false);
 				}
 			}
 			if (data->map.grid[i][j] != '\0')
 				printf("%c", data->map.grid[i][j]);
-			else
-				printf("X");
+			//else
+			//	printf("X");
 			j++;
 		}
 		printf("<----\n");
 		i++;
 	}
 	return true;
+}
+
+//flood-fill from (i,j), returns false if any path leaks out
+//uses visited array so we don't edit data->map.grid
+static bool	flood_fill(t_data *data, bool **visited, int i, int j)
+{
+	char	**grid;
+	int		height;
+	int		len;
+
+	grid   = data->map.grid;
+	height = data->map.height;
+	//off top/bottom means open
+	if (i < 0 || i >= height)
+		return (false);
+	//off left/right means open
+	len = ft_strlen(grid[i]);
+	if (j < 0 || j >= len)
+		return (false);
+	//wall, this path is sealed
+	if (grid[i][j] == '1')
+		return (true);
+	//already visited, sealed
+	if (visited[i][j])
+		return (true);
+	//anything other than floor or door, treat as sealed
+	if (grid[i][j] != '0' && grid[i][j] != 'D')
+		return (true);
+	//mark visited
+	visited[i][j] = true;
+	//recursively, if leaks out from anywhere propagate false
+	if (!flood_fill(data, visited, i - 1, j))
+		return (false);
+	if (!flood_fill(data, visited, i + 1, j))
+		return (false);
+	if (!flood_fill(data, visited, i, j - 1))
+		return (false);
+	if (!flood_fill(data, visited, i, j + 1))
+		return (false);
+	return (true);
+}
+
+bool	is_map_closed(t_data *data)
+{
+	int		height;
+	char	**grid;
+	bool	**visited;
+	int		i;
+	int		len;
+	int		start_i;
+	int		start_j;
+	bool	ok;
+
+	height = data->map.height;
+	grid   = data->map.grid;
+	// allocate visited (bool) array
+	visited = malloc(sizeof(bool *) * height);
+	if (!visited)
+		return (false);
+	i = 0;
+	while (i < height)
+	{
+		len = ft_strlen(grid[i]);
+		visited[i] = malloc(sizeof(bool) * len);
+		if (!visited[i])
+			return (false);
+		ft_memset(visited[i], 0, sizeof(bool) * len);
+		i++;
+	}
+	// starting cell from player position
+	start_i = (int)(data->player.y - 0.5);
+	start_j = (int)(data->player.x - 0.5);
+	ok = flood_fill(data, visited, start_i, start_j);
+	if (!ok)
+		printf("Not closed\n");
+	// free visited
+	i = 0;
+	while (i < height)
+	{
+		free(visited[i]);
+		i++;
+	}
+	free(visited);
+	return (ok);
 }
 
 int	parse_cubfile(char *filepath, t_data *data)
@@ -427,18 +515,35 @@ int	parse_cubfile(char *filepath, t_data *data)
 	{
 		status = parse_player_pos(data);
 	}
-	if (!status && !is_map_closed(data))
+	if (!status)
 	{
+		/*
 		i = 0;
 		while (i < map_vec.len)
 		{
 			printf("->%s<-\n", data->map.grid[i]);
 			i++;
 		}
-		ft_putstr_fd("Map is not closed\n", 2);
-		status = 1;
+		*/
+		//ft_putstr_fd("Map is not closed\n", 2);
+		if (data->strict)
+		{
+			if (!is_map_closed_strict(data))
+			{
+				ft_putstr_fd("Map is not closed (using strict checking)\n", 2);
+				status = 1;
+			}
+		}
+		else
+		{
+			if (!is_map_closed(data))
+			{
+				ft_putstr_fd("Map is not closed\n", 2);
+				status = 1;
+			}
+		}
 	}
 	vec_free(&map_vec);
-	printf("reached end of parsing\n");
+	//printf("reached end of parsing\n");
 	return (status);
 }

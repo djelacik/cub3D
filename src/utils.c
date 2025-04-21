@@ -76,12 +76,25 @@ void update_doors(t_data *data)
 	}
 }
 
+static char	get_map_cell(t_data *data, double x, double y)
+{
+	int	xi;
+	int	yi;
+
+	xi = (int)x;
+	yi = (int)y;
+	if (yi < 0 || yi >= data->map.height)
+		return ('1');
+	if (xi < 0 || xi >= (int)ft_strlen(data->map.grid[yi]))
+		return ('1');
+	return (data->map.grid[yi][xi]);
+}
 
 int	is_wall(t_data *data, double x, double y)
 {
 	char	cell;
 
-	cell = data->map.grid[(int)y][(int)x];
+	cell = get_map_cell(data, x, y);
 	if (cell == '1')
 		return (1);
 	else if (cell == 'D')

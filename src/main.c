@@ -28,7 +28,7 @@ void	free_textures(t_textures *textures)
 
 //try many doors
 //use argv[1] as cubfile
-bool	initializer(t_data *data, char *filename)
+bool	initializer(t_data *data, char *filename, bool strict)
 {
 	int	monitor_width;
 	int	monitor_height;
@@ -36,6 +36,7 @@ bool	initializer(t_data *data, char *filename)
 
 	status = 0;
 	ft_memset(data, 0, sizeof(t_data));
+	data->strict = strict;
 	data->player.speed = 0.025;
 	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	if (!data->mlx)
@@ -51,7 +52,7 @@ bool	initializer(t_data *data, char *filename)
 	status = parse_cubfile(filename, data);
 	if (status)
 	{
-		printf("Parsing error\n");
+		printf("Parsing error (possibly, location shown with an X)\n");
 		//mlx_terminate(data->mlx); //if window
 		if (data->textures)
 			free_textures(data->textures);
@@ -110,13 +111,17 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 	int		error;
+	bool	strict;
 	
-	if (argc != 2)
+	strict = false;
+	if (argc < 2 || argc > 3 || (argc == 3 && ft_strncmp(argv[2], "--strict", 9) != 0))
 	{
-		printf("Usage: %s <.cub file>\n", argv[0]);
+		printf("Usage: %s <.cub file> [--strict]\n", argv[0]);
 		return (EXIT_FAILURE);
 	}
-	error = initializer(&data, argv[1]);
+	if (argc == 3)
+		strict = true;
+	error = initializer(&data, argv[1], strict);
 	if (error)
 		return (EXIT_FAILURE);
 	mlx_image_to_window(data.mlx, data.image, 0, 0);

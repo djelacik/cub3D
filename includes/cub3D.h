@@ -161,6 +161,8 @@ typedef struct s_data {
 	int hud_frame_timer;
 
 	bool			is_player_moving;
+
+	bool			strict;
 }	t_data;
 
 /* 
