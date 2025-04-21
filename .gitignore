@@ -1,6 +1,6 @@
 # MLX42 n other
 MLX42/
-vscode/
+.vscode/
 
 # Prerequisites
 *.d
