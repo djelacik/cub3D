@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "cub3D.h"
-#include <fcntl.h>
 
 static bool	valid_character(char c)
 {
@@ -48,56 +47,18 @@ bool	line_is_only_spaces(char *line)
 	return (false);
 }
 
-bool	remove_spaces(char *line)
+int	count_char(char *str, char c)
 {
-	char	*src;
-	char	*dst;
+	int count;
 
-	src = line;
-	dst = line;
-	while (*src)
+	count = 0;
+	while (*str)
 	{
-		if (*src != ' ' && *src != '\t') //tabs?
-			*dst++ = *src;
-		src++;
+		if (*str == c)
+			count++;
+		str++;
 	}
-	*dst = '\0';
-	return (true);
-}
-
-bool	load_texture(char *path, mlx_texture_t **texture)
-{
-	*texture = mlx_load_png(path);
-	if (!*texture)
-	{
-		ft_putstr_fd("Failed to load texture\n", 2);
-		return (false);
-	}
-	return (true);
-}
-
-bool	parse_texture_line(char *line, t_data *data)
-{
-	t_textures		*t;
-
-	t = data->textures;
-	if (!ft_strncmp(line, "NO", 2) && !t->north)
-		return (load_texture(line + 2, &t->north));
-	else if (!ft_strncmp(line, "SO", 2)  && !t->south)
-		return (load_texture(line + 2, &t->south));
-	else if (!ft_strncmp(line, "WE", 2) && !t->west)
-		return (load_texture(line + 2, &t->west));
-	else if (!ft_strncmp(line, "EA", 2) && !t->east)
-		return (load_texture(line + 2, &t->east));
-	return (false);
-}
-
-bool	textures_ready(t_data *data)
-{
-	t_textures		*t;
-
-	t = data->textures;
-	return (t->north && t->south && t->west && t->east);
+	return (count);
 }
 
 bool	is_number(char *str)
@@ -111,53 +72,129 @@ bool	is_number(char *str)
 	return true;
 }
 
-//check commas and numbers
-bool	parse_color_values(char *str, uint32_t *color)
+bool	load_texture(char *path, mlx_texture_t **texture)
 {
-	int count;
-	char **split;
-	char **copy;
-	int number;
-
-	split = gc_split(str, ',', &count);
-	if (count != 3)
-		return (false);
-	copy = split;
-	while (*copy)
+	*texture = mlx_load_png(path);
+	if (!*texture)
 	{
-		number = ft_atoi(*copy);
-		if (!is_number(*copy) || number < 0 || number > 255)
-			return (false);
-		copy++;
+		ft_putstr_fd("Failed to load texture\n", 2);
+		return (false);
 	}
-	*color = get_rgba(ft_atoi(split[0]), ft_atoi(split[1]), ft_atoi(split[2]), 255);
 	return (true);
 }
 
+bool	textures_ready(t_data *data)
+{
+	t_textures		*t;
+
+	t = data->textures;
+	return (t->north && t->south && t->west && t->east);
+}
+
+//*key and *rest point at new malloc strings
+static bool split_line(char *line, char **key, char **rest)
+{
+	char	*trimmed;
+	char	*sep;
+
+	trimmed = gc_strtrim(line, " \t\n\r");
+	if (!trimmed)
+		return (false);
+	sep = trimmed;
+	//find the first space, that will be our separator
+	while (*sep && !ft_isspace(*sep))
+		sep++;
+	if (!*sep)
+		return (false);
+	*sep = '\0';
+	sep++;
+	//skip spaces before the rest
+	while (ft_isspace(*sep))
+		sep++;
+	if (!*sep)
+		return (false);
+	*key = gc_strdup(trimmed);
+	*rest = gc_strtrim(sep, " \t\n\r");
+	return (*key && *rest);
+}
+
+bool	parse_color_values(char *str, uint32_t *color)
+{
+	int count;
+	char **vals;
+	int i;
+	int nums[3];
+
+	if (count_char(str, ',') != 2)
+		return (false);
+	vals = gc_split(str, ',', &count);
+	if (!vals || count != 3)
+		return (false);
+	i = 0;
+	while (i < 3)
+	{
+		vals[i] = gc_strtrim(vals[i], " \t\n\r");
+		if (!is_number(vals[i]))
+			return (false);
+		nums[i] = ft_atoi(vals[i]);
+		if (nums[i] < 0 || nums[i] > 255)
+			return (false);
+		i++;
+	}
+	*color = get_rgba(nums[0], nums[1], nums[2], 255);
+	return (true);
+}
+
+//(F | C) <r,g,b>
 bool	parse_color_line(char *line, t_data *data)
 {
+	char	*key;
+	char	*vals;
 	bool	status;
-	if (!data->f_color_found && line[0] == 'F')
+
+	status = false;
+	if (!split_line(line, &key, &vals))
+		return (false);
+	if (!ft_strncmp(key, "F", 2) && !data->f_color_found)
 	{
-		//hardcoded jump of 1
-		printf("Floor color:\n");
-		status = parse_color_values(line + 1, &data->floor);
-		printf("data->floor_color = 0x%08x\n", data->floor);
+		status = parse_color_values(vals, &data->floor);
 		if (status)
-			data->f_color_found = 1;
-		return (status);
+			data->f_color_found = true;
 	}
-	if (!data->c_color_found && line[0] == 'C')
+	else if (!ft_strncmp(key, "C", 2) && !data->c_color_found)
 	{
-		//hardcoded jump of 1
-		printf("Ceiling color:\n");
-		status = parse_color_values(line + 1, &data->ceiling);
-		printf("data->ceiling_color = 0x%08x\n", data->ceiling);
+		status = parse_color_values(vals, &data->ceiling);
 		if (status)
-			data->c_color_found = 1;
-		return (status);
+			data->c_color_found = true;
 	}
-	return false;
+	gc_free(key);
+	gc_free(vals);
+	return (status);
+}
+
+//(NO | SO | WE | EA) <path>
+bool	parse_texture_line(char *line, t_data *data)
+{
+	char		*key;
+	char		*path;
+	bool		ok;
+	t_textures	*t;
+
+	ok = false;
+	t = data->textures;
+	if (!split_line(line, &key, &path))
+		return (false);
+	if (!ft_strncmp(key, "NO", 3) && !t->north)
+		ok = load_texture(path, &t->north);
+	else if (!ft_strncmp(key, "SO", 3) && !t->south)
+		ok = load_texture(path, &t->south);
+	else if (!ft_strncmp(key, "WE", 3) && !t->west)
+		ok = load_texture(path, &t->west);
+	else if (!ft_strncmp(key, "EA", 3) && !t->east)
+		ok = load_texture(path, &t->east);
+	gc_free(key);
+	gc_free(path);
+	return (ok);
 }
 
 bool	parse_player_pos(t_data *data)
@@ -436,7 +473,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		*/
 		else if (!map_started)
 		{
-			remove_spaces(line);
+			//remove_spaces(line);
 			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
 			{
 				ft_putstr_fd("Either some invalid line or trying to define the same thing twice\n", 2);
@@ -547,3 +584,90 @@ int	parse_cubfile(char *filepath, t_data *data)
 	//printf("reached end of parsing\n");
 	return (status);
 }
+
+/*
+bool	remove_spaces(char *line)
+{
+	char	*src;
+	char	*dst;
+
+	src = line;
+	dst = line;
+	while (*src)
+	{
+		if (*src != ' ' && *src != '\t') //tabs?
+			*dst++ = *src;
+		src++;
+	}
+	*dst = '\0';
+	return (true);
+}
+
+bool	parse_texture_line(char *line, t_data *data)
+{
+	t_textures	*t;
+
+	t = data->textures;
+	if (!ft_strncmp(line, "NO", 2) && !t->north)
+		return (load_texture(line + 2, &t->north));
+	else if (!ft_strncmp(line, "SO", 2)  && !t->south)
+		return (load_texture(line + 2, &t->south));
+	else if (!ft_strncmp(line, "WE", 2) && !t->west)
+		return (load_texture(line + 2, &t->west));
+	else if (!ft_strncmp(line, "EA", 2) && !t->east)
+		return (load_texture(line + 2, &t->east));
+	return (false);
+}
+
+
+bool	parse_color_line(char *line, t_data *data)
+{
+	bool	status;
+	if (!data->f_color_found && line[0] == 'F')
+	{
+		//hardcoded jump of 1
+		printf("Floor color:\n");
+		status = parse_color_values(line + 1, &data->floor);
+		printf("data->floor_color = 0x%08x\n", data->floor);
+		if (status)
+			data->f_color_found = 1;
+		return (status);
+	}
+	if (!data->c_color_found && line[0] == 'C')
+	{
+		//hardcoded jump of 1
+		printf("Ceiling color:\n");
+		status = parse_color_values(line + 1, &data->ceiling);
+		printf("data->ceiling_color = 0x%08x\n", data->ceiling);
+		if (status)
+			data->c_color_found = 1;
+		return (status);
+	}
+	return false;
+}
+
+//check commas and numbers
+bool	parse_color_values(char *str, uint32_t *color)
+{
+	int words;
+	char **split;
+	char **copy;
+	int number;
+
+	if (count_char(str, ',') != 2)
+		return (false);
+	split = gc_split(str, ',', &words);
+	if (words != 3)
+		return (false);
+	copy = split;
+	while (*copy)
+	{
+		number = ft_atoi(*copy);
+		if (!is_number(*copy) || number < 0 || number > 255)
+			return (false);
+		copy++;
+	}
+	*color = get_rgba(ft_atoi(split[0]), ft_atoi(split[1]), ft_atoi(split[2]), 255);
+	return (true);
+}
+*/

@@ -71,6 +71,7 @@ B_SOURCES = ft_lstnew_bonus.c \
 			gc_alloc/gc_substr.c \
 			gc_alloc/gc_calloc.c \
 			gc_alloc/gc_strndup.c \
+			gc_alloc/gc_strtrim.c \
 			gc_alloc/gc_lstnew.c \
 			vector/vec_new.c \
 			vector/vec_free.c \

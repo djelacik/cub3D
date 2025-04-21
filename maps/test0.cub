@@ -1,0 +1,11 @@
+NO ./textures/pics/redbrick.png
+EA ./textures/pics/redbrick.png
+WE ./textures/pics/greystone.png
+SO                           ./textures/pics/mossy.png
+
+C 127 ,                           127 , 127              
+F 127              ,                       127,127
+
+ 1
+1E1
+ 1

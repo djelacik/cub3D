@@ -19,6 +19,7 @@
 # include <limits.h>
 # include <float.h> //erase
 # include <assert.h> //erase
+# include <fcntl.h> //file open
 
 # include "libft.h"
 # include "vec.h"
