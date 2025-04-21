@@ -411,8 +411,15 @@ int	parse_cubfile(char *filepath, t_data *data)
 					data->map.width = row_len;
 				i++;
 			}
-			data->doors = gc_alloc(doors_count * sizeof(t_door));
-			ft_memset(data->doors, 0, doors_count * sizeof(t_door));
+			if (doors_count > 0)
+			{
+				data->doors = gc_alloc(doors_count * sizeof(t_door));
+				ft_memset(data->doors, 0, doors_count * sizeof(t_door));
+			}
+			else
+			{
+				data->doors = NULL;
+			}
 			data->map.grid[map_vec.len] = NULL;
 		}
 	}
