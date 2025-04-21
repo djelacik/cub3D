@@ -29,6 +29,8 @@ void	draw_mini_map(t_data *data)
 			screen_y = y * TILE_SIZE * MINIMAP_SCALE;
 			if (data->map.grid[y][x] == '1')
 				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR);
+			else if (data->map.grid[y][x] == 'D' && is_wall(data, (double)x, (double)y))
+				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, GREEN_COLOR);
 			else // Lattia
 				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR_2);
 			x++;
@@ -96,7 +98,7 @@ void	draw_mini_rays(t_data *data)
 		//assert(angle >= 0 && angle < 2 * M_PI);
 		ray_x = data->player.x;
 		ray_y = data->player.y;
-		while (data->map.grid[(int)ray_y][(int)ray_x] != '1')
+		while (data->map.grid[(int)ray_y][(int)ray_x] && !is_wall(data, (double)ray_x, (double)ray_y)) //data->map.grid[(int)ray_y][(int)ray_x] == '0')
 		{
 			//assert(ray_x >= 0 && ray_x < data->map.width);
 			//assert(ray_y >= 0 && ray_y < data->map.height);
