@@ -164,6 +164,7 @@ typedef struct s_data {
 	bool			is_player_moving;
 
 	bool			strict;
+	char			*error_msg;
 }	t_data;
 
 /* 
@@ -218,6 +219,7 @@ int		parse_cubfile(char *filepath, t_data *data);
 //free.c
 void	free_and_exit(void);
 void	free_and_exit_with(int exit_code);
+void	error_exit(char *msg);
 
 //sprites.c
 //void	draw_sprites(t_data *data);

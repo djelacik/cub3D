@@ -23,3 +23,11 @@ void	free_and_exit_with(int exit_code)
 	gc_free_all();
 	exit(exit_code);
 }
+
+void	error_exit(char *msg)
+{
+	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd(msg, 2);
+	//gc_free_all();
+	exit(EXIT_FAILURE);
+}
