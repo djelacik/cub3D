@@ -114,6 +114,18 @@ bool	initializer(t_data *data, char *filename, bool strict)
 	return (EXIT_SUCCESS);
 }
 
+bool	has_cub_extension(char *filename)
+{
+	int len;
+
+	if (!filename)
+		return (false);
+	len = ft_strlen(filename);
+	if (len < 4)
+		return (false);
+	return (ft_strncmp(filename + len - 4, ".cub", 4) == 0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -121,7 +133,7 @@ int	main(int argc, char **argv)
 	bool	strict;
 	
 	strict = false;
-	if (argc < 2 || argc > 3 || (argc == 3 && ft_strncmp(argv[2], "--strict", 9) != 0))
+	if (argc < 2 || !has_cub_extension(argv[1]) || argc > 3 || (argc == 3 && ft_strncmp(argv[2], "--strict", 9) != 0))
 	{
 		printf("Usage: %s <.cub file> [--strict]\n", argv[0]);
 		return (EXIT_FAILURE);
