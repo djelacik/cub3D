@@ -76,10 +76,7 @@ bool	load_texture(char *path, mlx_texture_t **texture)
 {
 	*texture = mlx_load_png(path);
 	if (!*texture)
-	{
-		ft_putstr_fd("Failed to load texture\n", 2);
 		return (false);
-	}
 	return (true);
 }
 
@@ -167,8 +164,8 @@ bool	parse_color_line(char *line, t_data *data)
 		if (status)
 			data->c_color_found = true;
 	}
-	gc_free(key);
-	gc_free(vals);
+	//gc_free(key);
+	//gc_free(vals);
 	return (status);
 }
 
@@ -224,7 +221,8 @@ bool	parse_player_pos(t_data *data)
 			}
 			else if((data->map.grid[i][j] == 'N' || data->map.grid[i][j] == 'S' || data->map.grid[i][j] == 'E' || data->map.grid[i][j] == 'W') && already_assigned)
 			{
-				ft_putstr_fd("Error, multiple player positions\n", 2);
+				//ft_putstr_fd("Error, multiple player positions\n", 2);
+				data->error_msg = "Multiple player positions detected";
 				return (true);
 			}
 			else if (data->map.grid[i][j] == 'D')
@@ -243,7 +241,8 @@ bool	parse_player_pos(t_data *data)
 			//neccessary?
 			else if (data->map.grid[i][j] != '0' && data->map.grid[i][j] != '1')
 			{
-				ft_putstr_fd("Error, invalid character in map\n", 2);
+				//ft_putstr_fd("Error, invalid character in map\n", 2);
+				data->error_msg = "Invalid character in map";
 				return (true);
 			}
 			j++;
@@ -252,7 +251,7 @@ bool	parse_player_pos(t_data *data)
 	}
 	if (!already_assigned)
 	{
-		ft_putstr_fd("Error, no player position found\n", 2);
+		data->error_msg = "No player position found";
 		return (true);
 	}
 	return (false);
@@ -278,7 +277,7 @@ bool is_map_closed_strict(t_data *data)
 				if (data->map.grid[i][j] != '1')
 				{
 					//ft_putstr_fd("Error, map is not closed\n", 2);
-					printf("X\n");
+					//printf("X\n");
 					return (false);
 				}
 			}
@@ -287,7 +286,7 @@ bool is_map_closed_strict(t_data *data)
 				if (data->map.grid[i - 1][j] == '\0' || data->map.grid[i + 1][j] == '\0' || data->map.grid[i][j - 1] == '\0' || data->map.grid[i][j + 1] == '\0')
 				{
 					//ft_putstr_fd("Error, map is not closed (intermediate)\n", 2);
-					printf("X\n");
+					//printf("X\n");
 					return (false);
 				}
 			}
@@ -296,17 +295,17 @@ bool is_map_closed_strict(t_data *data)
 				if (data->map.grid[i][j] != '1')
 				{
 					//ft_putstr_fd("Error, map is not closed\n", 2);
-					printf("X\n");
+					//printf("X\n");
 					return (false);
 				}
 			}
-			if (data->map.grid[i][j] != '\0')
-				printf("%c", data->map.grid[i][j]);
+			//if (data->map.grid[i][j] != '\0')
+				//printf("%c", data->map.grid[i][j]);
 			//else
 			//	printf("X");
 			j++;
 		}
-		printf("<----\n");
+		//printf("<----\n");
 		i++;
 	}
 	return true;
@@ -365,7 +364,7 @@ bool	is_map_closed(t_data *data)
 
 	height = data->map.height;
 	grid   = data->map.grid;
-	// allocate visited (bool) array
+	//allocate visited (bool) array
 	visited = malloc(sizeof(bool *) * height);
 	if (!visited)
 		return (false);
@@ -379,13 +378,11 @@ bool	is_map_closed(t_data *data)
 		ft_memset(visited[i], 0, sizeof(bool) * len);
 		i++;
 	}
-	// starting cell from player position
+	//starting cell from player position
 	start_i = (int)(data->player.y - 0.5);
 	start_j = (int)(data->player.x - 0.5);
 	ok = flood_fill(data, visited, start_i, start_j);
-	if (!ok)
-		printf("Not closed\n");
-	// free visited
+	//free visited
 	i = 0;
 	while (i < height)
 	{
@@ -418,7 +415,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 	t_vec	map_vec;
 	if (vec_new(&map_vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
 	{
-		ft_putstr_fd("Vec alloc failed\n", 2);
+		//ft_putstr_fd("Vec alloc failed\n", 2);
+		data->error_msg = "Vec alloc failed";
 		close(fd);
 		return (1);
 	}
@@ -448,7 +446,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 		{
 			if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
 			{
-				ft_putstr_fd("You're trying to initialize map before colors or textures, exiting\n", 2);
+				//ft_putstr_fd("You're trying to initialize map before colors or textures, exiting\n", 2);
+				data->error_msg = "Please define colors/textures before the map";
 				status = 1;
 				break ;
 			}
@@ -456,7 +455,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 				map_started = true;
 			if (vec_push(&map_vec, &line) < 0)
 			{
-				ft_putstr_fd("Vec push failed\n", 2);
+				//ft_putstr_fd("Vec push failed\n", 2);
+				data->error_msg = "Vec push failed";
 				//free(line);
 				status = 1;
 				break ;
@@ -476,7 +476,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 			//remove_spaces(line);
 			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
 			{
-				ft_putstr_fd("Either some invalid line or trying to define the same thing twice\n", 2);
+				data->error_msg = "Check your color/textures";
+				//ft_putstr_fd("Either some invalid line or trying to define the same thing twice\n", 2);
 				//free(line);
 				status = 1;
 				break ;
@@ -488,7 +489,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 		*/
 		else
 		{
-			ft_putstr_fd("Map must be the last thing in file\n", 2);
+			//ft_putstr_fd("Map must be the last thing in file\n", 2);
+			data->error_msg = "Map must be the last thing in file";
 			//free(line);
 			status = 1;
 			break ;
@@ -504,7 +506,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 		data->map.grid = gc_alloc((map_vec.len + 1) * sizeof(char *));
 		if (!data->map.grid)
 		{
-			ft_putstr_fd("Map alloc failed\n", 2);
+			//ft_putstr_fd("Map alloc failed\n", 2);
+			data->error_msg = "Map alloc failed";
 			status = 1;
 		}
 		else
@@ -567,7 +570,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 		{
 			if (!is_map_closed_strict(data))
 			{
-				ft_putstr_fd("Map is not closed (using strict checking)\n", 2);
+				//ft_putstr_fd("Map is not closed (using strict checking)\n", 2);
+				data->error_msg = "Map is open (strict checking)";
 				status = 1;
 			}
 		}
@@ -575,7 +579,8 @@ int	parse_cubfile(char *filepath, t_data *data)
 		{
 			if (!is_map_closed(data))
 			{
-				ft_putstr_fd("Map is not closed\n", 2);
+				//ft_putstr_fd("Map is not closed\n", 2);
+				data->error_msg = "Map is open";
 				status = 1;
 			}
 		}

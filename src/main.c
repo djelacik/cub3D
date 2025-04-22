@@ -40,11 +40,15 @@ bool	initializer(t_data *data, char *filename, bool strict)
 	data->player.speed = 0.025;
 	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	if (!data->mlx)
+	{
+		data->error_msg = "Failed to initialize MLX";
 		return (EXIT_FAILURE);
+	}
 	data->textures = gc_alloc(sizeof(t_textures));
 	if (!data->textures)
 	{
-		printf("Error: Failed to allocate memory for textures\n");
+		//printf("Error: Failed to allocate memory for textures\n");
+		data->error_msg = "Failed to allocate memory for textures";
 		return (EXIT_FAILURE);
 	}
 	ft_memset(data->textures, 0, sizeof(t_textures));
@@ -52,7 +56,7 @@ bool	initializer(t_data *data, char *filename, bool strict)
 	status = parse_cubfile(filename, data);
 	if (status)
 	{
-		printf("Parsing error (possibly, location shown with an X)\n");
+		//printf("Parsing error (possibly, location shown with an X)\n");
 		//mlx_terminate(data->mlx); //if window
 		if (data->textures)
 			free_textures(data->textures);
@@ -68,7 +72,10 @@ bool	initializer(t_data *data, char *filename, bool strict)
 	data->camera.y = data->height / 2;
 	data->image = mlx_new_image(data->mlx, data->width, data->height);
 	if (!data->image)
+	{
+		data->error_msg = "Failed to create image";
 		return (EXIT_FAILURE);
+	}
 	/* sprite hardcoded try */
 	data->sprites = gc_alloc(sizeof(t_sprite) * 3);
 	data->num_sprites = 3;
@@ -123,7 +130,8 @@ int	main(int argc, char **argv)
 		strict = true;
 	error = initializer(&data, argv[1], strict);
 	if (error)
-		return (EXIT_FAILURE);
+		error_exit(data.error_msg);
+		//return (EXIT_FAILURE);
 	mlx_image_to_window(data.mlx, data.image, 0, 0);
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);
