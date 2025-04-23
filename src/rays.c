@@ -21,10 +21,10 @@ void	draw_walls_and_sprites(t_data *data)
 	double	angle_offset;
 	double	ray_angle;
 
-	double	dir_x = cos(data->player.angle);
-	double	dir_y = sin(data->player.angle);
-	double	plane_x = -dir_y * tan(FOV / 2.0);
-	double	plane_y = dir_x * tan(FOV / 2.0);
+	//double	dir_x = cos(data->player.angle);
+	//double	dir_y = sin(data->player.angle);
+	//double	plane_x = -dir_y * tan(FOV / 2.0);
+	//double	plane_y = dir_x * tan(FOV / 2.0);
 
 	distToPlane = ((double)data->width / 2.0) / tan(FOV / 2.0);
 	screen_x = 0;
@@ -34,7 +34,7 @@ void	draw_walls_and_sprites(t_data *data)
 		angle_offset = atan(offset / distToPlane);
 		ray_angle = data->player.angle + angle_offset;
 		draw_wall_column(data, ray_angle, (int)screen_x);
-		draw_sprite_column(data, (int)screen_x, dir_x, dir_y, plane_x, plane_y);
+		//draw_sprite_column(data, (int)screen_x, dir_x, dir_y, plane_x, plane_y);
 		screen_x++;
 	}
 }
@@ -47,6 +47,7 @@ void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
 	int		vis_start_y;
 	int		vis_end_y;
 	int		wall_height;
+	int		center_y;
 
 	// Calculate ray properties
 	calculate_ray_data(data, ray_angle, &ray);
@@ -54,8 +55,11 @@ void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
 
 	// Compute the full (virtual) wall height and its starting/ending positions
 	wall_height = (int)(data->height / ray.distance);
-	orig_start_y = (data->height / 2) - (wall_height / 2);
-	orig_end_y = (data->height / 2) + (wall_height / 2);
+	//orig_start_y = (data->height / 2) - (wall_height / 2);
+	//orig_end_y = (data->height / 2) + (wall_height / 2);
+	center_y = (int)(data->height / 2 + data->camera.shake_offset);
+	orig_start_y = center_y - (wall_height / 2);
+	orig_end_y = center_y + (wall_height / 2);
 
 	// Clip the drawing area to the visible screen (but keep the original positions for texture mapping)
 	vis_start_y = orig_start_y;

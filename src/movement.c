@@ -98,6 +98,29 @@ static void handle_movement(t_data *data)
 	}
 }
 
+static void handle_shake(t_data *data)
+{
+	if (data->is_player_moving)
+	{
+		data->camera.shake_time += 10;
+		data->camera.shake_offset = sin(data->camera.shake_time * 5.0) * 2; //2 pixels shake walking
+		if (data->is_player_shooting)
+			data->camera.shake_offset += sin(data->camera.shake_time * 50.0) * 7; //7 pixels shake recoil
+		printf("Shake time: %f\n", data->camera.shake_time);
+	}
+	else if (data->is_player_shooting)
+	{
+		data->camera.shake_time += 10;
+		data->camera.shake_offset = sin(data->camera.shake_time * 50.0) * 5; //5 pixels shake recoil
+		printf("Shake time: %f\n", data->camera.shake_time);
+	}
+	else
+	{
+		data->camera.shake_time = 0;
+		data->camera.shake_offset = 0;
+	}
+}
+
 static void	handle_shooting(t_data *data)
 {
 	if (mlx_is_key_down(data->mlx, MLX_KEY_SPACE))
@@ -221,6 +244,7 @@ void	loop_hook(void *param)
 	data = (t_data *)param;
 
 	handle_movement(data);
+	handle_shake(data);
 	handle_shooting(data);
 	handle_mouse_rotation(data);
 	handle_rotation(data);

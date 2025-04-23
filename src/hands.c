@@ -26,7 +26,7 @@ void shooting_animation(t_data *data)
 			data->hud_frame_timer = 0;
 			just_started = false;
 		}
-		printf("frame is %d\n", data->hud_frame);
+		//printf("frame is %d\n", data->hud_frame);
 		if (data->hud_frame == 0 && !just_started)
 			data->is_player_shooting = 0;
 	}

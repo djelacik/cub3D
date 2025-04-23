@@ -75,6 +75,8 @@ typedef struct s_view {
 	int32_t		x;
     int32_t		y;
 	int8_t		toggle;
+	double		shake_offset;
+	double		shake_time;
 }	t_view;
 
 // typedef struct s_sprite {
