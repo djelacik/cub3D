@@ -162,6 +162,7 @@ typedef struct s_data {
 	int hud_frame_timer;
 
 	bool			is_player_moving;
+	bool			is_player_shooting;
 
 	bool			strict;
 	char			*error_msg;
@@ -225,5 +226,6 @@ void	error_exit(char *msg);
 //void	draw_sprites(t_data *data);
 void 	draw_sprite_column(t_data *data, int x, double dir_x, double dir_y, double plane_x, double plane_y);
 void	draw_hud_hands(t_data *data);
+void	shooting_animation(t_data *data);
 
 #endif

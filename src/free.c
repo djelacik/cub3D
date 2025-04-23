@@ -28,6 +28,8 @@ void	error_exit(char *msg)
 {
 	ft_putstr_fd("Error\n", 2);
 	ft_putstr_fd(msg, 2);
-	//gc_free_all();
+	//mlx_delete_texture(data.sprite_textures[0]);
+	//mlx_delete_texture(data.hud_hands[0]);
+	gc_free_all();
 	exit(EXIT_FAILURE);
 }

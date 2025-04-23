@@ -12,6 +12,31 @@
 
 #include "cub3D.h"
 
+void shooting_animation(t_data *data)
+{
+	if (data->is_player_shooting) //is_player_moving
+	{
+		bool just_started;
+
+		just_started = true;
+		data->hud_frame_timer++;
+		if (data->hud_frame_timer >= 8)
+		{
+			data->hud_frame = (data->hud_frame + 1) % data->hud_frame_count;
+			data->hud_frame_timer = 0;
+			just_started = false;
+		}
+		printf("frame is %d\n", data->hud_frame);
+		if (data->hud_frame == 0 && !just_started)
+			data->is_player_shooting = 0;
+	}
+	else
+	{
+		data->hud_frame = 0;
+		data->hud_frame_timer = 0;
+	}
+}
+
 void draw_hud_hands(t_data *data)
 {
 	mlx_texture_t	*hand_tex = data->hud_hands[data->hud_frame];

@@ -98,6 +98,12 @@ static void handle_movement(t_data *data)
 	}
 }
 
+static void	handle_shooting(t_data *data)
+{
+	if (mlx_is_key_down(data->mlx, MLX_KEY_SPACE))
+		data->is_player_shooting = 1;
+}
+
 static void	handle_rotation(t_data *data)
 {
 	if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
@@ -206,20 +212,7 @@ static void	render(t_data *data)
 	// Draw HUD hands
 	draw_hud_hands(data);
     // Hud animation
-	if (data->is_player_moving)
-	{
-		data->hud_frame_timer++;
-		if (data->hud_frame_timer >= 15)
-		{
-			data->hud_frame = (data->hud_frame + 1) % data->hud_frame_count;
-			data->hud_frame_timer = 0;
-		}
-	}
-	else
-	{
-		data->hud_frame = 0;
-		data->hud_frame_timer = 0;
-	}
+	shooting_animation(data);
 }
 
 void	loop_hook(void *param)
@@ -228,6 +221,7 @@ void	loop_hook(void *param)
 	data = (t_data *)param;
 
 	handle_movement(data);
+	handle_shooting(data);
 	handle_mouse_rotation(data);
 	handle_rotation(data);
 	render(data);

@@ -48,16 +48,17 @@ bool	initializer(t_data *data, char *filename, bool strict)
 	if (!data->textures)
 	{
 		//printf("Error: Failed to allocate memory for textures\n");
+		mlx_terminate(data->mlx);
 		data->error_msg = "Failed to allocate memory for textures";
 		return (EXIT_FAILURE);
 	}
 	ft_memset(data->textures, 0, sizeof(t_textures));
-	data->textures->door = mlx_load_png("textures/pics/eagle.png");
+	data->textures->door = mlx_load_png("textures/pics/eagle.png"); //check error
 	status = parse_cubfile(filename, data);
 	if (status)
 	{
 		//printf("Parsing error (possibly, location shown with an X)\n");
-		//mlx_terminate(data->mlx); //if window
+		mlx_terminate(data->mlx);
 		if (data->textures)
 			free_textures(data->textures);
 		return (EXIT_FAILURE);
@@ -73,6 +74,8 @@ bool	initializer(t_data *data, char *filename, bool strict)
 	data->image = mlx_new_image(data->mlx, data->width, data->height);
 	if (!data->image)
 	{
+		mlx_terminate(data->mlx);
+		free_textures(data->textures);
 		data->error_msg = "Failed to create image";
 		return (EXIT_FAILURE);
 	}
