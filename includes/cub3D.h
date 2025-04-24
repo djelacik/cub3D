@@ -48,6 +48,14 @@
 
 #define COLLISION_LIMIT 0.15
 #define MOUSE_SENSITIVITY 0.001
+#define DOOR_OPENING_SPEED 0.05
+#define PLAYER_SPEED 0.00005
+#define SEC_PER_FRAME 5
+#define PIX_RECOIL 5
+#define PIX_WALK 3
+#define SHAKE_VEL_WALK 10
+#define SHAKE_VEL_RECO 50
+
 #define VEC_INIT_SIZE 4
 
 //# define DEBUG
@@ -213,7 +221,7 @@ void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
 //utils.c
 double	lookup_door_progress(t_data *data, int x, int y);
 void	update_doors(t_data *data);
-int		is_wall(t_data *data, double x, double y); //update
+bool	is_wall(t_data *data, double x, double y); //update
 void	draw_floor_and_ceiling(t_data *data);
 
 //parsing.c

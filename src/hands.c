@@ -20,7 +20,7 @@ void shooting_animation(t_data *data)
 
 		just_started = true;
 		data->hud_frame_timer++;
-		if (data->hud_frame_timer >= 8)
+		if (data->hud_frame_timer >= SEC_PER_FRAME)
 		{
 			data->hud_frame = (data->hud_frame + 1) % data->hud_frame_count;
 			data->hud_frame_timer = 0;

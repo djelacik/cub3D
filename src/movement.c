@@ -102,16 +102,16 @@ static void handle_shake(t_data *data)
 {
 	if (data->is_player_moving)
 	{
-		data->camera.shake_time += 5;
-		data->camera.shake_offset = sin(data->camera.shake_time * 5.0) * 2; //2 pixels shake walking
+		data->camera.shake_time += SEC_PER_FRAME;
+		data->camera.shake_offset = sin(data->camera.shake_time * SHAKE_VEL_WALK) * PIX_WALK;
 		if (data->is_player_shooting)
-			data->camera.shake_offset += sin(data->camera.shake_time * 50.0) * 7; //7 pixels shake recoil
+			data->camera.shake_offset += sin(data->camera.shake_time * SHAKE_VEL_RECO) * PIX_RECOIL;
 		//printf("Shake time: %f\n", data->camera.shake_time);
 	}
 	else if (data->is_player_shooting)
 	{
-		data->camera.shake_time += 10;
-		data->camera.shake_offset = sin(data->camera.shake_time * 50.0) * 5; //5 pixels shake recoil
+		data->camera.shake_time += SEC_PER_FRAME;
+		data->camera.shake_offset = sin(data->camera.shake_time * SHAKE_VEL_RECO) * PIX_RECOIL;
 		//printf("Shake time: %f\n", data->camera.shake_time);
 	}
 	else
@@ -124,7 +124,9 @@ static void handle_shake(t_data *data)
 static void	handle_shooting(t_data *data)
 {
 	if (mlx_is_key_down(data->mlx, MLX_KEY_SPACE))
-		data->is_player_shooting = 1;
+		data->is_player_shooting = true;
+	if (mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
+		data->is_player_shooting = true;
 }
 
 static void	handle_rotation(t_data *data)
@@ -219,7 +221,7 @@ static void	render(t_data *data)
 		data->image = mlx_new_image(data->mlx, data->new_width, data->new_height);
 		mlx_image_to_window(data->mlx, data->image, 0, 0);
 		//if (!data->image)
-		data->player.speed = (double)data->height * 0.00002;
+		data->player.speed = (double)data->height * PLAYER_SPEED;
 		data->camera.x = data->width / 2;
 		data->camera.y = data->height / 2;
 		printf("Render will now happen with %dx%d\n", data->width, data->height);

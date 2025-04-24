@@ -36,7 +36,7 @@ void update_doors(t_data *data)
 		double distance = sqrt(dx * dx + dy * dy);
 
 		// If player is close enough and roughly facing the door, trigger it
-		if (distance < 2) /* adjust threshold */
+		if (distance < 3) /* adjust threshold */
 		{
 			// Check the angle between player direction and the door
 			// (For simplicity, you might compare the player's angle with the angle to the door)
@@ -50,7 +50,7 @@ void update_doors(t_data *data)
 		// Animate door opening/closing
 		if (door->state == OPENING)
 		{
-			door->progress += 0.01; // adjust speed as needed
+			door->progress += DOOR_OPENING_SPEED; // adjust speed as needed
 			if (door->progress > 1.0)
 			{
 				door->progress = 1.01;
@@ -60,12 +60,12 @@ void update_doors(t_data *data)
 		else if (door->state == OPEN)
 		{
 			// Optionally, if the player moves away, start closing the door
-			if (distance > 2)
+			if (distance > 3)
 				door->state = CLOSING;
 		}
 		else if (door->state == CLOSING)
 		{
-			door->progress -= 0.01;
+			door->progress -= DOOR_OPENING_SPEED;
 			if (door->progress <= 0.0)
 			{
 				door->progress = 0.0;
@@ -90,7 +90,7 @@ static char	get_map_cell(t_data *data, double x, double y)
 	return (data->map.grid[yi][xi]);
 }
 
-int	is_wall(t_data *data, double x, double y)
+bool	is_wall(t_data *data, double x, double y)
 {
 	char	cell;
 
@@ -104,17 +104,17 @@ int	is_wall(t_data *data, double x, double y)
 		{
 			if (data->doors[i].x == (int)x && data->doors[i].y == (int)y)
 			{
-				// If door is closed or only partially open, consider it a wall.
+				// If door is closed or only partially open, consider it a wall
 				if (data->doors[i].state == CLOSED || data->doors[i].progress < 0.8)
-					return (1);
+					return (true);
 				else
-					return (0);
+					return (false);
 			}
 			i++;
 		}
-		return (1);
+		return (true);
 	}
-	return (0);
+	return (false);
 }
 
 void	draw_floor_and_ceiling(t_data *data)
