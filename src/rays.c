@@ -21,10 +21,10 @@ void	draw_walls_and_sprites(t_data *data)
 	double	angle_offset;
 	double	ray_angle;
 
-	//double	dir_x = cos(data->player.angle);
-	//double	dir_y = sin(data->player.angle);
-	//double	plane_x = -dir_y * tan(FOV / 2.0);
-	//double	plane_y = dir_x * tan(FOV / 2.0);
+	double	dir_x = cos(data->player.angle);
+	double	dir_y = sin(data->player.angle);
+	double	plane_x = -dir_y * tan(FOV / 2.0);
+	double	plane_y = dir_x * tan(FOV / 2.0);
 
 	distToPlane = ((double)data->width / 2.0) / tan(FOV / 2.0);
 	screen_x = 0;
@@ -34,7 +34,7 @@ void	draw_walls_and_sprites(t_data *data)
 		angle_offset = atan(offset / distToPlane);
 		ray_angle = data->player.angle + angle_offset;
 		draw_wall_column(data, ray_angle, (int)screen_x);
-		//draw_sprite_column(data, (int)screen_x, dir_x, dir_y, plane_x, plane_y);
+		draw_sprite_column(data, (int)screen_x, dir_x, dir_y, plane_x, plane_y);
 		screen_x++;
 	}
 }

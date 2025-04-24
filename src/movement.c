@@ -102,7 +102,7 @@ static void handle_shake(t_data *data)
 {
 	if (data->is_player_moving)
 	{
-		data->camera.shake_time += 10;
+		data->camera.shake_time += 5;
 		data->camera.shake_offset = sin(data->camera.shake_time * 5.0) * 2; //2 pixels shake walking
 		if (data->is_player_shooting)
 			data->camera.shake_offset += sin(data->camera.shake_time * 50.0) * 7; //7 pixels shake recoil
