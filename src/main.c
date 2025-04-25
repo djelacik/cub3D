@@ -53,7 +53,7 @@ bool	initializer(t_data *data, char *filename, bool strict)
 		return (EXIT_FAILURE);
 	}
 	ft_memset(data->textures, 0, sizeof(t_textures));
-	data->textures->door = mlx_load_png("textures/pics/eagle.png"); //check error
+	//data->textures->door = mlx_load_png("textures/pics/eagle.png"); //check error
 	status = parse_cubfile(filename, data);
 	if (status)
 	{
@@ -80,8 +80,8 @@ bool	initializer(t_data *data, char *filename, bool strict)
 		return (EXIT_FAILURE);
 	}
 	/* sprite hardcoded try */
-	data->sprites = gc_alloc(sizeof(t_sprite) * 3);
 	data->num_sprites = 3;
+	data->sprites = gc_alloc(sizeof(t_sprite) * data->num_sprites);
 	data->sprites[0].x = 2.5;
 	data->sprites[0].y = 2.5;
 	data->sprites[0].texture = 0;

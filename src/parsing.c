@@ -189,6 +189,8 @@ bool	parse_texture_line(char *line, t_data *data)
 		ok = load_texture(path, &t->west);
 	else if (!ft_strncmp(key, "EA", 3) && !t->east)
 		ok = load_texture(path, &t->east);
+	else if (!ft_strncmp(key, "DO", 3) && !t->door)
+		ok = load_texture(path, &t->door);
 	gc_free(key);
 	gc_free(path);
 	return (ok);
@@ -227,6 +229,11 @@ bool	parse_player_pos(t_data *data)
 			}
 			else if (data->map.grid[i][j] == 'D')
 			{
+				if (data->textures->door == NULL)
+				{
+					data->error_msg = "Door texture not defined";
+					return (true);
+				}
 				data->doors[data->door_count].x = j;
 				data->doors[data->door_count].y = i;
 				data->doors[data->door_count].state = CLOSED;
