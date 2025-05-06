@@ -196,8 +196,8 @@ void	calculate_ray_data(t_data *data, double angle, t_ray *ray);
 //rays.c
 double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
 void	draw_wall_column(t_data *data, double angle, int screen_x);
-//void	draw_walls(t_data *data);
-void	draw_walls_and_sprites(t_data *data);
+void	draw_walls(t_data *data);
+//void	draw_walls_and_sprites(t_data *data);
 
 //movement.c
 void	loop_hook(void *param);

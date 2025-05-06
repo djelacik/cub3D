@@ -26,8 +26,6 @@ void	free_textures(t_textures *textures)
 		mlx_delete_texture(textures->door);
 }
 
-//try many doors
-//use argv[1] as cubfile
 bool	initializer(t_data *data, char *filename, bool strict)
 {
 	int	monitor_width;
@@ -53,11 +51,9 @@ bool	initializer(t_data *data, char *filename, bool strict)
 		return (EXIT_FAILURE);
 	}
 	ft_memset(data->textures, 0, sizeof(t_textures));
-	//data->textures->door = mlx_load_png("textures/pics/eagle.png"); //check error
 	status = parse_cubfile(filename, data);
 	if (status)
 	{
-		//printf("Parsing error (possibly, location shown with an X)\n");
 		mlx_terminate(data->mlx);
 		if (data->textures)
 			free_textures(data->textures);
@@ -127,7 +123,6 @@ int	main(int argc, char **argv)
 	error = initializer(&data, argv[1], strict);
 	if (error)
 		error_exit(data.error_msg);
-		//return (EXIT_FAILURE);
 	mlx_image_to_window(data.mlx, data.image, 0, 0);
 	mlx_loop_hook(data.mlx, loop_hook, &data);
 	mlx_loop(data.mlx);

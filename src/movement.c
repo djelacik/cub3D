@@ -142,13 +142,7 @@ static void handle_mouse_rotation(t_data *data)
 	int32_t aux_x = 0;
 	int32_t aux_y = 0;
 	int32_t dx = 0;
-	//int32_t dy = 0;
-	
-	// if (!data->flag)
-	// {
-	// 	mlx_set_cursor_mode(data->mlx, MLX_MOUSE_DISABLED);
-	// 	return ;
-	// }
+
 	if (mlx_is_key_down(data->mlx, MLX_KEY_TAB))
 		data->camera.toggle = 0;
 	if (!data->camera.toggle && mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
@@ -220,9 +214,7 @@ static void	render(t_data *data)
 		data->resize_pending = false;
 	}
 	draw_floor_and_ceiling(data);
-	//draw_walls(data);
-	//draw_sprites(data);
-	draw_walls_and_sprites(data);
+	draw_walls(data);
 	draw_mini_map(data);
 	draw_mini_player(data);
 	draw_mini_rays(data);

@@ -31,7 +31,7 @@ void	draw_mini_map(t_data *data)
 				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR);
 			else if (data->map.grid[y][x] == 'D' && is_wall(data, (double)x, (double)y))
 				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, GREEN_COLOR);
-			else // Lattia
+			else
 				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR_2);
 			x++;
 		}
@@ -49,7 +49,7 @@ void	draw_mini_player(t_data *data)
 
 	x = (int)(data->player.x * TILE_SIZE * MINIMAP_SCALE);
 	y = (int)(data->player.y * TILE_SIZE * MINIMAP_SCALE);
-	size = 5; //size of player
+	size = 5;
 	i = -size / 2;
 	while (i <= size / 2)
 	{
@@ -86,22 +86,14 @@ void	draw_mini_rays(t_data *data)
 	double	screen_y;
 	double	max_angle;
 
-	//data->player.angle = normalize_angle(data->player.angle);
-	//printf("player.angle: %f\n", data->player.angle);
-	//angle = normalize_angle(data->player.angle - FOV / 2);
 	angle = data->player.angle - FOV / 2;
-	//max_angle = normalize_angle(data->player.angle + FOV / 2);
 	max_angle = data->player.angle + FOV / 2;
-	//assert(data->player.angle >= 0 && data->player.angle < 2 * M_PI);
 	while (angle <= max_angle)
 	{
-		//assert(angle >= 0 && angle < 2 * M_PI);
 		ray_x = data->player.x;
 		ray_y = data->player.y;
-		while (!is_wall(data, ray_x, ray_y)) //data->map.grid[(int)ray_y][(int)ray_x] == '0') //data->map.grid[(int)ray_y][(int)ray_x]
+		while (!is_wall(data, ray_x, ray_y))
 		{
-			//assert(ray_x >= 0 && ray_x < data->map.width);
-			//assert(ray_y >= 0 && ray_y < data->map.height);
 			ray_x += cos(angle) * STEP_SIZE;
 			ray_y += sin(angle) * STEP_SIZE;
 			screen_x = ray_x * TILE_SIZE * MINIMAP_SCALE;
@@ -126,7 +118,6 @@ void	draw_square(mlx_image_t *image, int x, int y, int size, int color)
 		j = 0;
 		while (j < size)
 		{
-			// Piirrä ilman reunoja
 			mlx_put_pixel(image, x + i, y + j, color);
 			j++;
 		}

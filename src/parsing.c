@@ -223,7 +223,6 @@ bool	parse_player_pos(t_data *data)
 			}
 			else if((data->map.grid[i][j] == 'N' || data->map.grid[i][j] == 'S' || data->map.grid[i][j] == 'E' || data->map.grid[i][j] == 'W') && already_assigned)
 			{
-				//ft_putstr_fd("Error, multiple player positions\n", 2);
 				data->error_msg = "Multiple player positions detected";
 				return (true);
 			}
@@ -243,12 +242,9 @@ bool	parse_player_pos(t_data *data)
 			else if (data->map.grid[i][j] == ' ')
 			{
 				data->map.grid[i][j] = '0';
-				//printf("ok trying to remove spaces\n");
 			}
-			//neccessary?
 			else if (data->map.grid[i][j] != '0' && data->map.grid[i][j] != '1')
 			{
-				//ft_putstr_fd("Error, invalid character in map\n", 2);
 				data->error_msg = "Invalid character in map";
 				return (true);
 			}
@@ -271,20 +267,16 @@ bool is_map_closed_strict(t_data *data)
 	i = 0;
 	line_len = 0;
 
-	//printf("player position: %f %f\n", data->player.x, data->player.y);
 	while (i < height)
 	{
 		j = 0;
 		line_len = ft_strlen(data->map.grid[i]);
-		//printf("%i has %i chars---->", i, line_len);
 		while (j < line_len)
 		{
 			if (i == 0 || i == height - 1 || j == 0 || j == line_len - 1)
 			{
 				if (data->map.grid[i][j] != '1')
 				{
-					//ft_putstr_fd("Error, map is not closed\n", 2);
-					//printf("X\n");
 					return (false);
 				}
 			}
@@ -292,8 +284,6 @@ bool is_map_closed_strict(t_data *data)
 			{
 				if (data->map.grid[i - 1][j] == '\0' || data->map.grid[i + 1][j] == '\0' || data->map.grid[i][j - 1] == '\0' || data->map.grid[i][j + 1] == '\0')
 				{
-					//ft_putstr_fd("Error, map is not closed (intermediate)\n", 2);
-					//printf("X\n");
 					return (false);
 				}
 			}
@@ -301,18 +291,11 @@ bool is_map_closed_strict(t_data *data)
 			{
 				if (data->map.grid[i][j] != '1')
 				{
-					//ft_putstr_fd("Error, map is not closed\n", 2);
-					//printf("X\n");
 					return (false);
 				}
 			}
-			//if (data->map.grid[i][j] != '\0')
-				//printf("%c", data->map.grid[i][j]);
-			//else
-			//	printf("X");
 			j++;
 		}
-		//printf("<----\n");
 		i++;
 	}
 	return true;
@@ -412,7 +395,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 	int		doors_count = 0;
 
 	line = NULL;
-	//data->player.angle = 0;
 	fd = open(filepath, O_RDONLY); //check more errors
 	if (fd < 0)
 	{
@@ -444,7 +426,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 		{
 			if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
 			{
-				//ft_putstr_fd("You're trying to initialize map before colors or textures, exiting\n", 2);
 				data->error_msg = "Please define colors/textures before the map";
 				status = 1;
 				break ;
@@ -453,9 +434,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 				map_started = true;
 			if (vec_push(&map_vec, &line) < 0)
 			{
-				//ft_putstr_fd("Vec push failed\n", 2);
 				data->error_msg = "Vec push failed";
-				//free(line);
 				status = 1;
 				break ;
 			}
@@ -466,17 +445,13 @@ int	parse_cubfile(char *filepath, t_data *data)
 			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
 			{
 				data->error_msg = "Check your color/textures";
-				//ft_putstr_fd("Either some invalid line or trying to define the same thing twice\n", 2);
-				//free(line);
 				status = 1;
 				break ;
 			}
 		}
 		else
 		{
-			//ft_putstr_fd("Map must be the last thing in file\n", 2);
 			data->error_msg = "Map must be the last thing in file";
-			//free(line);
 			status = 1;
 			break ;
 		}
@@ -484,14 +459,12 @@ int	parse_cubfile(char *filepath, t_data *data)
 	}
 	gc_next_line(fd, CLEAN_LINE);
 	close(fd);
-	//clean static buffer from gnl
 	if (!status)
 	{
 		data->map.height = map_vec.len;
 		data->map.grid = gc_alloc((map_vec.len + 1) * sizeof(char *));
 		if (!data->map.grid)
 		{
-			//ft_putstr_fd("Map alloc failed\n", 2);
 			data->error_msg = "Map alloc failed";
 			status = 1;
 		}
@@ -501,7 +474,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 			while (i < map_vec.len)
 			{
 				data->map.grid[i] = *(char **)vec_get(&map_vec, i);
-				//printf("->%s<-\n", data->map.grid[i]);
 				/*should this be here?*/
 				int j = 0;
 				while (data->map.grid[i][j])

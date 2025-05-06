@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-void	draw_walls_and_sprites(t_data *data)
+void	draw_walls(t_data *data)
 {
 	double	distToPlane;
 	double	screen_x; //mmmmmm
@@ -44,12 +44,9 @@ void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
 
 	// Calculate ray properties
 	calculate_ray_data(data, ray_angle, &ray);
-	// data->zBuffer[screen_x] = ray.distance;
 
 	// Compute the full (virtual) wall height and its starting/ending positions
 	wall_height = (int)(data->height / ray.distance);
-	//orig_start_y = (data->height / 2) - (wall_height / 2);
-	//orig_end_y = (data->height / 2) + (wall_height / 2);
 	center_y = (int)(data->height / 2 + data->camera.shake_offset);
 	orig_start_y = center_y - (wall_height / 2);
 	orig_end_y = center_y + (wall_height / 2);
@@ -73,9 +70,7 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, 
 	int			tex_y;
 	uint32_t	color;
 	uint32_t	shaded_color;
-	// bool		invisible;
 
-	// invisible = false;
 	tex_x = ray->wall_x * ray->texture->width;
 	if (tex_x >= (int)ray->texture->width)
 		tex_x = ray->texture->width - 1;
@@ -85,8 +80,6 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, 
 		tex_x = (tex_x + offset) % ray->texture->width;
 		if (tex_x < offset)
 		{
-			// invisible = true;
-			// (void)invisible;
 			ray->is_door = false;
 			ray->texture = get_wall_texture(data, ray);
 			ray->is_door = true; // Necessary?
