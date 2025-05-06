@@ -26,31 +26,58 @@ void	free_textures(t_textures *textures)
 		mlx_delete_texture(textures->door);
 }
 
+static bool	init_mlx_data(t_data *data)
+{
+	int	mw;
+	int mh;
+
+	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
+	if (!data->mlx)
+	{
+		data->error_msg = "Failed to initialize MLX";
+		return (false);
+	}
+	data->textures = gc_alloc(sizeof(t_textures));
+	if (!data->textures)
+	{
+		mlx_terminate(data->mlx);
+		data->error_msg = "Failed to allocate memory for textures";
+		return (false);
+	}
+	ft_memset(data->textures, 0, sizeof(t_textures));
+	mlx_get_monitor_size(0, &mw, &mh);
+	data->width = mw / 2;
+	data->height = mh / 2;
+	mlx_set_window_size(data->mlx, data->width, data->height);
+	mlx_set_window_limit(data->mlx, MIN_WIDTH, MIN_HEIGHT, mw, mh);
+	mlx_set_window_pos(data->mlx, (mw - data->width) / 2, (mh - data->height) / 2);
+	return (true);
+}
+
+static bool	load_hud_textures(t_data *data)
+{
+	data->hud_hands = gc_alloc(sizeof(mlx_texture_t *) * 5);
+	if (!data->hud_hands)
+		return (false);
+	data->hud_hands[0] = mlx_load_png("textures/hand/hand111.png");
+	data->hud_hands[1] = mlx_load_png("textures/hand/hand222.png");
+	data->hud_hands[2] = mlx_load_png("textures/hand/hand333.png");
+	data->hud_hands[3] = mlx_load_png("textures/hand/hand444.png");
+	data->hud_hands[4] = mlx_load_png("textures/hand/hand555.png");
+	data->hud_frame_count = 5;
+	return (true);
+}
+
 bool	initializer(t_data *data, char *filename, bool strict)
 {
-	int	monitor_width;
-	int	monitor_height;
 	int	status;
 
 	status = 0;
 	ft_memset(data, 0, sizeof(t_data));
 	data->strict = strict;
 	data->player.speed = 0.025;
-	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
-	if (!data->mlx)
-	{
-		data->error_msg = "Failed to initialize MLX";
+	if (!init_mlx_data(data))
 		return (EXIT_FAILURE);
-	}
-	data->textures = gc_alloc(sizeof(t_textures));
-	if (!data->textures)
-	{
-		//printf("Error: Failed to allocate memory for textures\n");
-		mlx_terminate(data->mlx);
-		data->error_msg = "Failed to allocate memory for textures";
-		return (EXIT_FAILURE);
-	}
-	ft_memset(data->textures, 0, sizeof(t_textures));
 	status = parse_cubfile(filename, data);
 	if (status)
 	{
@@ -59,12 +86,6 @@ bool	initializer(t_data *data, char *filename, bool strict)
 			free_textures(data->textures);
 		return (EXIT_FAILURE);
 	}
-	mlx_get_monitor_size(0, &monitor_width, &monitor_height);
-	data->width = monitor_width * 0.5;
-	data->height = monitor_height * 0.5;
-	mlx_set_window_size(data->mlx, data->width, data->height);
-	mlx_set_window_limit(data->mlx, MIN_WIDTH, MIN_HEIGHT, monitor_width, monitor_height);
-	mlx_set_window_pos(data->mlx, (monitor_width - data->width) / 2, (monitor_height - data->height) / 2);
 	data->camera.x = data->width / 2;
 	data->camera.y = data->height / 2;
 	data->image = mlx_new_image(data->mlx, data->width, data->height);
@@ -75,15 +96,13 @@ bool	initializer(t_data *data, char *filename, bool strict)
 		data->error_msg = "Failed to create image";
 		return (EXIT_FAILURE);
 	}
-	/* hands */
-	data->hud_hands = gc_alloc(sizeof(mlx_texture_t *) * 5);
-	data->hud_hands[0] = mlx_load_png("textures/hand/hand111.png");
-	data->hud_hands[1] = mlx_load_png("textures/hand/hand222.png");
-	data->hud_hands[2] = mlx_load_png("textures/hand/hand333.png");
-	data->hud_hands[3] = mlx_load_png("textures/hand/hand444.png");
-	data->hud_hands[4] = mlx_load_png("textures/hand/hand555.png");
-	data->hud_frame_count = 5;
-	/* hands */
+	if (!load_hud_textures(data))
+	{
+		mlx_terminate(data->mlx);
+		free_textures(data->textures);
+		data->error_msg = "Failed to load hud textures";
+		return (EXIT_FAILURE);
+	}
 	if (is_wall(data, data->player.x, data->player.y))
 	{
 		printf("Error: Player starts inside a wall\n");
