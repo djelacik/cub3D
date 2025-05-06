@@ -72,14 +72,6 @@ bool	is_number(char *str)
 	return true;
 }
 
-bool	load_texture(char *path, mlx_texture_t **texture)
-{
-	*texture = mlx_load_png(path);
-	if (!*texture)
-		return (false);
-	return (true);
-}
-
 bool	textures_ready(t_data *data)
 {
 	t_textures		*t;

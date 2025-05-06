@@ -12,6 +12,8 @@
 
 #include "cub3D.h"
 
+//clean textures too
+//terminate window
 void	free_and_exit(void)
 {
 	gc_free_all();

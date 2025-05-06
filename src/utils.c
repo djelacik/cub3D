@@ -12,6 +12,14 @@
 
 #include "cub3D.h"
 
+bool	load_texture(char *path, mlx_texture_t **texture)
+{
+	*texture = mlx_load_png(path);
+	if (!*texture)
+		return (false);
+	return (true);
+}
+
 double	lookup_door_progress(t_data *data, int x, int y)
 {
 	int i = 0;

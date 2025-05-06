@@ -209,6 +209,7 @@ void	draw_mini_rays(t_data *data);
 void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
 
 //utils.c
+bool	load_texture(char *path, mlx_texture_t **texture);
 double	lookup_door_progress(t_data *data, int x, int y);
 void	update_doors(t_data *data);
 bool	is_wall(t_data *data, double x, double y); //update
