@@ -208,14 +208,6 @@ static void	render(t_data *data)
 	{
 		data->width = data->new_width;
 		data->height = data->new_height;
-		gc_free(data->zBuffer);
-		//free(data->zBuffer);
-		data->zBuffer = gc_alloc(sizeof(double) * data->width);
-		if (!data->zBuffer)
-		{
-			printf("Error: Failed to allocate memory for zBuffer\n");
-			return; //exit if possible
-		}
 		//if (data->image)
 		mlx_delete_image(data->mlx, data->image);
 		data->image = mlx_new_image(data->mlx, data->new_width, data->new_height);

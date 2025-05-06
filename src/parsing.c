@@ -440,15 +440,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 		nl = ft_strchr(line, '\n');
 		if (nl)
 			*nl = '\0';
-		//printf("line->%s<-\n", line);
-		/*
-		if (is_map_line(line))
-		{
-			if (!map_started)
-				map_started = true;
-			printf("is map.grid line\n");
-		}
-		*/
 		if (is_map_line(line) && !line_is_only_spaces(line))
 		{
 			if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
@@ -469,15 +460,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 				break ;
 			}
 		}
-		/*
-		else if (!map_started)
-		{
-			if (is_texture_line(line))
-				printf("is texture line\n");
-			if (is_color_line(line))
-				printf("is color line\n");
-		}
-		*/
 		else if (!map_started)
 		{
 			//remove_spaces(line);
@@ -490,10 +472,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 				break ;
 			}
 		}
-		/*
-		else
-			printf("error: either map.grid is not last or line not valid\n");
-		*/
 		else
 		{
 			//ft_putstr_fd("Map must be the last thing in file\n", 2);
@@ -532,12 +510,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 					{
 						doors_count++;
 					}
-					/*
-					else if (data->map.grid[i][j] == 'X')
-					{
-						//data->enemy_count++;
-					}
-					*/
 					j++;
 				}
 				/*should this be here?*/
@@ -564,20 +536,10 @@ int	parse_cubfile(char *filepath, t_data *data)
 	}
 	if (!status)
 	{
-		/*
-		i = 0;
-		while (i < map_vec.len)
-		{
-			printf("->%s<-\n", data->map.grid[i]);
-			i++;
-		}
-		*/
-		//ft_putstr_fd("Map is not closed\n", 2);
 		if (data->strict)
 		{
 			if (!is_map_closed_strict(data))
 			{
-				//ft_putstr_fd("Map is not closed (using strict checking)\n", 2);
 				data->error_msg = "Map is open (strict checking)";
 				status = 1;
 			}
@@ -586,7 +548,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 		{
 			if (!is_map_closed(data))
 			{
-				//ft_putstr_fd("Map is not closed\n", 2);
 				data->error_msg = "Map is open";
 				status = 1;
 			}
@@ -596,90 +557,3 @@ int	parse_cubfile(char *filepath, t_data *data)
 	//printf("reached end of parsing\n");
 	return (status);
 }
-
-/*
-bool	remove_spaces(char *line)
-{
-	char	*src;
-	char	*dst;
-
-	src = line;
-	dst = line;
-	while (*src)
-	{
-		if (*src != ' ' && *src != '\t') //tabs?
-			*dst++ = *src;
-		src++;
-	}
-	*dst = '\0';
-	return (true);
-}
-
-bool	parse_texture_line(char *line, t_data *data)
-{
-	t_textures	*t;
-
-	t = data->textures;
-	if (!ft_strncmp(line, "NO", 2) && !t->north)
-		return (load_texture(line + 2, &t->north));
-	else if (!ft_strncmp(line, "SO", 2)  && !t->south)
-		return (load_texture(line + 2, &t->south));
-	else if (!ft_strncmp(line, "WE", 2) && !t->west)
-		return (load_texture(line + 2, &t->west));
-	else if (!ft_strncmp(line, "EA", 2) && !t->east)
-		return (load_texture(line + 2, &t->east));
-	return (false);
-}
-
-
-bool	parse_color_line(char *line, t_data *data)
-{
-	bool	status;
-	if (!data->f_color_found && line[0] == 'F')
-	{
-		//hardcoded jump of 1
-		printf("Floor color:\n");
-		status = parse_color_values(line + 1, &data->floor);
-		printf("data->floor_color = 0x%08x\n", data->floor);
-		if (status)
-			data->f_color_found = 1;
-		return (status);
-	}
-	if (!data->c_color_found && line[0] == 'C')
-	{
-		//hardcoded jump of 1
-		printf("Ceiling color:\n");
-		status = parse_color_values(line + 1, &data->ceiling);
-		printf("data->ceiling_color = 0x%08x\n", data->ceiling);
-		if (status)
-			data->c_color_found = 1;
-		return (status);
-	}
-	return false;
-}
-
-//check commas and numbers
-bool	parse_color_values(char *str, uint32_t *color)
-{
-	int words;
-	char **split;
-	char **copy;
-	int number;
-
-	if (count_char(str, ',') != 2)
-		return (false);
-	split = gc_split(str, ',', &words);
-	if (words != 3)
-		return (false);
-	copy = split;
-	while (*copy)
-	{
-		number = ft_atoi(*copy);
-		if (!is_number(*copy) || number < 0 || number > 255)
-			return (false);
-		copy++;
-	}
-	*color = get_rgba(ft_atoi(split[0]), ft_atoi(split[1]), ft_atoi(split[2]), 255);
-	return (true);
-}
-*/

@@ -16,15 +16,9 @@ void	draw_walls_and_sprites(t_data *data)
 {
 	double	distToPlane;
 	double	screen_x; //mmmmmm
-
 	double	offset;
 	double	angle_offset;
 	double	ray_angle;
-
-	double	dir_x = cos(data->player.angle);
-	double	dir_y = sin(data->player.angle);
-	double	plane_x = -dir_y * tan(FOV / 2.0);
-	double	plane_y = dir_x * tan(FOV / 2.0);
 
 	distToPlane = ((double)data->width / 2.0) / tan(FOV / 2.0);
 	screen_x = 0;
@@ -34,7 +28,6 @@ void	draw_walls_and_sprites(t_data *data)
 		angle_offset = atan(offset / distToPlane);
 		ray_angle = data->player.angle + angle_offset;
 		draw_wall_column(data, ray_angle, (int)screen_x);
-		draw_sprite_column(data, (int)screen_x, dir_x, dir_y, plane_x, plane_y);
 		screen_x++;
 	}
 }
@@ -51,7 +44,7 @@ void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
 
 	// Calculate ray properties
 	calculate_ray_data(data, ray_angle, &ray);
-	data->zBuffer[screen_x] = ray.distance;
+	// data->zBuffer[screen_x] = ray.distance;
 
 	// Compute the full (virtual) wall height and its starting/ending positions
 	wall_height = (int)(data->height / ray.distance);
@@ -80,9 +73,9 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, 
 	int			tex_y;
 	uint32_t	color;
 	uint32_t	shaded_color;
-	bool		invisible;
+	// bool		invisible;
 
-	invisible = false;
+	// invisible = false;
 	tex_x = ray->wall_x * ray->texture->width;
 	if (tex_x >= (int)ray->texture->width)
 		tex_x = ray->texture->width - 1;
@@ -92,8 +85,8 @@ void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, 
 		tex_x = (tex_x + offset) % ray->texture->width;
 		if (tex_x < offset)
 		{
-			invisible = true;
-			(void)invisible;
+			// invisible = true;
+			// (void)invisible;
 			ray->is_door = false;
 			ray->texture = get_wall_texture(data, ray);
 			ray->is_door = true; // Necessary?

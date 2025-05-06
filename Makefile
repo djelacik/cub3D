@@ -20,7 +20,6 @@ src/rays.c \
 src/utils.c \
 src/minimap.c \
 src/movement.c \
-src/sprites.c \
 src/hands.c \
 src/free.c
 

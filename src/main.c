@@ -79,25 +79,6 @@ bool	initializer(t_data *data, char *filename, bool strict)
 		data->error_msg = "Failed to create image";
 		return (EXIT_FAILURE);
 	}
-	/* sprite hardcoded try */
-	data->num_sprites = 3;
-	data->sprites = gc_alloc(sizeof(t_sprite) * data->num_sprites);
-	data->sprites[0].x = 2.5;
-	data->sprites[0].y = 2.5;
-	data->sprites[0].texture = 0;
-	data->sprites[1].x = 5.5;
-	data->sprites[1].y = 5.5;
-	data->sprites[1].texture = 1;
-	data->sprites[2].x = 2.5;
-	data->sprites[2].y = 5.5;
-	data->sprites[2].texture = 2;
-	data->zBuffer = gc_alloc(sizeof(double) * data->width);
-	data->sprite_textures = gc_alloc(sizeof(mlx_texture_t *) * 3);
-	data->sprite_textures[0] = mlx_load_png("textures/pics/pillar.png");
-	data->sprite_textures[1] = mlx_load_png("textures/pics/greenlight.png");
-	data->sprite_textures[2] = mlx_load_png("textures/pics/barrel.png");
-	/* sprite hardcoded try */
-
 	/* hands */
 	data->hud_hands = gc_alloc(sizeof(mlx_texture_t *) * 5);
 	data->hud_hands[0] = mlx_load_png("textures/hand/hand111.png");
@@ -152,9 +133,7 @@ int	main(int argc, char **argv)
 	mlx_loop(data.mlx);
 	mlx_terminate(data.mlx);
 	free_textures(data.textures);
-	mlx_delete_texture(data.sprite_textures[0]);
-	mlx_delete_texture(data.sprite_textures[1]);
-	mlx_delete_texture(data.sprite_textures[2]);
+	//hands
 	mlx_delete_texture(data.hud_hands[0]);
 	mlx_delete_texture(data.hud_hands[1]);
 	mlx_delete_texture(data.hud_hands[2]);
