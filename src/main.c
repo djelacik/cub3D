@@ -12,62 +12,6 @@
 
 #include "cub3D.h"
 
-void	free_textures(t_textures *textures)
-{
-	if (textures->north)
-		mlx_delete_texture(textures->north);
-	if (textures->south)
-		mlx_delete_texture(textures->south);
-	if (textures->west)
-		mlx_delete_texture(textures->west);
-	if (textures->east)
-		mlx_delete_texture(textures->east);
-	if (textures->door)
-		mlx_delete_texture(textures->door);
-}
-
-void	free_hud_textures(t_data *data)
-{
-	int	i;
-
-	if (data->hud_hands)
-	{
-		i = 0;
-		while (i < data->hud_frame_count)
-		{
-			if (data->hud_hands[i])
-				mlx_delete_texture(data->hud_hands[i]);
-			i++;
-		}
-		gc_free(data->hud_hands);
-		data->hud_frame_count = 0;
-		data->hud_hands = NULL;
-	}
-}
-
-static bool	load_hud_textures(t_data *data)
-{
-	bool	ok[5];
-
-	ft_memset(ok, 0, sizeof(bool) * 5);
-	data->hud_hands = gc_alloc(sizeof(mlx_texture_t *) * 5);
-	if (!data->hud_hands)
-		return (false);
-	ok[0] = load_texture("textures/hand/hand111.png", &data->hud_hands[0]);
-	ok[1] = load_texture("textures/hand/hand222.png", &data->hud_hands[1]);
-	ok[2] = load_texture("textures/hand/hand333.png", &data->hud_hands[2]);
-	ok[3] = load_texture("textures/hand/hand444.png", &data->hud_hands[3]);
-	ok[4] = load_texture("textures/hand/hand555.png", &data->hud_hands[4]);
-	data->hud_frame_count = 5;
-	if (!ok[0] || !ok[1] || !ok[2] || !ok[3] || !ok[4])
-	{
-		data->error_msg = "Failed to load HUD textures";
-		free_hud_textures(data);
-		return (false);
-	}
-	return (true);
-}
-
 static bool	init_mlx_data(t_data *data)
 {
 	int	mw;

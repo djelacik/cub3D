@@ -39,6 +39,24 @@ void	draw_mini_map(t_data *data)
 	}
 }
 
+void	draw_square(mlx_image_t *image, int x, int y, int size, int color)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < size)
+	{
+		j = 0;
+		while (j < size)
+		{
+			mlx_put_pixel(image, x + i, y + j, color);
+			j++;
+		}
+		i++;
+	}
+}
+
 void	draw_mini_player(t_data *data)
 {
 	int	x;
@@ -65,14 +83,14 @@ void	draw_mini_player(t_data *data)
 	}
 }
 
-double	normalize_angle(double angle)
-{
-	while (angle >= 2 * M_PI)
-		angle -= 2 * M_PI;
-	while (angle < 0)
-		angle += 2 * M_PI;
-	return (angle);
-}
+// double	normalize_angle(double angle)
+// {
+// 	while (angle >= 2 * M_PI)
+// 		angle -= 2 * M_PI;
+// 	while (angle < 0)
+// 		angle += 2 * M_PI;
+// 	return (angle);
+// }
 
 //limit angle to 0 - 2 * M_PI
 //rays look more like waves wtf
@@ -104,23 +122,5 @@ void	draw_mini_rays(t_data *data)
 		}
 		angle += 0.01;
 		//angle = normalize_angle(angle);
-	}
-}
-
-void	draw_square(mlx_image_t *image, int x, int y, int size, int color)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < size)
-	{
-		j = 0;
-		while (j < size)
-		{
-			mlx_put_pixel(image, x + i, y + j, color);
-			j++;
-		}
-		i++;
 	}
 }

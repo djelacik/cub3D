@@ -28,6 +28,29 @@ bool	textures_ready(t_data *data)
 	return (t->north && t->south && t->west && t->east);
 }
 
+bool	load_hud_textures(t_data *data)
+{
+	bool	ok[5];
+
+	ft_memset(ok, 0, sizeof(bool) * 5);
+	data->hud_hands = gc_alloc(sizeof(mlx_texture_t *) * 5);
+	if (!data->hud_hands)
+		return (false);
+	ok[0] = load_texture("textures/hand/hand111.png", &data->hud_hands[0]);
+	ok[1] = load_texture("textures/hand/hand222.png", &data->hud_hands[1]);
+	ok[2] = load_texture("textures/hand/hand333.png", &data->hud_hands[2]);
+	ok[3] = load_texture("textures/hand/hand444.png", &data->hud_hands[3]);
+	ok[4] = load_texture("textures/hand/hand555.png", &data->hud_hands[4]);
+	data->hud_frame_count = 5;
+	if (!ok[0] || !ok[1] || !ok[2] || !ok[3] || !ok[4])
+	{
+		data->error_msg = "Failed to load HUD textures";
+		free_hud_textures(data);
+		return (false);
+	}
+	return (true);
+}
+
 //check int x and int y type
 uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y)
 {

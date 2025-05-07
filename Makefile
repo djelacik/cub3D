@@ -17,9 +17,13 @@ src/main.c \
 src/shading.c \
 src/texture.c \
 src/ray.c \
-src/rays.c \
+src/floor_ceiling.c \
+src/walls.c \
+src/doors.c \
 src/utils.c \
 src/minimap.c \
+src/render_utils.c \
+src/render.c \
 src/movement.c \
 src/hands.c \
 src/free.c

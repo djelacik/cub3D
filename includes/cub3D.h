@@ -55,15 +55,7 @@
 #define PIX_WALK 3
 #define SHAKE_VEL_WALK 10
 #define SHAKE_VEL_RECO 50
-
 #define VEC_INIT_SIZE 4
-
-//# define DEBUG
-#ifdef DEBUG 
-# define DBG_PRINT(...) fprintf(stderr, __VA_ARGS__)
-#else
-# define DBG_PRINT(...) ((void)0)
-#endif
 
 typedef enum e_door_state{
 	CLOSED,
@@ -186,23 +178,28 @@ uint32_t	simple_shading(uint32_t color, double distance);
 
 //texture.c
 bool			load_texture(char *path, mlx_texture_t **texture);
+bool			load_hud_textures(t_data *data);
 bool			textures_ready(t_data *data);
 uint32_t		get_texture_color(mlx_texture_t *texture, int x, int y);
 mlx_texture_t 	*get_wall_texture(t_data *data, t_ray *ray);
-void			draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, int vis_end_y, int orig_start_y, int wall_height);
 
 //ray.c
 double	calculate_distance(t_data *data, double angle, t_ray *ray);
 void	calculate_ray_data(t_data *data, double angle, t_ray *ray);
 
-//rays.c
+//walls.c
 double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
 void	draw_wall_column(t_data *data, double angle, int screen_x);
 void	draw_walls(t_data *data);
+void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, int vis_end_y, int orig_start_y, int wall_height);
 //void	draw_walls_and_sprites(t_data *data);
 
 //movement.c
-void	loop_hook(void *param);
+void	handle_movement(t_data *data);
+void	handle_shake(t_data *data);
+void	handle_shooting(t_data *data);
+void	handle_rotation(t_data *data);
+void	handle_mouse_rotation(t_data *data);
 
 //minimap.c
 void	draw_mini_map(t_data *data);
@@ -210,12 +207,24 @@ void	draw_mini_player(t_data *data);
 void	draw_mini_rays(t_data *data);
 void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
 
-//utils.c
-bool	load_texture(char *path, mlx_texture_t **texture);
+//doors.c
 double	lookup_door_progress(t_data *data, int x, int y);
 void	update_doors(t_data *data);
-bool	is_wall(t_data *data, double x, double y); //update
+
+//render_utils.c
+void	my_resize_callback(int width, int height, void* param);
+
+//floor_ceiling.c
 void	draw_floor_and_ceiling(t_data *data);
+
+//render.c
+void	render(t_data *data);
+void	loop_hook(void *param);
+
+//utils.c
+bool	load_texture(char *path, mlx_texture_t **texture);
+bool	is_wall(t_data *data, double x, double y); //update
+int		can_move_to(t_data *data, double new_x, double new_y);
 
 //parsing_utils.c
 bool	valid_character(char c);
@@ -231,6 +240,8 @@ int		parse_cubfile(char *filepath, t_data *data);
 void	free_and_exit(void);
 void	free_and_exit_with(int exit_code);
 void	error_exit(char *msg);
+void	free_textures(t_textures *textures);
+void	free_hud_textures(t_data *data);
 
 //sprites.c
 //void	draw_sprites(t_data *data);

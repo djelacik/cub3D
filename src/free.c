@@ -33,3 +33,36 @@ void	error_exit(char *msg)
 	gc_free_all();
 	exit(EXIT_FAILURE);
 }
+
+void	free_textures(t_textures *textures)
+{
+	if (textures->north)
+		mlx_delete_texture(textures->north);
+	if (textures->south)
+		mlx_delete_texture(textures->south);
+	if (textures->west)
+		mlx_delete_texture(textures->west);
+	if (textures->east)
+		mlx_delete_texture(textures->east);
+	if (textures->door)
+		mlx_delete_texture(textures->door);
+}
+
+void	free_hud_textures(t_data *data)
+{
+	int	i;
+
+	if (data->hud_hands)
+	{
+		i = 0;
+		while (i < data->hud_frame_count)
+		{
+			if (data->hud_hands[i])
+				mlx_delete_texture(data->hud_hands[i]);
+			i++;
+		}
+		gc_free(data->hud_hands);
+		data->hud_frame_count = 0;
+		data->hud_hands = NULL;
+	}
+}
