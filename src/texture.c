@@ -12,6 +12,22 @@
 
 #include "cub3D.h"
 
+bool	load_texture(char *path, mlx_texture_t **texture)
+{
+	*texture = mlx_load_png(path);
+	if (!*texture)
+		return (false);
+	return (true);
+}
+
+bool	textures_ready(t_data *data)
+{
+	t_textures		*t;
+
+	t = data->textures;
+	return (t->north && t->south && t->west && t->east);
+}
+
 //check int x and int y type
 uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y)
 {

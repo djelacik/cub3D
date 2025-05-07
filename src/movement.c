@@ -194,10 +194,7 @@ void my_resize_callback(int width, int height, void* param)
 
 static void	render(t_data *data)
 {
-	// mlx_delete_image(data->mlx, data->image);
 	mlx_resize_hook(data->mlx, &my_resize_callback, (void *)data);
-	// data->image = mlx_new_image(data->mlx, data->width, data->height);
-	// mlx_image_to_window(data->mlx, data->image, 0, 0);
 	if (data->resize_pending)
 	{
 		data->width = data->new_width;
@@ -218,9 +215,7 @@ static void	render(t_data *data)
 	draw_mini_map(data);
 	draw_mini_player(data);
 	draw_mini_rays(data);
-	// Draw HUD hands
 	draw_hud_hands(data);
-    // Hud animation
 	shooting_animation(data);
 }
 

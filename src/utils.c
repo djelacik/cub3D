@@ -12,14 +12,6 @@
 
 #include "cub3D.h"
 
-bool	load_texture(char *path, mlx_texture_t **texture)
-{
-	*texture = mlx_load_png(path);
-	if (!*texture)
-		return (false);
-	return (true);
-}
-
 double	lookup_door_progress(t_data *data, int x, int y)
 {
 	int i = 0;
@@ -33,7 +25,7 @@ double	lookup_door_progress(t_data *data, int x, int y)
 }
 
 //make smoother, currently it's buggy if moving in a distance == 2
-void update_doors(t_data *data)
+void	update_doors(t_data *data)
 {
 	int	i = 0;
 	while (i < data->door_count)

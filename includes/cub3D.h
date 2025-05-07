@@ -185,6 +185,8 @@ uint32_t	get_rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 uint32_t	simple_shading(uint32_t color, double distance);
 
 //texture.c
+bool			load_texture(char *path, mlx_texture_t **texture);
+bool			textures_ready(t_data *data);
 uint32_t		get_texture_color(mlx_texture_t *texture, int x, int y);
 mlx_texture_t 	*get_wall_texture(t_data *data, t_ray *ray);
 void			draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, int vis_end_y, int orig_start_y, int wall_height);
@@ -214,6 +216,13 @@ double	lookup_door_progress(t_data *data, int x, int y);
 void	update_doors(t_data *data);
 bool	is_wall(t_data *data, double x, double y); //update
 void	draw_floor_and_ceiling(t_data *data);
+
+//parsing_utils.c
+bool	valid_character(char c);
+bool	is_map_line(char *line);
+bool	line_is_only_spaces(char *line);
+int		count_char(char *str, char c);
+bool	is_number(char *str);
 
 //parsing.c
 int		parse_cubfile(char *filepath, t_data *data);

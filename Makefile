@@ -10,6 +10,7 @@ MLX_42 = $(LIBMLX)/build/libmlx42.a
 INCLUDES = -Iincludes -I$(LIBMLX)/include
 
 SRC = \
+src/parsing_utils.c \
 src/parsing.c \
 src/color_utils.c \
 src/main.c \
