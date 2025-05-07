@@ -136,4 +136,3 @@ void handle_mouse_rotation(t_data *data)
 	data->camera.y = data->height / 2;
 	mlx_set_mouse_pos(data->mlx, data->camera.x, data->camera.y);
 }
-

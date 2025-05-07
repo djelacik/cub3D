@@ -75,4 +75,3 @@ void	update_doors(t_data *data)
 		i++;
 	}
 }
-

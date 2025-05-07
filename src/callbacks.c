@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_utils.c                                     :+:      :+:    :+:   */
+/*   callbacks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 23:09:35 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/07 23:09:36 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/08 02:07:40 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,3 @@ void my_resize_callback(int width, int height, void* param)
 	data->resize_pending = true;
 	printf("Resize Callback: new dimensions set to %i x %i\n", data->new_width, data->new_height);
 }
-

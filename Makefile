@@ -16,6 +16,7 @@ src/parsing_logic.c \
 src/map_algorithms.c \
 src/parsing.c \
 src/color_utils.c \
+src/window.c \
 src/main.c \
 src/shading.c \
 src/texture.c \
@@ -25,7 +26,8 @@ src/walls.c \
 src/doors.c \
 src/utils.c \
 src/minimap.c \
-src/render_utils.c \
+src/callbacks.c \
+src/hooks.c \
 src/render.c \
 src/movement.c \
 src/hands.c \

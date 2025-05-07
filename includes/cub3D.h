@@ -166,6 +166,9 @@ typedef struct s_data {
 
 */
 
+//window.c
+bool	init_mlx_data(t_data *data);
+
 //color_utils.c
 uint8_t		get_r(uint32_t rgba);
 uint8_t		get_g(uint32_t rgba);
@@ -211,15 +214,17 @@ void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
 double	lookup_door_progress(t_data *data, int x, int y);
 void	update_doors(t_data *data);
 
-//render_utils.c
+//callbacks.c
 void	my_resize_callback(int width, int height, void* param);
 
 //floor_ceiling.c
 void	draw_floor_and_ceiling(t_data *data);
 
+//hooks.c
+void	loop_hook(void *param);
+
 //render.c
 void	render(t_data *data);
-void	loop_hook(void *param);
 
 //utils.c
 bool	load_texture(char *path, mlx_texture_t **texture);
@@ -230,6 +235,7 @@ int		can_move_to(t_data *data, double new_x, double new_y);
 bool	line_is_only_spaces(char *line);
 bool	is_map_line(char *line);
 bool	split_line(char *line, char **key, char **rest);
+bool	has_cub_extension(char *filename);
 
 //char.c
 bool	valid_character(char c);

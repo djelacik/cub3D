@@ -68,3 +68,14 @@ bool	split_line(char *line, char **key, char **rest)
 	return (*key && *rest);
 }
 
+bool	has_cub_extension(char *filename)
+{
+	int len;
+
+	if (!filename)
+		return (false);
+	len = ft_strlen(filename);
+	if (len < 4)
+		return (false);
+	return (ft_strncmp(filename + len - 4, ".cub", 4) == 0);
+}
