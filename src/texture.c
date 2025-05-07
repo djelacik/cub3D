@@ -78,4 +78,3 @@ mlx_texture_t *get_wall_texture(t_data *data, t_ray *ray)
 			return data->textures->north;
 	}
 }
-
