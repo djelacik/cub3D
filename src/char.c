@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*   char.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/07 19:27:16 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/07 19:27:18 by aapadill         ###   ########.fr       */
+/*   Created: 2025/05/08 01:57:21 by aapadill          #+#    #+#             */
+/*   Updated: 2025/05/08 01:57:23 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,35 +16,6 @@ bool	valid_character(char c)
 {
 	return (c == '0' || c == '1' || c == 'N' || c == 'S'
 		|| c == 'E' || c == 'W' || c == 'D' || c == ' ');
-}
-
-bool	is_map_line(char *line)
-{
-	while (*line)
-	{
-		if (!valid_character(*line))
-			return (false);
-		line++;
-	}
-	return (true);
-}
-
-bool	line_is_only_spaces(char *line)
-{
-	size_t	count;
-	char	*original;
-	
-	count = 0;
-	original = line;
-	while (*line)
-	{
-		if (*line == ' ')
-			count++;
-		line++;
-	}
-	if (ft_strlen(original) == count)
-		return (true);
-	return (false);
 }
 
 int	count_char(char *str, char c)

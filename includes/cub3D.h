@@ -226,12 +226,26 @@ bool	load_texture(char *path, mlx_texture_t **texture);
 bool	is_wall(t_data *data, double x, double y); //update
 int		can_move_to(t_data *data, double new_x, double new_y);
 
-//parsing_utils.c
-bool	valid_character(char c);
-bool	is_map_line(char *line);
+//line.c
 bool	line_is_only_spaces(char *line);
+bool	is_map_line(char *line);
+bool	split_line(char *line, char **key, char **rest);
+
+//char.c
+bool	valid_character(char c);
 int		count_char(char *str, char c);
 bool	is_number(char *str);
+
+//parsing_logic.c
+bool	parse_color_values(char *str, uint32_t *color);
+bool	parse_color_line(char *line, t_data *data);
+bool	parse_texture_line(char *line, t_data *data);
+bool	parse_player_pos(t_data *data);
+
+//map_algorithms.c
+bool 	is_map_closed_strict(t_data *data);
+bool	flood_fill(t_data *data, bool **visited, int i, int j);
+bool	is_map_closed(t_data *data);
 
 //parsing.c
 int		parse_cubfile(char *filepath, t_data *data);
