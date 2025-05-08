@@ -14,33 +14,26 @@
 
 void draw_hud_hands(t_data *data)
 {
-	mlx_texture_t	*hand_tex = data->hud_hands[data->hud_frame];
-
-	float			target_height = data->height * 0.6f;
-	float			scale_factor = target_height / hand_tex->height;
-
-	int				new_width = hand_tex->width * scale_factor;
-	int				new_height = hand_tex->height * scale_factor;
-
-	// bottom center of the screen
-	int pos_x = (data->width - new_width) / 2;
-	int pos_y = data->height - new_height;
-
-	int y = 0;
-	while (y < new_height)
+	mlx_texture_t	*hand_tex;
+	float			sf;
+	int				y;
+	int				x;
+	uint32_t 		color;
+	
+	hand_tex = data->hud_hands[data->hud_frame];
+	sf = (data->height * 0.6f) / hand_tex->height;
+	y = 0;
+	while (y < hand_tex->height * sf)
 	{
-		int x = 0;
-		while (x < new_width)
+		x = 0;
+		while (x < hand_tex->width * sf)
 		{
-			int	src_x = x / scale_factor;
-			int	src_y = y / scale_factor;
-
-			uint32_t color = get_texture_color(hand_tex, src_x, src_y);
-			// skip black pixels
+			color = get_texture_color(hand_tex, x / sf, y / sf);
 			if ((color & 0x00FFFFFF) != 0)
 			{
 				color = simple_shading(color, 1.0);
-				mlx_put_pixel(data->image, pos_x + x, pos_y + y, color);
+				mlx_put_pixel(data->image, (data->width - hand_tex->width * sf) / 2 + x,
+					data->height - hand_tex->height * sf + y, color);
 			}
 			x++;
 		}
@@ -50,10 +43,10 @@ void draw_hud_hands(t_data *data)
 
 void shooting_animation(t_data *data)
 {
-	if (data->is_player_shooting) //is_player_moving
-	{
-		bool just_started;
+	bool just_started;
 
+	if (data->is_player_shooting)
+	{
 		just_started = true;
 		data->hud_frame_timer++;
 		if (data->hud_frame_timer >= SEC_PER_FRAME)
@@ -62,7 +55,6 @@ void shooting_animation(t_data *data)
 			data->hud_frame_timer = 0;
 			just_started = false;
 		}
-		//printf("frame is %d\n", data->hud_frame);
 		if (data->hud_frame == 0 && !just_started)
 			data->is_player_shooting = 0;
 	}
