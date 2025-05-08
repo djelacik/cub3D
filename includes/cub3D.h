@@ -166,6 +166,11 @@ typedef struct s_data {
 
 */
 
+//file.c
+int  	open_cub_file(const char *path);
+int  	close_cub_file(int fd);
+bool	has_cub_extension(char *filename);
+
 //window.c
 bool	init_mlx_data(t_data *data);
 
@@ -235,18 +240,23 @@ int		can_move_to(t_data *data, double new_x, double new_y);
 bool	line_is_only_spaces(char *line);
 bool	is_map_line(char *line);
 bool	split_line(char *line, char **key, char **rest);
-bool	has_cub_extension(char *filename);
 
 //char.c
 bool	valid_character(char c);
 int		count_char(char *str, char c);
 bool	is_number(char *str);
 
-//parsing_logic.c
+//parsing_head.c
+int 	process_header_line(char *line, t_data *data);
 bool	parse_color_values(char *str, uint32_t *color);
 bool	parse_color_line(char *line, t_data *data);
 bool	parse_texture_line(char *line, t_data *data);
+
+//parsing_player.c
 bool	parse_player_pos(t_data *data);
+
+//parsing_map.c
+bool	build_map(t_data *data, t_vec *map_vec);
 
 //map_algorithms.c
 bool 	is_map_closed_strict(t_data *data);

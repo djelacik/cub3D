@@ -12,38 +12,10 @@
 
 #include "cub3D.h"
 
-int  open_cub_file(const char *path)
-{
-    int fd;
-
-    fd = open(path, O_RDONLY); //check more?
-    if (fd < 0)
-        return (-1);
-    return (fd);
-}
-
-int  close_cub_file(int fd)
-{
-	if (close(fd) < 0)
-		return (-1);
-	return (0);
-}
-
 int  init_map_vector(t_vec *vec)
 {
     if (vec_new(vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
         return (-1);
-    return (0);
-}
-
-int  process_header_line(char *line, t_data *data)
-{
-    if (!parse_texture_line(line, data)
-        && !parse_color_line(line, data))
-    {
-        data->error_msg = "Invalid color/texture definition";
-        return (1);
-    }
     return (0);
 }
 
@@ -110,56 +82,6 @@ bool	parse_file_lines(int fd, t_data *data, t_vec *map_vec, bool *map_started)
 	}
 	gc_next_line(fd, CLEAN_LINE);
 	return (status);
-}
-
-bool	build_map(t_data *data, t_vec *map_vec)
-{
-	size_t	i;
-	int		row_len;
-	int		doors;
-
-	doors = 0;
-	data->map.height = map_vec->len;
-	data->map.grid = gc_alloc((map_vec->len + 1) * sizeof(char *));
-	if (!data->map.grid)
-	{
-		data->error_msg = "Map alloc failed";
-		return (1);
-	}
-	else
-	{
-		i = 0;
-		while (i < map_vec->len)
-		{
-			data->map.grid[i] = *(char **)vec_get(map_vec, i);
-			/*should this be here?*/
-			int j = 0;
-			while (data->map.grid[i][j])
-			{
-				if (data->map.grid[i][j] == 'D')
-				{
-					doors++;
-				}
-				j++;
-			}
-			/*should this be here?*/
-			row_len = ft_strlen(data->map.grid[i]);
-			if (row_len > data->map.width)
-				data->map.width = row_len;
-			i++;
-		}
-		if (doors > 0)
-		{
-			data->doors = gc_alloc(doors * sizeof(t_door));
-			ft_memset(data->doors, 0, doors * sizeof(t_door));
-		}
-		else
-		{
-			data->doors = NULL;
-		}
-		data->map.grid[map_vec->len] = NULL;
-		return (0);
-	}
 }
 
 int	parse_cubfile(char *filepath, t_data *data)
