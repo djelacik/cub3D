@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include "libft.h"
+# include "gc_alloc.h"
 
 typedef struct s_vec
 {

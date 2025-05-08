@@ -105,39 +105,27 @@ int	parse_cubfile(char *filepath, t_data *data)
 	if (parse_file_lines(fd, data, &map_vec, &map_started))
 	{
 		close_cub_file(fd, data);
-		vec_free(&map_vec);
 		return (1);
 	}
 	if (build_map(data, &map_vec))
 	{
 		data->error_msg = "Map build failed";
-		vec_free(&map_vec);
 		return (1);
 	}
 	if (parse_player_pos(data))
 	{
 		data->error_msg = "Player position not found";
-		vec_free(&map_vec);
 		return (1);
 	}
-	if (data->strict)
+	if (data->strict && !is_map_closed_strict(data))
 	{
-		if (!is_map_closed_strict(data))
-		{
-			data->error_msg = "Map is open (strict checking)";
-			vec_free(&map_vec);
-			return (1);
-		}
+		data->error_msg = "Map is open (strict checking)";
+		return (1);
 	}
-	else
+	else if (!is_map_closed(data))
 	{
-		if (!is_map_closed(data))
-		{
-			data->error_msg = "Map is open";
-			vec_free(&map_vec);
-			return (1);
-		}
+		data->error_msg = "Map is open";
+		return (1);
 	}
-	vec_free(&map_vec);
 	return (0);
 }

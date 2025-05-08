@@ -83,15 +83,6 @@ void	draw_mini_player(t_data *data)
 	}
 }
 
-// double	normalize_angle(double angle)
-// {
-// 	while (angle >= 2 * M_PI)
-// 		angle -= 2 * M_PI;
-// 	while (angle < 0)
-// 		angle += 2 * M_PI;
-// 	return (angle);
-// }
-
 //limit angle to 0 - 2 * M_PI
 //rays look more like waves wtf
 //make this dynamic (portion of the map depending on player's position)
@@ -121,6 +112,5 @@ void	draw_mini_rays(t_data *data)
 				mlx_put_pixel(data->image, (int)screen_x, (int)screen_y, YELLOW_COLOR);
 		}
 		angle += 0.01;
-		//angle = normalize_angle(angle);
 	}
 }

@@ -28,23 +28,17 @@ bool is_map_closed_strict(t_data *data)
 			if (i == 0 || i == height - 1 || j == 0 || j == line_len - 1)
 			{
 				if (data->map.grid[i][j] != '1')
-				{
 					return (false);
-				}
 			}
 			else if (data->map.grid[i][j] == '0' || data->map.grid[i][j] == 'D')
 			{
 				if (data->map.grid[i - 1][j] == '\0' || data->map.grid[i + 1][j] == '\0' || data->map.grid[i][j - 1] == '\0' || data->map.grid[i][j + 1] == '\0')
-				{
 					return (false);
-				}
 			}
 			else
 			{
 				if (data->map.grid[i][j] != '1')
-				{
 					return (false);
-				}
 			}
 			j++;
 		}

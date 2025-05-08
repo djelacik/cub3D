@@ -16,7 +16,7 @@ void	vec_free(t_vec *src)
 {
 	if (!src || !src->alloc_size)
 		return ;
-	free(src->memory);
+	gc_free(src->memory);
 	src->memory = NULL;
 	src->alloc_size = 0;
 	src->elem_size = 0;

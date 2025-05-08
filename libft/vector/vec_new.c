@@ -23,7 +23,7 @@ int	vec_new(t_vec *dst, size_t init_len, size_t elem_size)
 		dst->memory = NULL;
 	else
 	{
-		dst->memory = malloc(dst->alloc_size);
+		dst->memory = gc_alloc(dst->alloc_size);
 		if (!dst->memory)
 			return (-1);
 	}
