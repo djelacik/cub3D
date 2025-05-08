@@ -16,7 +16,7 @@ int  open_cub_file(const char *path)
 {
     int fd;
 
-    fd = open(path, O_RDONLY);
+    fd = open(path, O_RDONLY); //check more?
     if (fd < 0)
         return (-1);
     return (fd);
@@ -57,6 +57,55 @@ int  push_map_line(t_vec *map_vec, char *line, t_data *data)
     return (0);
 }
 
+bool	build_map(t_data *data, t_vec *map_vec)
+{
+	size_t	i;
+	int	row_len;
+	int		doors_count = 0;
+
+	data->map.height = map_vec->len;
+	data->map.grid = gc_alloc((map_vec->len + 1) * sizeof(char *));
+	if (!data->map.grid)
+	{
+		data->error_msg = "Map alloc failed";
+		return (1);
+	}
+	else
+	{
+		i = 0;
+		while (i < map_vec->len)
+		{
+			data->map.grid[i] = *(char **)vec_get(map_vec, i);
+			/*should this be here?*/
+			int j = 0;
+			while (data->map.grid[i][j])
+			{
+				if (data->map.grid[i][j] == 'D')
+				{
+					doors_count++;
+				}
+				j++;
+			}
+			/*should this be here?*/
+			row_len = ft_strlen(data->map.grid[i]);
+			if (row_len > data->map.width)
+				data->map.width = row_len;
+			i++;
+		}
+		if (doors_count > 0)
+		{
+			data->doors = gc_alloc(doors_count * sizeof(t_door));
+			ft_memset(data->doors, 0, doors_count * sizeof(t_door));
+		}
+		else
+		{
+			data->doors = NULL;
+		}
+		data->map.grid[map_vec->len] = NULL;
+		return (0);
+	}
+}
+
 int	parse_cubfile(char *filepath, t_data *data)
 {
 	char	*line;
@@ -64,22 +113,13 @@ int	parse_cubfile(char *filepath, t_data *data)
 	int		fd;
 	bool	map_started = false;
 	bool	status = 0;
-	size_t	i;
-	int	row_len;
-	int		doors_count = 0;
 	t_vec	map_vec;
 
 	line = NULL;
-	// fd = open(filepath, O_RDONLY); //check more errors
-	// if (fd < 0)
-	// {
-	// 	perror("open failed");
-	// 	return (1);
-	// }
 	fd = open_cub_file(filepath);
 	if (fd < 0)
 	{
-		data->error_msg = "open failed";
+		data->error_msg = "Open failed";
 		return (1);
 	}
 	if (init_map_vector(&map_vec) < 0)
@@ -88,13 +128,6 @@ int	parse_cubfile(char *filepath, t_data *data)
 		close(fd);
 		return (1);
 	}
-	// if (vec_new(&map_vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
-	// {
-	// 	//ft_putstr_fd("Vec alloc failed\n", 2);
-	// 	data->error_msg = "Vec alloc failed";
-	// 	close(fd);
-	// 	return (1);
-	// }
 	line = gc_next_line(fd, READ_LINE);
 	while (line)
 	{
@@ -143,60 +176,18 @@ int	parse_cubfile(char *filepath, t_data *data)
 	gc_next_line(fd, CLEAN_LINE);
 	if (close_cub_file(fd) < 0)
 	{
-		data->error_msg = "close failed";
+		data->error_msg = "Close failed";
 		status = 1;
 	}
-	/*
-	
-	PAUSE HEREEEEEEE
-	
-	*/
-	if (!status)
+	if (!status && build_map(data, &map_vec))
 	{
-		data->map.height = map_vec.len;
-		data->map.grid = gc_alloc((map_vec.len + 1) * sizeof(char *));
-		if (!data->map.grid)
-		{
-			data->error_msg = "Map alloc failed";
-			status = 1;
-		}
-		else
-		{
-			i = 0;
-			while (i < map_vec.len)
-			{
-				data->map.grid[i] = *(char **)vec_get(&map_vec, i);
-				/*should this be here?*/
-				int j = 0;
-				while (data->map.grid[i][j])
-				{
-					if (data->map.grid[i][j] == 'D')
-					{
-						doors_count++;
-					}
-					j++;
-				}
-				/*should this be here?*/
-				row_len = ft_strlen(data->map.grid[i]);
-				if (row_len > data->map.width)
-					data->map.width = row_len;
-				i++;
-			}
-			if (doors_count > 0)
-			{
-				data->doors = gc_alloc(doors_count * sizeof(t_door));
-				ft_memset(data->doors, 0, doors_count * sizeof(t_door));
-			}
-			else
-			{
-				data->doors = NULL;
-			}
-			data->map.grid[map_vec.len] = NULL;
-		}
+		data->error_msg = "Map build failed";
+		status = 1;
 	}
-	if (!status)
+	if (!status && parse_player_pos(data))
 	{
-		status = parse_player_pos(data);
+		data->error_msg = "Player position not found";
+		status = 1;
 	}
 	if (!status)
 	{
