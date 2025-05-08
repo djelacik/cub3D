@@ -99,18 +99,12 @@ int	parse_cubfile(char *filepath, t_data *data)
 	if (init_map_vector(&map_vec) < 0)
 	{
 		data->error_msg = "Vec alloc failed";
-		close(fd);
+		close_cub_file(fd, data);
 		return (1);
 	}
 	if (parse_file_lines(fd, data, &map_vec, &map_started))
 	{
-		close_cub_file(fd);
-		vec_free(&map_vec);
-		return (1);
-	}
-	if (close_cub_file(fd) < 0)
-	{
-		data->error_msg = "Close failed";
+		close_cub_file(fd, data);
 		vec_free(&map_vec);
 		return (1);
 	}

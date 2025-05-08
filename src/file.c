@@ -22,10 +22,13 @@ int  open_cub_file(const char *path)
     return (fd);
 }
 
-int  close_cub_file(int fd)
+int  close_cub_file(int fd, t_data *data)
 {
 	if (close(fd) < 0)
-		return (-1);
+	{
+		data->error_msg = "Close failed";
+		return (1);
+	}
 	return (0);
 }
 

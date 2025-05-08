@@ -168,7 +168,7 @@ typedef struct s_data {
 
 //file.c
 int  	open_cub_file(const char *path);
-int  	close_cub_file(int fd);
+int  	close_cub_file(int fd, t_data *data);
 bool	has_cub_extension(char *filename);
 
 //window.c
