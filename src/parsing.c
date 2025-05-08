@@ -29,15 +29,40 @@ int  push_map_line(t_vec *map_vec, char *line, t_data *data)
     return (0);
 }
 
+bool categorize_line(t_data *data, char *line, t_vec *map_vec, bool *map_started)
+{
+	if (is_map_line(line) && !line_is_only_spaces(line))
+	{
+		if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
+		{
+			data->error_msg = "Please define colors/textures before the map";
+			return (true);
+		}
+		*map_started = true;
+		if (push_map_line(map_vec, line, data))
+			return (true);
+	}
+	else if (!*map_started)
+	{
+		if (process_header_line(line, data))
+			return (true);
+	}
+	else
+	{
+		data->error_msg = "Map must be last in file";
+		return (true);
+	}
+	return (false);
+}
+
 bool	parse_file_lines(int fd, t_data *data, t_vec *map_vec, bool *map_started)
 {
 	char	*line;
 	char	*nl;
-	bool	status;
+	bool	error;
 
-	status = 0;
-	line = NULL;
-
+	error = 0;
+	// line = NULL;
 	line = gc_next_line(fd, READ_LINE);
 	while (line)
 	{
@@ -49,39 +74,13 @@ bool	parse_file_lines(int fd, t_data *data, t_vec *map_vec, bool *map_started)
 		nl = ft_strchr(line, '\n');
 		if (nl)
 			*nl = '\0';
-		if (is_map_line(line) && !line_is_only_spaces(line))
-		{
-			if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
-			{
-				data->error_msg = "Please define colors/textures before the map";
-				status = 1;
-				break ;
-			}
-			*map_started = true;
-			if (push_map_line(map_vec, line, data))
-			{
-				status = 1;
-				break ;
-			}
-		}
-		else if (!*map_started)
-		{
-			if (process_header_line(line, data))
-			{
-				status = 1;
-				break ;
-			}
-		}
-		else
-		{
-			data->error_msg = "Map must be last in file";
-			status = 1;
+		error = categorize_line(data, line, map_vec, map_started);
+		if (error)
 			break ;
-		}
 		line = gc_next_line(fd, READ_LINE);
 	}
 	gc_next_line(fd, CLEAN_LINE);
-	return (status);
+	return (error);
 }
 
 int	parse_cubfile(char *filepath, t_data *data)
