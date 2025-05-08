@@ -57,12 +57,68 @@ int  push_map_line(t_vec *map_vec, char *line, t_data *data)
     return (0);
 }
 
+bool	parse_file_lines(int fd, t_data *data, t_vec *map_vec, bool *map_started)
+{
+	char	*line;
+	char	*nl;
+	bool	status;
+
+	status = 0;
+	line = NULL;
+
+	line = gc_next_line(fd, READ_LINE);
+	while (line)
+	{
+		if (line[0] == '\n' && !*map_started)
+		{
+			line = gc_next_line(fd, READ_LINE);
+			continue ;
+		}
+		nl = ft_strchr(line, '\n');
+		if (nl)
+			*nl = '\0';
+		if (is_map_line(line) && !line_is_only_spaces(line))
+		{
+			if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
+			{
+				data->error_msg = "Please define colors/textures before the map";
+				status = 1;
+				break ;
+			}
+			*map_started = true;
+			if (push_map_line(map_vec, line, data))
+			{
+				status = 1;
+				break ;
+			}
+		}
+		else if (!*map_started)
+		{
+			if (process_header_line(line, data))
+			{
+				status = 1;
+				break ;
+			}
+		}
+		else
+		{
+			data->error_msg = "Map must be last in file";
+			status = 1;
+			break ;
+		}
+		line = gc_next_line(fd, READ_LINE);
+	}
+	gc_next_line(fd, CLEAN_LINE);
+	return (status);
+}
+
 bool	build_map(t_data *data, t_vec *map_vec)
 {
 	size_t	i;
-	int	row_len;
-	int		doors_count = 0;
+	int		row_len;
+	int		doors;
 
+	doors = 0;
 	data->map.height = map_vec->len;
 	data->map.grid = gc_alloc((map_vec->len + 1) * sizeof(char *));
 	if (!data->map.grid)
@@ -82,7 +138,7 @@ bool	build_map(t_data *data, t_vec *map_vec)
 			{
 				if (data->map.grid[i][j] == 'D')
 				{
-					doors_count++;
+					doors++;
 				}
 				j++;
 			}
@@ -92,10 +148,10 @@ bool	build_map(t_data *data, t_vec *map_vec)
 				data->map.width = row_len;
 			i++;
 		}
-		if (doors_count > 0)
+		if (doors > 0)
 		{
-			data->doors = gc_alloc(doors_count * sizeof(t_door));
-			ft_memset(data->doors, 0, doors_count * sizeof(t_door));
+			data->doors = gc_alloc(doors * sizeof(t_door));
+			ft_memset(data->doors, 0, doors * sizeof(t_door));
 		}
 		else
 		{
@@ -108,14 +164,11 @@ bool	build_map(t_data *data, t_vec *map_vec)
 
 int	parse_cubfile(char *filepath, t_data *data)
 {
-	char	*line;
-	char	*nl;
 	int		fd;
-	bool	map_started = false;
-	bool	status = 0;
+	bool	map_started;
 	t_vec	map_vec;
 
-	line = NULL;
+	map_started = false;
 	fd = open_cub_file(filepath);
 	if (fd < 0)
 	{
@@ -128,87 +181,48 @@ int	parse_cubfile(char *filepath, t_data *data)
 		close(fd);
 		return (1);
 	}
-	line = gc_next_line(fd, READ_LINE);
-	while (line)
+	if (parse_file_lines(fd, data, &map_vec, &map_started))
 	{
-		if (line[0] == '\n' && !map_started)
-		{
-			line = gc_next_line(fd, READ_LINE);
-			continue ;
-		}
-		nl = ft_strchr(line, '\n');
-		if (nl)
-			*nl = '\0';
-		if (is_map_line(line) && !line_is_only_spaces(line))
-		{
-			if (!data->f_color_found || !data->c_color_found || !textures_ready(data))
-			{
-				data->error_msg = "Please define colors/textures before the map";
-				status = 1;
-				break ;
-			}
-			//if (!map_started)
-			map_started = true;
-			if (push_map_line(&map_vec, line, data))
-			{
-				status = 1;
-			//	break ;
-			}
-		}
-		else if (!map_started)
-		{
-			if (process_header_line(line, data))
-			{
-				status = 1;
-				//break ;
-			}
-		}
-		else
-		{
-			data->error_msg = "Map must be last in file";
-			status = 1;
-			//break ;
-		}
-		if (status)
-			break ;
-		line = gc_next_line(fd, READ_LINE);
+		close_cub_file(fd);
+		vec_free(&map_vec);
+		return (1);
 	}
-	gc_next_line(fd, CLEAN_LINE);
 	if (close_cub_file(fd) < 0)
 	{
 		data->error_msg = "Close failed";
-		status = 1;
+		vec_free(&map_vec);
+		return (1);
 	}
-	if (!status && build_map(data, &map_vec))
+	if (build_map(data, &map_vec))
 	{
 		data->error_msg = "Map build failed";
-		status = 1;
+		vec_free(&map_vec);
+		return (1);
 	}
-	if (!status && parse_player_pos(data))
+	if (parse_player_pos(data))
 	{
 		data->error_msg = "Player position not found";
-		status = 1;
+		vec_free(&map_vec);
+		return (1);
 	}
-	if (!status)
+	if (data->strict)
 	{
-		if (data->strict)
+		if (!is_map_closed_strict(data))
 		{
-			if (!is_map_closed_strict(data))
-			{
-				data->error_msg = "Map is open (strict checking)";
-				status = 1;
-			}
+			data->error_msg = "Map is open (strict checking)";
+			vec_free(&map_vec);
+			return (1);
 		}
-		else
+	}
+	else
+	{
+		if (!is_map_closed(data))
 		{
-			if (!is_map_closed(data))
-			{
-				data->error_msg = "Map is open";
-				status = 1;
-			}
+			data->error_msg = "Map is open";
+			vec_free(&map_vec);
+			return (1);
 		}
 	}
 	vec_free(&map_vec);
-	//printf("reached end of parsing\n");
-	return (status);
+	return (0);
 }
