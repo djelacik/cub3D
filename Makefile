@@ -24,16 +24,16 @@ src/main.c \
 src/shading.c \
 src/texture.c \
 src/ray.c \
-src/floor_ceiling.c \
-src/walls.c \
+src/draw_floor_ceiling.c \
+src/draw_walls.c \
 src/doors.c \
 src/utils.c \
-src/minimap.c \
+src/draw_minimap.c \
 src/callbacks.c \
 src/hooks.c \
 src/render.c \
 src/movement.c \
-src/hands.c \
+src/draw_hands.c \
 src/free.c
 
 OBJ = $(SRC:.c=.o)

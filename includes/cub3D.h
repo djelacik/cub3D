@@ -195,7 +195,7 @@ mlx_texture_t 	*get_wall_texture(t_data *data, t_ray *ray);
 double	calculate_distance(t_data *data, double angle, t_ray *ray);
 void	calculate_ray_data(t_data *data, double angle, t_ray *ray);
 
-//walls.c
+//draw_walls.c
 double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
 void	draw_wall_column(t_data *data, double angle, int screen_x);
 void	draw_walls(t_data *data);
@@ -209,7 +209,7 @@ void	handle_shooting(t_data *data);
 void	handle_rotation(t_data *data);
 void	handle_mouse_rotation(t_data *data);
 
-//minimap.c
+//draw_minimap.c
 void	draw_mini_map(t_data *data);
 void	draw_mini_player(t_data *data);
 void	draw_mini_rays(t_data *data);
@@ -222,7 +222,7 @@ void	update_doors(t_data *data);
 //callbacks.c
 void	my_resize_callback(int width, int height, void* param);
 
-//floor_ceiling.c
+//draw_floor_ceiling.c
 void	draw_floor_and_ceiling(t_data *data);
 
 //hooks.c
@@ -273,8 +273,7 @@ void	error_exit(char *msg);
 void	free_textures(t_textures *textures);
 void	free_hud_textures(t_data *data);
 
-//sprites.c
-//void	draw_sprites(t_data *data);
+//draw_hands.c
 void	draw_hud_hands(t_data *data);
 void	shooting_animation(t_data *data);
 
