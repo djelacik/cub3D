@@ -12,6 +12,51 @@
 
 #include "cub3D.h"
 
+int  open_cub_file(const char *path)
+{
+    int fd;
+
+    fd = open(path, O_RDONLY);
+    if (fd < 0)
+        return (-1);
+    return (fd);
+}
+
+int  close_cub_file(int fd)
+{
+	if (close(fd) < 0)
+		return (-1);
+	return (0);
+}
+
+int  init_map_vector(t_vec *vec)
+{
+    if (vec_new(vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
+        return (-1);
+    return (0);
+}
+
+int  process_header_line(char *line, t_data *data)
+{
+    if (!parse_texture_line(line, data)
+        && !parse_color_line(line, data))
+    {
+        data->error_msg = "Invalid color/texture definition";
+        return (1);
+    }
+    return (0);
+}
+
+int  push_map_line(t_vec *map_vec, char *line, t_data *data)
+{
+    if (vec_push(map_vec, &line) < 0)
+    {
+        data->error_msg = "Vec push failed";
+        return (1);
+    }
+    return (0);
+}
+
 int	parse_cubfile(char *filepath, t_data *data)
 {
 	char	*line;
@@ -22,29 +67,39 @@ int	parse_cubfile(char *filepath, t_data *data)
 	size_t	i;
 	int	row_len;
 	int		doors_count = 0;
+	t_vec	map_vec;
 
 	line = NULL;
-	fd = open(filepath, O_RDONLY); //check more errors
+	// fd = open(filepath, O_RDONLY); //check more errors
+	// if (fd < 0)
+	// {
+	// 	perror("open failed");
+	// 	return (1);
+	// }
+	fd = open_cub_file(filepath);
 	if (fd < 0)
 	{
-		perror("open failed");
+		data->error_msg = "open failed";
 		return (1);
 	}
-	t_vec	map_vec;
-	if (vec_new(&map_vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
+	if (init_map_vector(&map_vec) < 0)
 	{
-		//ft_putstr_fd("Vec alloc failed\n", 2);
 		data->error_msg = "Vec alloc failed";
 		close(fd);
 		return (1);
 	}
+	// if (vec_new(&map_vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
+	// {
+	// 	//ft_putstr_fd("Vec alloc failed\n", 2);
+	// 	data->error_msg = "Vec alloc failed";
+	// 	close(fd);
+	// 	return (1);
+	// }
 	line = gc_next_line(fd, READ_LINE);
 	while (line)
 	{
-		//skip empty lines
 		if (line[0] == '\n' && !map_started)
 		{
-			//free(line);
 			line = gc_next_line(fd, READ_LINE);
 			continue ;
 		}
@@ -59,35 +114,43 @@ int	parse_cubfile(char *filepath, t_data *data)
 				status = 1;
 				break ;
 			}
-			if (!map_started)
-				map_started = true;
-			if (vec_push(&map_vec, &line) < 0)
+			//if (!map_started)
+			map_started = true;
+			if (push_map_line(&map_vec, line, data))
 			{
-				data->error_msg = "Vec push failed";
 				status = 1;
-				break ;
+			//	break ;
 			}
 		}
 		else if (!map_started)
 		{
-			//remove_spaces(line);
-			if (!parse_texture_line(line, data) && !parse_color_line(line, data))
+			if (process_header_line(line, data))
 			{
-				data->error_msg = "Check your color/textures";
 				status = 1;
-				break ;
+				//break ;
 			}
 		}
 		else
 		{
-			data->error_msg = "Map must be the last thing in file";
+			data->error_msg = "Map must be last in file";
 			status = 1;
-			break ;
+			//break ;
 		}
+		if (status)
+			break ;
 		line = gc_next_line(fd, READ_LINE);
 	}
 	gc_next_line(fd, CLEAN_LINE);
-	close(fd);
+	if (close_cub_file(fd) < 0)
+	{
+		data->error_msg = "close failed";
+		status = 1;
+	}
+	/*
+	
+	PAUSE HEREEEEEEE
+	
+	*/
 	if (!status)
 	{
 		data->map.height = map_vec.len;
