@@ -12,11 +12,10 @@
 
 #include "cub3D.h"
 
-int  init_map_vector(t_vec *vec)
+bool	error_return(t_data *data, char *msg)
 {
-    if (vec_new(vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
-        return (-1);
-    return (0);
+	data->error_msg = msg;
+	return (true);
 }
 
 int  push_map_line(t_vec *map_vec, char *line, t_data *data)
@@ -62,7 +61,6 @@ bool	parse_file_lines(int fd, t_data *data, t_vec *map_vec, bool *map_started)
 	bool	error;
 
 	error = 0;
-	// line = NULL;
 	line = gc_next_line(fd, READ_LINE);
 	while (line)
 	{
@@ -83,50 +81,31 @@ bool	parse_file_lines(int fd, t_data *data, t_vec *map_vec, bool *map_started)
 	return (error);
 }
 
-//TODO
 int	parse_cubfile(char *filepath, t_data *data)
 {
 	int		fd;
 	bool	map_started;
-	t_vec	map_vec;
 
-	map_started = false;
 	fd = open_cub_file(filepath);
 	if (fd < 0)
+		return(error_return(data, "Open failed"));
+	if (vec_new(&data->map_vec, VEC_INIT_SIZE, sizeof(char *)) < 0)
 	{
-		data->error_msg = "Open failed";
-		return (1);
-	}
-	if (init_map_vector(&map_vec) < 0)
-	{
-		data->error_msg = "Vec alloc failed";
 		close_cub_file(fd, data);
-		return (1);
+		return(error_return(data, "Vec alloc failed"));
 	}
-	if (parse_file_lines(fd, data, &map_vec, &map_started))
+	if (parse_file_lines(fd, data, &data->map_vec, &map_started))
 	{
 		close_cub_file(fd, data);
 		return (1);
 	}
-	if (build_map(data, &map_vec))
-	{
-		data->error_msg = "Map build failed";
-		return (1);
-	}
+	if (build_map(data, &data->map_vec))
+		return(error_return(data, "Map build failed"));
 	if (parse_player_pos(data))
-	{
-		data->error_msg = "Player position not found";
-		return (1);
-	}
+		return(error_return(data, "Player position not found"));
 	if (data->strict && !is_map_closed_strict(data))
-	{
-		data->error_msg = "Map is open (strict checking)";
-		return (1);
-	}
+		return (error_return(data, "Map is open (strict checking)"));
 	else if (!is_map_closed(data))
-	{
-		data->error_msg = "Map is open";
-		return (1);
-	}
+		return (error_return(data, "Map is open"));
 	return (0);
 }

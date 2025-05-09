@@ -179,6 +179,9 @@ typedef struct s_data {
 
 	bool			strict;
 	char			*error_msg;
+
+	bool			map_started;
+	t_vec	map_vec;
 }	t_data;
 
 /* 
