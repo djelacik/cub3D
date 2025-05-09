@@ -12,43 +12,49 @@
 
 #include "cub3D.h"
 
-//TODO
-bool is_map_closed_strict(t_data *data)
+static bool	check_cell_strict(t_data *data, int i, int j)
 {
-	int i, j, line_len;
-	int height = data->map.height;
-	i = 0;
-	line_len = 0;
+    char    **grid;
+    char    *row;
+    int     h;
 
-	while (i < height)
-	{
-		j = 0;
-		line_len = ft_strlen(data->map.grid[i]);
-		while (j < line_len)
-		{
-			if (i == 0 || i == height - 1 || j == 0 || j == line_len - 1)
-			{
-				if (data->map.grid[i][j] != '1')
-					return (false);
-			}
-			else if (data->map.grid[i][j] == '0' || data->map.grid[i][j] == 'D')
-			{
-				if (data->map.grid[i - 1][j] == '\0' || data->map.grid[i + 1][j] == '\0' || data->map.grid[i][j - 1] == '\0' || data->map.grid[i][j + 1] == '\0')
-					return (false);
-			}
-			else
-			{
-				if (data->map.grid[i][j] != '1')
-					return (false);
-			}
-			j++;
-		}
-		i++;
-	}
-	return true;
+    grid = data->map.grid;
+    row = grid[i];
+    h = data->map.height;
+    if (i == 0 || i == h - 1 || j == 0 || row[j + 1] == '\0')
+    {
+        return (row[j] == '1');
+    }
+    if (row[j] == '0' || row[j] == 'D')
+    {
+        return (grid[i][j - 1] != '\0' && grid[i - 1][j] != '\0'
+            && grid[i + 1][j] != '\0'&& row[j + 1] != '\0');
+    }
+    return (row[j] == '1');
 }
 
-//TODO
+bool	is_map_closed_strict(t_data *data)
+{
+    int     i;
+    int     j;
+    char    *row;
+
+    i = 0;
+    while (i < data->map.height)
+    {
+        row = data->map.grid[i];
+        j = 0;
+        while (row[j])
+        {
+            if (!check_cell_strict(data, i, j))
+                return (false);
+            j++;
+        }
+        i++;
+    }
+    return (true);
+}
+
 //flood-fill from (i,j), returns false if any path leaks out
 //uses visited array so we don't edit data->map.grid
 //off top/bottom means open
@@ -87,6 +93,8 @@ bool	flood_fill(t_data *data, bool **visited, int i, int j)
 	return (true);
 }
 
+static	allocate_bool_array();
+
 //TODO
 bool	is_map_closed(t_data *data)
 {
@@ -102,14 +110,14 @@ bool	is_map_closed(t_data *data)
 	height = data->map.height;
 	grid   = data->map.grid;
 	//allocate visited (bool) array
-	visited = malloc(sizeof(bool *) * height);
+	visited = gc_alloc(sizeof(bool *) * height);
 	if (!visited)
 		return (false);
 	i = 0;
 	while (i < height)
 	{
 		len = ft_strlen(grid[i]);
-		visited[i] = malloc(sizeof(bool) * len);
+		visited[i] = gc_alloc(sizeof(bool) * len);
 		if (!visited[i])
 			return (false);
 		ft_memset(visited[i], 0, sizeof(bool) * len);
@@ -119,13 +127,5 @@ bool	is_map_closed(t_data *data)
 	start_i = (int)(data->player.y - 0.5);
 	start_j = (int)(data->player.x - 0.5);
 	ok = flood_fill(data, visited, start_i, start_j);
-	//free visited
-	i = 0;
-	while (i < height)
-	{
-		free(visited[i]);
-		i++;
-	}
-	free(visited);
 	return (ok);
 }
