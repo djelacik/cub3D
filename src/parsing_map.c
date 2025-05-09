@@ -12,54 +12,73 @@
 
 #include "cub3D.h"
 
-//TODO
-bool	build_map(t_data *data, t_vec *map_vec)
+bool	alloc_map_grid(t_data *data, size_t rows)
 {
-	size_t	i;
-	int		row_len;
-	int		doors;
-
-	doors = 0;
-	data->map.height = map_vec->len;
-	data->map.grid = gc_alloc((map_vec->len + 1) * sizeof(char *));
-	if (!data->map.grid)
-	{
-		data->error_msg = "Map alloc failed";
-		return (1);
-	}
-	else
-	{
-		i = 0;
-		while (i < map_vec->len)
-		{
-			data->map.grid[i] = *(char **)vec_get(map_vec, i);
-			/*should this be here?*/
-			int j = 0;
-			while (data->map.grid[i][j])
-			{
-				if (data->map.grid[i][j] == 'D')
-				{
-					doors++;
-				}
-				j++;
-			}
-			/*should this be here?*/
-			row_len = ft_strlen(data->map.grid[i]);
-			if (row_len > data->map.width)
-				data->map.width = row_len;
-			i++;
-		}
-		if (doors > 0)
-		{
-			data->doors = gc_alloc(doors * sizeof(t_door));
-			ft_memset(data->doors, 0, doors * sizeof(t_door));
-		}
-		else
-		{
-			data->doors = NULL;
-		}
-		data->map.grid[map_vec->len] = NULL;
-		return (0);
-	}
+    data->map.height = rows;
+    data->map.grid = gc_alloc((rows + 1) * sizeof(char *));
+    if (!data->map.grid)
+    {
+        data->error_msg = "Map alloc failed";
+        return (true);
+    }
+    data->map.grid[rows] = NULL;
+    return (false);
 }
 
+void	fill_grid_and_count(t_data *data, t_vec *map_vec, int *doors)
+{
+    size_t  i;
+    char    **grid;
+    int     j;
+    int     len;
+
+    grid = data->map.grid;
+    i = 0;
+    while (i < map_vec->len)
+    {
+        grid[i] = *(char **)vec_get(map_vec, i);
+        len = ft_strlen(grid[i]);
+        if (len > data->map.width)
+            data->map.width = len;
+        j = 0;
+        while (grid[i][j])
+        {
+            if (grid[i][j] == 'D')
+                (*doors)++;
+            j++;
+        }
+        i++;
+    }
+}
+
+bool	alloc_doors_array(t_data *data, int doors)
+{
+    if (doors <= 0)
+    {
+        data->doors = NULL;
+        return (false);
+    }
+    data->doors = gc_alloc(doors * sizeof(t_door));
+    if (!data->doors)
+    {
+        data->error_msg = "Doors alloc failed";
+        return (true);
+    }
+    ft_memset(data->doors, 0, doors * sizeof(t_door));
+    return (false);
+}
+
+bool	build_map(t_data *data, t_vec *map_vec)
+{
+    int     doors;
+    size_t  rows;
+
+    doors = 0;
+    rows = map_vec->len;
+    if (alloc_map_grid(data, rows))
+        return (true);
+    fill_grid_and_count(data, map_vec, &doors);
+    if (alloc_doors_array(data, doors))
+        return (true);
+    return (false);
+}

@@ -12,7 +12,6 @@
 
 #include "cub3D.h"
 
-//TODO
 //normalize diagonal movement
 void	handle_movement(t_data *data)
 {
