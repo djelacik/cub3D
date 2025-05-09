@@ -23,6 +23,7 @@ src/window.c \
 src/main.c \
 src/shading.c \
 src/texture.c \
+src/dda.c \
 src/ray.c \
 src/draw_floor_ceiling.c \
 src/draw_walls.c \

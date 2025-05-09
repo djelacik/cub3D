@@ -102,6 +102,18 @@ typedef struct s_column {
 	int		wall_height;
 }	t_column;
 
+typedef struct s_dda
+{
+    int     map_x;
+    int     map_y;
+    int     step_x;
+    int     step_y;
+    double  delta_x;
+    double  delta_y;
+    double  side_x;
+    double  side_y;
+}   t_dda;
+
 typedef struct s_sprite {
 	double	x;
 	double	y;
@@ -200,8 +212,13 @@ bool			textures_ready(t_data *data);
 uint32_t		get_texture_color(mlx_texture_t *texture, int x, int y);
 mlx_texture_t 	*get_wall_texture(t_data *data);
 
+//dda.c
+double	calc_delta(double dir);
+void	init_dda_axis_x(t_data *data, t_dda *dda, double px, int mx);
+void	init_dda_axis_y(t_data *data, t_dda *dda, double py, int my);
+bool	process_dda_cell(t_data *data, t_dda *dda);
+
 //ray.c
-double	calculate_distance(t_data *data, double angle, t_ray *ray);
 void	calculate_ray_data(t_data *data, double angle);
 
 //draw_walls.c
