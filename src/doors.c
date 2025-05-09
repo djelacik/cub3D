@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 22:18:28 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/07 22:18:35 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:20:37 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 double	lookup_door_progress(t_data *data, int x, int y)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < data->door_count)
 	{
 		if (data->doors[i].x == x && data->doors[i].y == y)
-			return data->doors[i].progress;
+			return (data->doors[i].progress);
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
 void	update_door_state(t_door *door, double distance)
@@ -56,10 +56,10 @@ void	update_door_state(t_door *door, double distance)
 void	update_doors(t_data *data)
 {
 	int		i;
-	t_door 	*door;
-	double 	dx;
-	double 	dy;
-	double 	distance;
+	t_door	*door;
+	double	dx;
+	double	dy;
+	double	distance;
 
 	i = 0;
 	while (i < data->door_count)

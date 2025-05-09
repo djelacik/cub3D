@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 15:58:08 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:06:01 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:21:32 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	init_dda_axis_y(t_data *data, t_dda *dda, double py, int my)
 
 bool	process_dda_cell(t_data *data, t_dda *dda)
 {
-	char cell;
+	char	cell;
 
 	cell = data->map.grid[dda->map_y][dda->map_x];
 	if (cell == '1')
@@ -59,7 +59,7 @@ bool	process_dda_cell(t_data *data, t_dda *dda)
 	if (cell == 'D')
 	{
 		data->ray.door_progress = lookup_door_progress(
-			data, dda->map_x, dda->map_y);
+				data, dda->map_x, dda->map_y);
 		if (data->ray.door_progress <= 1)
 		{
 			data->ray.is_door = true;

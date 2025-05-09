@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   draw_hands.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 10:26:53 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/08 14:53:28 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:18:39 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void draw_hud_hands(t_data *data)
+void	draw_hud_hands(t_data *data)
 {
 	mlx_texture_t	*hand_tex;
 	float			sf;
 	int				y;
 	int				x;
-	uint32_t 		color;
-	
+	uint32_t		color;
+
 	hand_tex = data->hud_hands[data->hud_frame];
 	sf = (data->height * 0.6f) / hand_tex->height;
 	y = 0;
@@ -41,9 +41,9 @@ void draw_hud_hands(t_data *data)
 	}
 }
 
-void shooting_animation(t_data *data)
+void	shooting_animation(t_data *data)
 {
-	bool just_started;
+	bool	just_started;
 
 	if (data->is_player_shooting)
 	{

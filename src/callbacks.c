@@ -6,15 +6,15 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 23:09:35 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:07:08 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:26:18 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void my_resize_callback(int width, int height, void* param)
+void	my_resize_callback(int width, int height, void *param)
 {
-	t_data *data = (t_data *)param;
+	t_data	*data = (t_data *)param;
 
 	if (width <= MIN_WIDTH || height <= MIN_HEIGHT)
 	{
