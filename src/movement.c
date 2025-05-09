@@ -14,63 +14,17 @@
 
 //TODO
 //normalize diagonal movement
-void handle_movement(t_data *data)
+void	handle_movement(t_data *data)
 {
-	double orig_x;
-	double orig_y;
-	double new_x;
-	double new_y;
+    double  dx;
+    double  dy;
 
-	orig_x = data->player.x;
-	orig_y = data->player.y;
-	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
-	{
-		new_x = orig_x + cos(data->player.angle) * data->player.speed;
-		new_y = orig_y + sin(data->player.angle) * data->player.speed;
-	}
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_S))
-	{
-		new_x = orig_x - cos(data->player.angle) * data->player.speed;
-		new_y = orig_y - sin(data->player.angle) * data->player.speed;
-	}
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_D))
-	{
-		new_x = orig_x - sin(data->player.angle) * data->player.speed;
-		new_y = orig_y + cos(data->player.angle) * data->player.speed;
-	}
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_A))
-	{
-		new_x = orig_x + sin(data->player.angle) * data->player.speed;
-		new_y = orig_y - cos(data->player.angle) * data->player.speed;
-	}
-	else
-	{
-		data->is_player_moving = false;
-		return; // No forward/backward movement
-	}
-
-	// Try moving diagonally first
-	if (can_move_to(data, new_x, new_y))
-	{
-		data->player.x = new_x;
-		data->player.y = new_y;
-		data->is_player_moving = true;
-	}
-	else
-	{
-		// If blocked, try moving along X only
-		if (can_move_to(data, new_x, orig_y))
-		{
-			data->player.x = new_x;
-			data->is_player_moving = true;
-		}
-		// And try moving along Y only
-		if (can_move_to(data, orig_x, new_y))
-		{
-			data->player.y = new_y;
-			data->is_player_moving = true;
-		}
-	}
+    if (!get_movement_delta(data, &dx, &dy))
+    {
+        data->is_player_moving = false;
+        return;
+    }
+    try_move(data, dx, dy);
 }
 
 void handle_shake(t_data *data)

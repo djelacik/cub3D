@@ -211,6 +211,10 @@ void	draw_walls(t_data *data);
 void	draw_wall_texture(t_data *data, int screen_x);
 //void	draw_walls_and_sprites(t_data *data);
 
+//movement_utils.c
+bool	get_movement_delta(t_data *data, double *dx, double *dy);
+void	try_move(t_data *data, double dx, double dy);
+
 //movement.c
 void	handle_movement(t_data *data);
 void	handle_shake(t_data *data);

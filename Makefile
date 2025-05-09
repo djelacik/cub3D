@@ -32,6 +32,7 @@ src/draw_minimap.c \
 src/callbacks.c \
 src/hooks.c \
 src/render.c \
+src/movement_utils.c \
 src/movement.c \
 src/draw_hands.c \
 src/free.c
