@@ -12,6 +12,7 @@
 
 #include "cub3D.h"
 
+//TODO
 bool	build_map(t_data *data, t_vec *map_vec)
 {
 	size_t	i;

@@ -12,6 +12,7 @@
 
 #include "cub3D.h"
 
+//TODO
 bool is_map_closed_strict(t_data *data)
 {
 	int i, j, line_len;
@@ -47,6 +48,7 @@ bool is_map_closed_strict(t_data *data)
 	return true;
 }
 
+//TODO
 //flood-fill from (i,j), returns false if any path leaks out
 //uses visited array so we don't edit data->map.grid
 bool	flood_fill(t_data *data, bool **visited, int i, int j)
@@ -87,6 +89,7 @@ bool	flood_fill(t_data *data, bool **visited, int i, int j)
 	return (true);
 }
 
+//TODO
 bool	is_map_closed(t_data *data)
 {
 	int		height;

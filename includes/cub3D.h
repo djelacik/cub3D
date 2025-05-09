@@ -94,6 +94,14 @@ typedef struct s_door {
 	double			progress;
 }	t_door;
 
+typedef struct s_column {
+	int		orig_start_y;
+	int		orig_end_y;
+	int		vis_start_y;
+	int		vis_end_y;
+	int		wall_height;
+}	t_column;
+
 typedef struct s_sprite {
 	double	x;
 	double	y;
@@ -133,7 +141,8 @@ typedef struct s_data {
 
 	mlx_t			*mlx;
 	mlx_image_t		*image;
-	t_ray			*ray;
+	t_ray			ray;
+	t_column		column;
 	t_player		player;
 	t_view			camera;
 	t_textures		*textures;
@@ -189,17 +198,17 @@ bool			load_texture(char *path, mlx_texture_t **texture);
 bool			load_hud_textures(t_data *data);
 bool			textures_ready(t_data *data);
 uint32_t		get_texture_color(mlx_texture_t *texture, int x, int y);
-mlx_texture_t 	*get_wall_texture(t_data *data, t_ray *ray);
+mlx_texture_t 	*get_wall_texture(t_data *data);
 
 //ray.c
 double	calculate_distance(t_data *data, double angle, t_ray *ray);
-void	calculate_ray_data(t_data *data, double angle, t_ray *ray);
+void	calculate_ray_data(t_data *data, double angle);
 
 //draw_walls.c
 double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
 void	draw_wall_column(t_data *data, double angle, int screen_x);
 void	draw_walls(t_data *data);
-void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, int vis_end_y, int orig_start_y, int wall_height);
+void	draw_wall_texture(t_data *data, int screen_x);
 //void	draw_walls_and_sprites(t_data *data);
 
 //movement.c

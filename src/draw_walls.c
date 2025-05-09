@@ -15,7 +15,7 @@
 void	draw_walls(t_data *data)
 {
 	double	distToPlane;
-	double	screen_x; //mmmmmm
+	double	screen_x;
 	double	offset;
 	double	angle_offset;
 	double	ray_angle;
@@ -32,69 +32,64 @@ void	draw_walls(t_data *data)
 	}
 }
 
+/*
+	Calculates ray properties
+	Computes full (virtual wall height) and its stating/ending positions
+	Clips the drawing area to the visible screen (but keeps the original positions for texture mapping)
+	Passes both the visible drawing range and the original wall info
+*/
 void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
 {
-	t_ray	ray;
-	int		orig_start_y;
-	int		orig_end_y;
-	int		vis_start_y;
-	int		vis_end_y;
-	int		wall_height;
 	int		center_y;
 
-	// Calculate ray properties
-	calculate_ray_data(data, ray_angle, &ray);
-
-	// Compute the full (virtual) wall height and its starting/ending positions
-	wall_height = (int)(data->height / ray.distance);
+	calculate_ray_data(data, ray_angle);
+	data->column.wall_height = (int)(data->height / data->ray.distance);
 	center_y = (int)(data->height / 2 + data->camera.shake_offset);
-	orig_start_y = center_y - (wall_height / 2);
-	orig_end_y = center_y + (wall_height / 2);
-
-	// Clip the drawing area to the visible screen (but keep the original positions for texture mapping)
-	vis_start_y = orig_start_y;
-	vis_end_y = orig_end_y;
-	if (vis_start_y < 0)
-		vis_start_y = 0;
-	if (vis_end_y >= data->height)
-		vis_end_y = data->height - 1;
-
-	// Pass both the visible drawing range and the original wall info
-	draw_wall_texture(data, &ray, screen_x, vis_start_y, vis_end_y, orig_start_y, wall_height);
+	data->column.orig_start_y = center_y - (data->column.wall_height / 2);
+	data->column.orig_end_y = center_y + (data->column.wall_height / 2);
+	data->column.vis_start_y = data->column.orig_start_y;
+	data->column.vis_end_y = data->column.orig_end_y;
+	if (data->column.vis_start_y < 0)
+		data->column.vis_start_y = 0;
+	if (data->column.vis_end_y >= data->height)
+		data->column.vis_end_y = data->height - 1;
+	draw_wall_texture(data, screen_x);
 }
 
-void	draw_wall_texture(t_data *data, t_ray *ray, int screen_x, int vis_start_y, int vis_end_y, int orig_start_y, int wall_height)
+
+/*
+	Compute the texture y-coordinate using the original (unclipped) wall parameters
+*/
+void	draw_wall_texture(t_data *data, int screen_x)
 {
 	int			y;
 	int			tex_x;
 	int			tex_y;
 	uint32_t	color;
-	uint32_t	shaded_color;
+	int			offset;
 
-	tex_x = ray->wall_x * ray->texture->width;
-	if (tex_x >= (int)ray->texture->width)
-		tex_x = ray->texture->width - 1;
-	if (ray->is_door)
+	tex_x = data->ray.wall_x * data->ray.texture->width;
+	if (tex_x >= (int)data->ray.texture->width)
+		tex_x = data->ray.texture->width - 1;
+	if (data->ray.is_door)
 	{
-		int offset = (int)(ray->door_progress * ray->texture->width);
-		tex_x = (tex_x + offset) % ray->texture->width;
+		offset = (int)(data->ray.door_progress * data->ray.texture->width);
+		tex_x = (tex_x + offset) % data->ray.texture->width;
 		if (tex_x < offset)
 		{
-			ray->is_door = false;
-			ray->texture = get_wall_texture(data, ray);
-			ray->is_door = true; // Necessary?
+			data->ray.is_door = false;
+			data->ray.texture = get_wall_texture(data);
+			data->ray.is_door = true;
 		}
 	}
-	y = vis_start_y;
-	while (y <= vis_end_y)
+	y = data->column.vis_start_y;
+	while (y <= data->column.vis_end_y)
 	{
-		// Compute the texture y-coordinate using the original (unclipped) wall parameters
-		tex_y = ((y - orig_start_y) * ray->texture->height) / wall_height;
-		if (tex_y >= (int)ray->texture->height)
-			tex_y = ray->texture->height - 1;
-		color = get_texture_color(ray->texture, tex_x, tex_y);
-		shaded_color = simple_shading(color, ray->distance);
-		mlx_put_pixel(data->image, screen_x, y, shaded_color);
+		tex_y = ((y - data->column.orig_start_y) * data->ray.texture->height) / data->column.wall_height;
+		if (tex_y >= (int)data->ray.texture->height)
+			tex_y = data->ray.texture->height - 1;
+		color = get_texture_color(data->ray.texture, tex_x, tex_y);
+		mlx_put_pixel(data->image, screen_x, y, simple_shading(color, data->ray.distance));
 		y++;
 	}
 }

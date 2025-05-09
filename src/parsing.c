@@ -83,6 +83,7 @@ bool	parse_file_lines(int fd, t_data *data, t_vec *map_vec, bool *map_started)
 	return (error);
 }
 
+//TODO
 int	parse_cubfile(char *filepath, t_data *data)
 {
 	int		fd;

@@ -59,20 +59,20 @@ uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y)
 	return (*(uint32_t *)(texture->pixels + y * texture->width * 4 + x * 4));
 }
 
-mlx_texture_t *get_wall_texture(t_data *data, t_ray *ray)
+mlx_texture_t *get_wall_texture(t_data *data)
 {
-	if (ray->is_door)
+	if (data->ray.is_door)
 		return data->textures->door;
-	if (ray->side == 0)
+	if (data->ray.side == 0)
 	{
-		if (ray->dir_x > 0)
+		if (data->ray.dir_x > 0)
 			return data->textures->east;
 		else
 			return data->textures->west;
 	}
 	else
 	{
-		if (ray->dir_y > 0)
+		if (data->ray.dir_y > 0)
 			return data->textures->south;
 		else
 			return data->textures->north;

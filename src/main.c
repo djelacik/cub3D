@@ -12,6 +12,7 @@
 
 #include "cub3D.h"
 
+//TODO
 bool	initializer(t_data *data, char *filename, bool strict)
 {
 	int	status;

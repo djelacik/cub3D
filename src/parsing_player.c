@@ -12,6 +12,7 @@
 
 #include "cub3D.h"
 
+//TODO
 bool	parse_player_pos(t_data *data)
 {
 	int i, j, already_assigned = 0;
