@@ -6,7 +6,7 @@
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 02:01:28 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/08 02:01:29 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:13:08 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,45 @@
 
 static bool	check_cell_strict(t_data *data, int i, int j)
 {
-    char    **grid;
-    char    *row;
-    int     h;
+	char	**grid;
+	char	*row;
+	int	 h;
 
-    grid = data->map.grid;
-    row = grid[i];
-    h = data->map.height;
-    if (i == 0 || i == h - 1 || j == 0 || row[j + 1] == '\0')
-    {
-        return (row[j] == '1');
-    }
-    if (row[j] == '0' || row[j] == 'D')
-    {
-        return (grid[i][j - 1] != '\0' && grid[i - 1][j] != '\0'
-            && grid[i + 1][j] != '\0'&& row[j + 1] != '\0');
-    }
-    return (row[j] == '1');
+	grid = data->map.grid;
+	row = grid[i];
+	h = data->map.height;
+	if (i == 0 || i == h - 1 || j == 0 || row[j + 1] == '\0')
+	{
+		return (row[j] == '1');
+	}
+	if (row[j] == '0' || row[j] == 'D')
+	{
+		return (grid[i][j - 1] != '\0' && grid[i - 1][j] != '\0'
+			&& grid[i + 1][j] != '\0'&& row[j + 1] != '\0');
+	}
+	return (row[j] == '1');
 }
 
 bool	is_map_closed_strict(t_data *data)
 {
-    int     i;
-    int     j;
-    char    *row;
+	int	 i;
+	int	 j;
+	char	*row;
 
-    i = 0;
-    while (i < data->map.height)
-    {
-        row = data->map.grid[i];
-        j = 0;
-        while (row[j])
-        {
-            if (!check_cell_strict(data, i, j))
-                return (false);
-            j++;
-        }
-        i++;
-    }
-    return (true);
+	i = 0;
+	while (i < data->map.height)
+	{
+		row = data->map.grid[i];
+		j = 0;
+		while (row[j])
+		{
+			if (!check_cell_strict(data, i, j))
+				return (false);
+			j++;
+		}
+		i++;
+	}
+	return (true);
 }
 
 //flood-fill from (i,j), returns false if any path leaks out

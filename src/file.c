@@ -6,7 +6,7 @@
 /*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:23:26 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/08 14:23:27 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:12:34 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int  open_cub_file(const char *path)
 {
-    int fd;
+	int fd;
 
-    fd = open(path, O_RDONLY); //check more?
-    if (fd < 0)
-        return (-1);
-    return (fd);
+	fd = open(path, O_RDONLY); //check more?
+	if (fd < 0)
+		return (-1);
+	return (fd);
 }
 
 int  close_cub_file(int fd, t_data *data)

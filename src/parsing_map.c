@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:29:25 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:08:36 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:13:46 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ bool	alloc_doors_array(t_data *data, int doors)
 
 bool	build_map(t_data *data, t_vec *map_vec)
 {
-	int     doors;
+	int	 doors;
 	size_t  rows;
 
 	doors = 0;

@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 15:40:09 by djelacik          #+#    #+#             */
-/*   Updated: 2025/04/14 10:20:25 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:13:15 by aapadill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 //normalize diagonal movement
 void	handle_movement(t_data *data)
 {
-    double  dx;
-    double  dy;
+	double  dx;
+	double  dy;
 
-    if (!get_movement_delta(data, &dx, &dy))
-    {
-        data->is_player_moving = false;
-        return;
-    }
-    try_move(data, dx, dy);
+	if (!get_movement_delta(data, &dx, &dy))
+	{
+		data->is_player_moving = false;
+		return;
+	}
+	try_move(data, dx, dy);
 }
 
 void handle_shake(t_data *data)
