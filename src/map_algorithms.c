@@ -93,23 +93,16 @@ bool	flood_fill(t_data *data, bool **visited, int i, int j)
 	return (true);
 }
 
-static	allocate_bool_array();
-
-//TODO
-bool	is_map_closed(t_data *data)
+bool **allocate_bool_array(t_data *data)
 {
 	int		height;
 	char	**grid;
 	bool	**visited;
-	int		i;
 	int		len;
-	int		start_i;
-	int		start_j;
-	bool	ok;
+	int		i;
 
 	height = data->map.height;
 	grid   = data->map.grid;
-	//allocate visited (bool) array
 	visited = gc_alloc(sizeof(bool *) * height);
 	if (!visited)
 		return (false);
@@ -123,7 +116,19 @@ bool	is_map_closed(t_data *data)
 		ft_memset(visited[i], 0, sizeof(bool) * len);
 		i++;
 	}
-	//starting cell from player position
+	return (visited);
+}
+
+bool	is_map_closed(t_data *data)
+{
+	int		start_i;
+	int		start_j;
+	bool	ok;
+	bool	**visited;
+
+	visited = allocate_bool_array(data);
+	if (!visited)
+		return (false);
 	start_i = (int)(data->player.y - 0.5);
 	start_j = (int)(data->player.x - 0.5);
 	ok = flood_fill(data, visited, start_i, start_j);
