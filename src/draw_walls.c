@@ -56,7 +56,6 @@ void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
 	draw_wall_texture(data, screen_x);
 }
 
-
 /*
 	Compute the texture y-coordinate using the original (unclipped) wall parameters
 */
