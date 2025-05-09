@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_logic.c                                    :+:      :+:    :+:   */
+/*   parsing_head.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 01:47:34 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/08 01:47:35 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:09:08 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int  process_header_line(char *line, t_data *data)
 {
-    if (!parse_texture_line(line, data)
-        && !parse_color_line(line, data))
-    {
-        data->error_msg = "Invalid color/texture definition";
-        return (1);
-    }
-    return (0);
+	if (!parse_texture_line(line, data)
+		&& !parse_color_line(line, data))
+	{
+		data->error_msg = "Invalid color/texture definition";
+		return (1);
+	}
+	return (0);
 }
 
 bool	parse_color_values(char *str, uint32_t *color)

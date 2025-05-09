@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 09:32:54 by aapadill          #+#    #+#             */
-/*   Updated: 2025/04/03 09:29:49 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:08:13 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ bool	error_return(t_data *data, char *msg)
 
 int  push_map_line(t_vec *map_vec, char *line, t_data *data)
 {
-    if (vec_push(map_vec, &line) < 0)
-    {
-        data->error_msg = "Vec push failed";
-        return (1);
-    }
-    return (0);
+	if (vec_push(map_vec, &line) < 0)
+	{
+		data->error_msg = "Vec push failed";
+		return (1);
+	}
+	return (0);
 }
 
 bool categorize_line(t_data *data, char *line, t_vec *map_vec, bool *map_started)
