@@ -15,7 +15,7 @@
 bool	init_mlx_data(t_data *data)
 {
 	int	mw;
-	int mh;
+	int	mh;
 
 	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	if (!data->mlx)
