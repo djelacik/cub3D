@@ -12,7 +12,7 @@ A raycasting 3D game engine built using MLX42 and C. Inspired by **Wolfenstein 3
 - **Input Handling:** Supports both keyboard and mouse controls for movement and view rotation.
 - **Responsive Resolution:** Automatically adapts to different screen sizes and maintains a minimum window resolution.
 
-## Demon
+## Demo
 
 ![Rotation demo](assets/optimized.gif)
 
