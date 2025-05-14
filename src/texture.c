@@ -22,7 +22,7 @@ bool	load_texture(char *path, mlx_texture_t **texture)
 
 bool	textures_ready(t_data *data)
 {
-	t_textures		*t;
+	t_textures	*t;
 
 	t = data->textures;
 	return (t->north && t->south && t->west && t->east);
