@@ -75,6 +75,6 @@ int	can_move_to(t_data *data, double new_x, double new_y)
 	if (is_wall(data, new_x + diag_offset, new_y - diag_offset)) // Top-right
 		return 0;
 	if (is_wall(data, new_x - diag_offset, new_y - diag_offset)) // Top-left
-		return 0;
-	return 1; // No collisions, movement allowed
+		return (0);
+	return (1); // No collisions, movement allowed
 }
