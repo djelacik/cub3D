@@ -70,8 +70,8 @@ bool	alloc_doors_array(t_data *data, int doors)
 
 bool	build_map(t_data *data, t_vec *map_vec)
 {
-	int	 doors;
-	size_t  rows;
+	int		doors;
+	size_t	rows;
 
 	doors = 0;
 	rows = map_vec->len;
