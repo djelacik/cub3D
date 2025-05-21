@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 16:01:21 by djelacik          #+#    #+#             */
-/*   Updated: 2025/05/21 14:15:55 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:41:02 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define MINIMAP_SCALE 0.15
 # define TILE_SIZE 64
 # define STEP_SIZE 0.5
-# define FOV M_PI / 3
+# define FOV 1.0471975511965976
 
 # define COLLISION_LIMIT 0.15
 # define MOUSE_SENSITIVITY 0.001
@@ -138,13 +138,15 @@ typedef struct s_ray {
 	double			door_progress;
 }	t_ray;
 
+//width is window's
+//same with height
 typedef struct s_data {
 	bool			resize_pending;
 	int				new_width;
 	int				new_height;
 
-	int				width; //window width
-	int				height; //window height
+	int				width;
+	int				height;
 	t_map			map;
 
 	bool			f_color_found;
@@ -166,7 +168,6 @@ typedef struct s_data {
 
 	t_sprite		*sprites;
 	int				num_sprites;
-	double			*zBuffer;
 	mlx_texture_t	**sprite_textures;
 
 	mlx_texture_t	**hud_hands;
