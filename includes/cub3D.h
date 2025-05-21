@@ -183,7 +183,7 @@ typedef struct s_data {
 
 	bool			map_started;
 	t_vec			map_vec;
-
+	bool			window_active;
 }	t_data;
 
 /* 

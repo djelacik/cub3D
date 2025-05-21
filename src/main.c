@@ -12,6 +12,19 @@
 
 #include "cub3D.h"
 
+bool	clean_return(t_data *data, char *msg)
+{
+	if (data->window_active)
+		mlx_terminate(data->mlx);
+	if (data->textures)
+		free_textures(data->textures);
+	if (data->hud_frame_count > 0)
+		free_hud_textures(data);
+	if (msg)
+		data->error_msg = msg;
+	return (EXIT_FAILURE);
+}
+
 //TODO
 bool	initializer(t_data *data, char *filename, bool strict)
 {
@@ -23,48 +36,29 @@ bool	initializer(t_data *data, char *filename, bool strict)
 	data->player.speed = 0.025;
 	if (!init_mlx_data(data))
 		return (EXIT_FAILURE);
+	data->window_active = 1;
 	status = parse_cubfile(filename, data);
 	if (status)
-	{
-		mlx_terminate(data->mlx);
-		if (data->textures)
-			free_textures(data->textures);
-		return (EXIT_FAILURE);
-	}
+		return (clean_return(data, NULL));
 	data->camera.x = data->width / 2;
 	data->camera.y = data->height / 2;
 	data->image = mlx_new_image(data->mlx, data->width, data->height);
 	if (!data->image)
-	{
-		mlx_terminate(data->mlx);
-		free_textures(data->textures);
-		data->error_msg = "Failed to create image";
-		return (EXIT_FAILURE);
-	}
+		return (clean_return(data, "Failed to create image"));
 	if (!load_hud_textures(data))
-	{
-		mlx_terminate(data->mlx);
-		free_textures(data->textures);
-		data->error_msg = "Failed to load hud textures";
-		return (EXIT_FAILURE);
-	}
+		return (clean_return(data, "Failed to load hud textures"));
 	if (is_wall(data, data->player.x, data->player.y))
-	{
-		mlx_terminate(data->mlx);
-		free_textures(data->textures);
-		free_hud_textures(data);
-		data->error_msg = "Player starts inside a wall";
-		return (EXIT_FAILURE);
-	}
+		return (clean_return(data, "Player starts inside a wall"));
 	return (EXIT_SUCCESS);
 }
 
+//gc_free(data.textures);
 int	main(int argc, char **argv)
 {
 	t_data	data;
 	int		error;
 	bool	strict;
-	
+
 	strict = false;
 	if (argc < 2 || !has_cub_extension(argv[1]) || argc > 3 || (argc == 3 && ft_strncmp(argv[2], "--strict", 9) != 0))
 	{
@@ -82,7 +76,6 @@ int	main(int argc, char **argv)
 	mlx_terminate(data.mlx);
 	free_textures(data.textures);
 	free_hud_textures(&data);
-	//gc_free(data.textures);
 	gc_free_all();
 	return (EXIT_SUCCESS);
 }
