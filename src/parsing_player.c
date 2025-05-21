@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:34:59 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:08:19 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:50:27 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static bool	process_cell_content(t_data *data, char c, int i, int j)
 
 static bool	classify_cell(t_data *data, bool *assigned, int i, int j)
 {
-	char c;
+	char	c;
 
 	c = data->map.grid[i][j];
 	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
@@ -80,9 +80,9 @@ static bool	classify_cell(t_data *data, bool *assigned, int i, int j)
 
 bool	parse_player_pos(t_data *data)
 {
-	int  i;
-	int  j;
-	bool assigned;
+	int		i;
+	int		j;
+	bool	assigned;
 
 	assigned = false;
 	i = 0;
