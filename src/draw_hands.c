@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 10:26:53 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:18:39 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:01:14 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	draw_hud_hands(t_data *data)
 			if ((color & 0x00FFFFFF) != 0)
 			{
 				color = shading(color, 1.0);
-				mlx_put_pixel(data->image, (data->width - hand_tex->width * sf) / 2 + x,
-					data->height - hand_tex->height * sf + y, color);
+				mlx_put_pixel(data->image, (data->width - hand_tex->width * sf)
+				/ 2 + x, data->height - hand_tex->height * sf + y, color);
 			}
 			x++;
 		}
