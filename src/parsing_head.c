@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 01:47:34 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/21 13:49:21 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:08:37 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ bool	parse_color_line(char *line, t_data *data)
 		if (status)
 			data->c_color_found = true;
 	}
-	//gc_free(key);
-	//gc_free(vals);
 	return (status);
 }
 
