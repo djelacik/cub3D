@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 16:34:31 by djelacik          #+#    #+#             */
-/*   Updated: 2025/05/21 13:11:28 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:53:45 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static char	get_map_cell(t_data *data, double x, double y)
 	return (data->map.grid[yi][xi]);
 }
 
+// If door is closed or only partially open, consider it a wall
 bool	is_wall(t_data *data, double x, double y)
 {
 	char	cell;
@@ -41,7 +42,6 @@ bool	is_wall(t_data *data, double x, double y)
 		{
 			if (data->doors[i].x == (int)x && data->doors[i].y == (int)y)
 			{
-				// If door is closed or only partially open, consider it a wall
 				if (data->doors[i].state == CLOSED
 					|| data->doors[i].progress < 0.8)
 					return (true);
@@ -57,26 +57,24 @@ bool	is_wall(t_data *data, double x, double y)
 
 int	can_move_to(t_data *data, double new_x, double new_y)
 {
-	// Check four diagonal directions
 	double	diag_offset;
 
 	diag_offset = COLLISION_LIMIT / sqrt(2);
-	// Check four cardinal directions
-	if (is_wall(data, new_x + COLLISION_LIMIT, new_y)) // Right
+	if (is_wall(data, new_x + COLLISION_LIMIT, new_y))
 		return (0);
-	if (is_wall(data, new_x - COLLISION_LIMIT, new_y)) // Left
+	if (is_wall(data, new_x - COLLISION_LIMIT, new_y))
 		return (0);
-	if (is_wall(data, new_x, new_y + COLLISION_LIMIT)) // Down
+	if (is_wall(data, new_x, new_y + COLLISION_LIMIT))
 		return (0);
-	if (is_wall(data, new_x, new_y - COLLISION_LIMIT)) // Up
+	if (is_wall(data, new_x, new_y - COLLISION_LIMIT))
 		return (0);
-	if (is_wall(data, new_x + diag_offset, new_y + diag_offset)) // Bottom-right
+	if (is_wall(data, new_x + diag_offset, new_y + diag_offset))
 		return (0);
-	if (is_wall(data, new_x - diag_offset, new_y + diag_offset)) // Bottom-left
+	if (is_wall(data, new_x - diag_offset, new_y + diag_offset))
 		return (0);
-	if (is_wall(data, new_x + diag_offset, new_y - diag_offset)) // Top-right
+	if (is_wall(data, new_x + diag_offset, new_y - diag_offset))
 		return (0);
-	if (is_wall(data, new_x - diag_offset, new_y - diag_offset)) // Top-left
+	if (is_wall(data, new_x - diag_offset, new_y - diag_offset))
 		return (0);
-	return (1); // No collisions, movement allowed
+	return (1);
 }
