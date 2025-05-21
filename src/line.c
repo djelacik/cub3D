@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   line.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 01:54:14 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/08 01:54:15 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:07:09 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	line_is_only_spaces(char *line)
 {
 	size_t	count;
 	char	*original;
-	
+
 	count = 0;
 	original = line;
 	while (*line)
@@ -51,14 +51,12 @@ bool	split_line(char *line, char **key, char **rest)
 	if (!trimmed)
 		return (false);
 	sep = trimmed;
-	//find the first space, that will be our separator
 	while (*sep && !ft_isspace(*sep))
 		sep++;
 	if (!*sep)
 		return (false);
 	*sep = '\0';
 	sep++;
-	//skip spaces before the rest
 	while (ft_isspace(*sep))
 		sep++;
 	if (!*sep)
