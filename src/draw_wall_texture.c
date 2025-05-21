@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:15:13 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/21 13:16:50 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:02:36 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ static int	adjust_tex_x_for_door(t_data *data, int tex_x)
 	return (adjusted);
 }
 
-//compute the texture y-coordinate using the original (unclipped) wall parameters
+//compute the texture y-coordinate using the original 
+//(unclipped) wall parameters
 void	draw_wall_texture(t_data *data, int screen_x)
 {
 	int			y;
