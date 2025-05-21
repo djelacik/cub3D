@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shading.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:00:08 by aapadill          #+#    #+#             */
-/*   Updated: 2025/01/09 21:00:10 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:55:23 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,8 @@ uint32_t	shading(uint32_t color, double distance)
 		factor = 1;
 	else
 		factor = 1 / factor;
-
 	r = (uint8_t)(get_r(color) * factor);
 	g = (uint8_t)(get_g(color) * factor);
 	b = (uint8_t)(get_b(color) * factor);
-
 	return (get_rgba(r, g, b, 0xFF));
 }
