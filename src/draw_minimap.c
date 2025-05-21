@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 16:37:41 by djelacik          #+#    #+#             */
-/*   Updated: 2025/05/08 14:53:41 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:00:12 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	draw_mini_map(t_data *data)
 			screen_y = y * TILE_SIZE * MINIMAP_SCALE;
 			if (data->map.grid[y][x] == '1')
 				data->aux_color = BLUE_COLOR;
-			else if (data->map.grid[y][x] == 'D' && is_wall(data, (double)x, (double)y))
+			else if (data->map.grid[y][x] == 'D' && is_wall(data,
+						(double)x, (double)y))
 				data->aux_color = GREEN_COLOR;
 			else
 				data->aux_color = BLUE_COLOR_2;
@@ -75,8 +76,8 @@ void	draw_mini_player(t_data *data)
 		j = -size / 2;
 		while (j <= size / 2)
 		{
-			if (x + i >= 0 && x + i < data->width &&
-				y + j >= 0 && y + j < data->height)
+			if (x + i >= 0 && x + i < data->width
+				&& y + j >= 0 && y + j < data->height)
 				mlx_put_pixel(data->image, x + i, y + j, RED_COLOR);
 			j++;
 		}
