@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:02:57 by aapadill          #+#    #+#             */
-/*   Updated: 2025/02/21 18:01:01 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:13:52 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,22 @@ uint32_t	get_texture_color(mlx_texture_t *texture, int x, int y)
 	return (*(uint32_t *)(texture->pixels + y * texture->width * 4 + x * 4));
 }
 
-mlx_texture_t *get_wall_texture(t_data *data)
+mlx_texture_t	*get_wall_texture(t_data *data)
 {
 	if (data->ray.is_door)
-		return data->textures->door;
+		return (data->textures->door);
 	if (data->ray.side == 0)
 	{
 		if (data->ray.dir_x > 0)
-			return data->textures->east;
+			return (data->textures->east);
 		else
-			return data->textures->west;
+			return (data->textures->west);
 	}
 	else
 	{
 		if (data->ray.dir_y > 0)
-			return data->textures->south;
+			return (data->textures->south);
 		else
-			return data->textures->north;
+			return (data->textures->north);
 	}
 }
