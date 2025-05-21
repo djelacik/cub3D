@@ -27,6 +27,7 @@ src/dda.c \
 src/ray.c \
 src/draw_floor_ceiling.c \
 src/draw_walls.c \
+src/draw_wall_texture.c \
 src/doors.c \
 src/utils.c \
 src/draw_minimap.c \

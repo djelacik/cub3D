@@ -83,6 +83,7 @@ void	draw_mini_player(t_data *data)
 	}
 }
 
+//TODO: reduce one variable
 //limit angle to 0 - 2 * M_PI
 //rays look more like waves wtf
 //make this dynamic (portion of the map depending on player's position)

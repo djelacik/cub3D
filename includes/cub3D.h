@@ -206,7 +206,7 @@ uint8_t		get_a(uint32_t rgba);
 uint32_t	get_rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
 //shading.c
-uint32_t	simple_shading(uint32_t color, double distance);
+uint32_t	shading(uint32_t color, double distance);
 
 //texture.c
 bool			load_texture(char *path, mlx_texture_t **texture);
@@ -228,6 +228,8 @@ void	calculate_ray_data(t_data *data, double angle);
 double	calculate_corrected_distance(double distance, double ray_angle, double player_angle);
 void	draw_wall_column(t_data *data, double angle, int screen_x);
 void	draw_walls(t_data *data);
+
+//draw_wall_textures.c
 void	draw_wall_texture(t_data *data, int screen_x);
 //void	draw_walls_and_sprites(t_data *data);
 

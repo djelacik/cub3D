@@ -12,7 +12,7 @@
 
 #include "cub3D.h"
 
-uint32_t	simple_shading(uint32_t color, double distance)
+uint32_t	shading(uint32_t color, double distance)
 {
 	uint8_t		r;
 	uint8_t		g;

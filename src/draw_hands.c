@@ -31,7 +31,7 @@ void	draw_hud_hands(t_data *data)
 			color = get_texture_color(hand_tex, x / sf, y / sf);
 			if ((color & 0x00FFFFFF) != 0)
 			{
-				color = simple_shading(color, 1.0);
+				color = shading(color, 1.0);
 				mlx_put_pixel(data->image, (data->width - hand_tex->width * sf) / 2 + x,
 					data->height - hand_tex->height * sf + y, color);
 			}
