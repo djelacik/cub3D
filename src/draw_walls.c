@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 16:29:26 by djelacik          #+#    #+#             */
-/*   Updated: 2025/05/08 14:53:52 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:03:48 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 void	draw_walls(t_data *data)
 {
-	double	distToPlane;
+	double	dist_to_plane;
 	double	screen_x;
 	double	offset;
 	double	angle_offset;
 	double	ray_angle;
 
-	distToPlane = ((double)data->width / 2.0) / tan(FOV / 2.0);
+	dist_to_plane = ((double)data->width / 2.0) / tan(FOV / 2.0);
 	screen_x = 0;
 	while ((int)screen_x < data->width)
 	{
 		offset = (screen_x + 0.5) - (double)((double)data->width / 2.0);
-		angle_offset = atan(offset / distToPlane);
+		angle_offset = atan(offset / dist_to_plane);
 		ray_angle = data->player.angle + angle_offset;
 		draw_wall_column(data, ray_angle, (int)screen_x);
 		screen_x++;
@@ -35,7 +35,8 @@ void	draw_walls(t_data *data)
 /*
 	Calculates ray properties
 	Computes full (virtual wall height) and its stating/ending positions
-	Clips the drawing area to the visible screen (but keeps the original positions for texture mapping)
+	Clips the drawing area to the visible screen (but keeps the original 
+	positions for texture mapping)
 	Passes both the visible drawing range and the original wall info
 */
 void	draw_wall_column(t_data *data, double ray_angle, int screen_x)
