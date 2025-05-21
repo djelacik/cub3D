@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 15:40:09 by djelacik          #+#    #+#             */
-/*   Updated: 2025/05/21 13:35:09 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:08:08 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,12 @@ void	handle_shake(t_data *data)
 		if (data->is_player_shooting)
 			data->camera.shake_offset += sin(data->camera.shake_time
 					* SHAKE_VEL_RECO) * PIX_RECOIL;
-		//printf("Shake time: %f\n", data->camera.shake_time);
 	}
 	else if (data->is_player_shooting)
 	{
 		data->camera.shake_time += SEC_PER_FRAME;
 		data->camera.shake_offset = sin(data->camera.shake_time
 				* SHAKE_VEL_RECO) * PIX_RECOIL;
-		//printf("Shake time: %f\n", data->camera.shake_time);
 	}
 	else
 	{
@@ -89,7 +87,6 @@ void	handle_mouse_rotation(t_data *data)
 	}
 	mlx_get_mouse_pos(data->mlx, &aux_x, &aux_y);
 	dx = aux_x - data->camera.x;
-	//dy = aux_y - data->camera.y;
 	if (dx)
 		data->player.angle += dx * MOUSE_SENSITIVITY;
 	mlx_set_cursor_mode(data->mlx, MLX_MOUSE_HIDDEN);
