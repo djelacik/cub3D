@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 16:02:56 by djelacik          #+#    #+#             */
-/*   Updated: 2025/01/04 18:56:34 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:13:14 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ int	main(int argc, char **argv)
 	bool	strict;
 
 	strict = false;
-	if (argc < 2 || !has_cub_extension(argv[1]) || argc > 3 || (argc == 3 && ft_strncmp(argv[2], "--strict", 9) != 0))
+	if (argc < 2 || !has_cub_extension(argv[1]) || argc > 3
+		|| (argc == 3 && ft_strncmp(argv[2], "--strict", 9) != 0))
 	{
 		printf("Usage: %s <.cub file> [--strict]\n", argv[0]);
 		return (EXIT_FAILURE);
