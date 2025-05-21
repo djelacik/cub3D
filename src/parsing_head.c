@@ -6,13 +6,13 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 01:47:34 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:09:08 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:49:21 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-int  process_header_line(char *line, t_data *data)
+int	process_header_line(char *line, t_data *data)
 {
 	if (!parse_texture_line(line, data)
 		&& !parse_color_line(line, data))
@@ -25,10 +25,10 @@ int  process_header_line(char *line, t_data *data)
 
 bool	parse_color_values(char *str, uint32_t *color)
 {
-	int count;
-	char **vals;
-	int i;
-	int nums[3];
+	int		count;
+	char	**vals;
+	int		i;
+	int		nums[3];
 
 	if (count_char(str, ',') != 2)
 		return (false);
@@ -103,4 +103,3 @@ bool	parse_texture_line(char *line, t_data *data)
 	gc_free(path);
 	return (ok);
 }
-
