@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 15:40:09 by djelacik          #+#    #+#             */
-/*   Updated: 2025/05/09 17:13:15 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:35:09 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,34 @@
 //normalize diagonal movement
 void	handle_movement(t_data *data)
 {
-	double  dx;
-	double  dy;
+	double	dx;
+	double	dy;
 
 	if (!get_movement_delta(data, &dx, &dy))
 	{
 		data->is_player_moving = false;
-		return;
+		return ;
 	}
 	try_move(data, dx, dy);
 }
 
-void handle_shake(t_data *data)
+void	handle_shake(t_data *data)
 {
 	if (data->is_player_moving)
 	{
 		data->camera.shake_time += SEC_PER_FRAME;
-		data->camera.shake_offset = sin(data->camera.shake_time * SHAKE_VEL_WALK) * PIX_WALK;
+		data->camera.shake_offset = sin(data->camera.shake_time
+				* SHAKE_VEL_WALK) * PIX_WALK;
 		if (data->is_player_shooting)
-			data->camera.shake_offset += sin(data->camera.shake_time * SHAKE_VEL_RECO) * PIX_RECOIL;
+			data->camera.shake_offset += sin(data->camera.shake_time
+					* SHAKE_VEL_RECO) * PIX_RECOIL;
 		//printf("Shake time: %f\n", data->camera.shake_time);
 	}
 	else if (data->is_player_shooting)
 	{
 		data->camera.shake_time += SEC_PER_FRAME;
-		data->camera.shake_offset = sin(data->camera.shake_time * SHAKE_VEL_RECO) * PIX_RECOIL;
+		data->camera.shake_offset = sin(data->camera.shake_time
+				* SHAKE_VEL_RECO) * PIX_RECOIL;
 		//printf("Shake time: %f\n", data->camera.shake_time);
 	}
 	else
@@ -65,15 +68,19 @@ void	handle_rotation(t_data *data)
 		data->player.angle += data->player.speed;
 }
 
-void handle_mouse_rotation(t_data *data)
+void	handle_mouse_rotation(t_data *data)
 {
-	int32_t aux_x = 0;
-	int32_t aux_y = 0;
-	int32_t dx = 0;
+	int32_t	aux_x;
+	int32_t	aux_y;
+	int32_t	dx;
 
+	aux_x = 0;
+	aux_y = 0;
+	dx = 0;
 	if (mlx_is_key_down(data->mlx, MLX_KEY_TAB))
 		data->camera.toggle = 0;
-	if (!data->camera.toggle && mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
+	if (!data->camera.toggle && mlx_is_mouse_down(data->mlx,
+			MLX_MOUSE_BUTTON_LEFT))
 		data->camera.toggle = 1;
 	if (data->camera.toggle == 0)
 	{
