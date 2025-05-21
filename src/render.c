@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 23:21:34 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/07 23:21:41 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:10:22 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@ void	render(t_data *data)
 	{
 		data->width = data->new_width;
 		data->height = data->new_height;
-		//if (data->image)
 		mlx_delete_image(data->mlx, data->image);
-		data->image = mlx_new_image(data->mlx, data->new_width, data->new_height);
+		data->image = mlx_new_image(data->mlx, data->new_width,
+				data->new_height);
 		mlx_image_to_window(data->mlx, data->image, 0, 0);
-		//if (!data->image)
 		data->player.speed = (double)data->height * PLAYER_SPEED;
 		data->camera.x = data->width / 2;
 		data->camera.y = data->height / 2;
