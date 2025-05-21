@@ -28,18 +28,19 @@ void	draw_mini_map(t_data *data)
 			screen_x = x * TILE_SIZE * MINIMAP_SCALE;
 			screen_y = y * TILE_SIZE * MINIMAP_SCALE;
 			if (data->map.grid[y][x] == '1')
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR);
+				data->aux_color = BLUE_COLOR;
 			else if (data->map.grid[y][x] == 'D' && is_wall(data, (double)x, (double)y))
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, GREEN_COLOR);
+				data->aux_color = GREEN_C
 			else
-				draw_square(data->image, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE, BLUE_COLOR_2);
+				data->aux_color = BLUE_COLOR_2;
+			draw_square(data, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE);
 			x++;
 		}
 		y++;
 	}
 }
 
-void	draw_square(mlx_image_t *image, int x, int y, int size, int color)
+void	draw_square(t_data *data, int x, int y, int size)
 {
 	int	i;
 	int	j;
@@ -50,7 +51,7 @@ void	draw_square(mlx_image_t *image, int x, int y, int size, int color)
 		j = 0;
 		while (j < size)
 		{
-			mlx_put_pixel(image, x + i, y + j, color);
+			mlx_put_pixel(data->image, x + i, y + j, data->aux_color);
 			j++;
 		}
 		i++;

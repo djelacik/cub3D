@@ -160,6 +160,7 @@ typedef struct s_data {
 	t_textures		*textures;
 	uint32_t		floor;
 	uint32_t		ceiling;
+	uint32_t		aux_color;
 
 	t_door			*doors;
 	int				door_count;
@@ -182,6 +183,7 @@ typedef struct s_data {
 
 	bool			map_started;
 	t_vec	map_vec;
+
 }	t_data;
 
 /* 
@@ -248,7 +250,7 @@ void	handle_mouse_rotation(t_data *data);
 void	draw_mini_map(t_data *data);
 void	draw_mini_player(t_data *data);
 void	draw_mini_rays(t_data *data);
-void	draw_square(mlx_image_t *image, int x, int y, int size, int color);
+void	draw_square(t_data *data, int x, int y, int size);
 
 //doors.c
 double	lookup_door_progress(t_data *data, int x, int y);
