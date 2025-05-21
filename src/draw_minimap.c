@@ -96,11 +96,9 @@ void	draw_mini_rays(t_data *data)
 	double	angle;
 	double	screen_x;
 	double	screen_y;
-	double	max_angle;
 
 	angle = data->player.angle - FOV / 2;
-	max_angle = data->player.angle + FOV / 2;
-	while (angle <= max_angle)
+	while (angle <= (data->player.angle + FOV / 2))
 	{
 		ray_x = data->player.x;
 		ray_y = data->player.y;
@@ -112,7 +110,8 @@ void	draw_mini_rays(t_data *data)
 			screen_y = ray_y * TILE_SIZE * MINIMAP_SCALE;
 			if (screen_x >= 0 && screen_x < data->width
 				&& screen_y >= 0 && screen_y < data->height)
-				mlx_put_pixel(data->image, (int)screen_x, (int)screen_y, YELLOW_COLOR);
+				mlx_put_pixel(data->image, (int)screen_x, (int)screen_y,
+					YELLOW_COLOR);
 		}
 		angle += 0.01;
 	}
