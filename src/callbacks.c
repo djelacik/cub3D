@@ -6,21 +6,24 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 23:09:35 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:26:18 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:57:36 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
+//printf("Reached smallest resolution: %i x %i\n", width, height);
+//printf("Resize Callback: new dimensions set to %i x %i\n", 
+//data->new_width, data->new_height);
 void	my_resize_callback(int width, int height, void *param)
 {
-	t_data	*data = (t_data *)param;
+	t_data	*data;
 
+	data = (t_data *)param;
 	if (width <= MIN_WIDTH || height <= MIN_HEIGHT)
 	{
 		if (width == MIN_WIDTH && height == MIN_HEIGHT)
 		{
-			printf("Reached smallest resolution: %i x %i\n", width, height);
 			return ;
 		}
 		if (width <= MIN_WIDTH)
@@ -38,5 +41,4 @@ void	my_resize_callback(int width, int height, void *param)
 		data->new_height = height;
 	}
 	data->resize_pending = true;
-	printf("Resize Callback: new dimensions set to %i x %i\n", data->new_width, data->new_height);
 }
