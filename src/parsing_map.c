@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:29:25 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:13:46 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:09:23 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	alloc_map_grid(t_data *data, size_t rows)
 
 void	fill_grid_and_count(t_data *data, t_vec *map_vec, int *doors)
 {
-	size_t 	i;
+	size_t	i;
 	char	**grid;
 	int		j;
 	int		len;
