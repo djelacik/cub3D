@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_algorithms.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 02:01:28 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:13:08 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:53:37 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static bool	check_cell_strict(t_data *data, int i, int j)
 {
 	char	**grid;
 	char	*row;
-	int	 h;
+	int		h;
 
 	grid = data->map.grid;
 	row = grid[i];
@@ -28,15 +28,15 @@ static bool	check_cell_strict(t_data *data, int i, int j)
 	if (row[j] == '0' || row[j] == 'D')
 	{
 		return (grid[i][j - 1] != '\0' && grid[i - 1][j] != '\0'
-			&& grid[i + 1][j] != '\0'&& row[j + 1] != '\0');
+			&& grid[i + 1][j] != '\0' && row[j + 1] != '\0');
 	}
 	return (row[j] == '1');
 }
 
 bool	is_map_closed_strict(t_data *data)
 {
-	int	 i;
-	int	 j;
+	int		i;
+	int		j;
 	char	*row;
 
 	i = 0;
@@ -93,7 +93,7 @@ bool	flood_fill(t_data *data, bool **visited, int i, int j)
 	return (true);
 }
 
-bool **allocate_bool_array(t_data *data)
+bool	**allocate_bool_array(t_data *data)
 {
 	int		height;
 	char	**grid;
@@ -102,7 +102,7 @@ bool **allocate_bool_array(t_data *data)
 	int		i;
 
 	height = data->map.height;
-	grid   = data->map.grid;
+	grid = data->map.grid;
 	visited = gc_alloc(sizeof(bool *) * height);
 	if (!visited)
 		return (false);
