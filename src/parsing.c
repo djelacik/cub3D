@@ -85,7 +85,6 @@ bool	parse_file_lines(int fd, t_data *data, t_vec *map_vec, bool *m_s)
 int	parse_cubfile(char *filepath, t_data *data)
 {
 	int		fd;
-	bool	map_started;
 
 	fd = open_cub_file(filepath);
 	if (fd < 0)
@@ -95,7 +94,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		close_cub_file(fd, data);
 		return (error_return(data, "Vec alloc failed"));
 	}
-	if (parse_file_lines(fd, data, &data->map_vec, &map_started))
+	if (parse_file_lines(fd, data, &data->map_vec, &data->map_started))
 	{
 		close_cub_file(fd, data);
 		return (1);
