@@ -6,7 +6,7 @@
 /*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 14:23:26 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/21 13:51:37 by djelacik         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:04:27 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	open_cub_file(const char *path)
 {
 	int	fd;
 
-	fd = open(path, O_RDONLY); //check more?
+	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (-1);
 	return (fd);
