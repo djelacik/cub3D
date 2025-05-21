@@ -26,7 +26,8 @@ void	render(t_data *data)
 		data->player.speed = (double)data->height * PLAYER_SPEED;
 		data->camera.x = data->width / 2;
 		data->camera.y = data->height / 2;
-		printf("Render will now happen with %dx%d\n", data->width, data->height);
+		printf("Render will now happen with %dx%d\n", data->width,
+			data->height);
 		data->resize_pending = false;
 	}
 	draw_floor_and_ceiling(data);

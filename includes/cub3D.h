@@ -17,8 +17,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <limits.h>
-# include <float.h> //erase
-# include <assert.h> //erase
 # include <fcntl.h> //file open
 
 # include "libft.h"
@@ -57,21 +55,24 @@
 # define SHAKE_VEL_RECO 50
 # define VEC_INIT_SIZE 4
 
-typedef enum e_door_state{
+typedef enum e_door_state
+{
 	CLOSED,
 	OPENING,
 	OPEN,
 	CLOSING
 }	t_door_state;
 
-typedef struct s_player {
+typedef struct s_player
+{
 	double		x;
 	double		y;
 	double		angle;
 	double		speed;
 }	t_player;
 
-typedef struct s_view {
+typedef struct s_view
+{
 	int32_t		x;
 	int32_t		y;
 	int8_t		toggle;
@@ -79,7 +80,8 @@ typedef struct s_view {
 	double		shake_time;
 }	t_view;
 
-typedef struct s_textures {
+typedef struct s_textures
+{
 	mlx_texture_t	*north;
 	mlx_texture_t	*south;
 	mlx_texture_t	*west;
@@ -87,14 +89,16 @@ typedef struct s_textures {
 	mlx_texture_t	*door;
 }	t_textures;
 
-typedef struct s_door {
+typedef struct s_door
+{
 	int				x;
 	int				y;
 	t_door_state	state;
 	double			progress;
 }	t_door;
 
-typedef struct s_column {
+typedef struct s_column
+{
 	int		orig_start_y;
 	int		orig_end_y;
 	int		vis_start_y;
@@ -102,7 +106,8 @@ typedef struct s_column {
 	int		wall_height;
 }	t_column;
 
-typedef struct s_dda {
+typedef struct s_dda
+{
 	int		map_x;
 	int		map_y;
 	int		step_x;
@@ -113,19 +118,22 @@ typedef struct s_dda {
 	double	side_y;
 }	t_dda;
 
-typedef struct s_sprite {
+typedef struct s_sprite
+{
 	double	x;
 	double	y;
 	int		texture;
 }	t_sprite;
 
-typedef struct s_map {
+typedef struct s_map
+{
 	char	**grid;
 	int		width;
 	int		height;
 }	t_map;
 
-typedef struct s_ray {
+typedef struct s_ray
+{
 	double			distance;
 	double			hit_x;
 	double			hit_y;
@@ -140,7 +148,8 @@ typedef struct s_ray {
 
 //width is window's
 //same with height
-typedef struct s_data {
+typedef struct s_data
+{
 	bool			resize_pending;
 	int				new_width;
 	int				new_height;
