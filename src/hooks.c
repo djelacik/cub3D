@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 02:09:45 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/08 02:09:51 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:55:54 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	loop_hook(void *param)
 {
 	t_data	*data;
-	data = (t_data *)param;
 
+	data = (t_data *)param;
 	handle_movement(data);
 	handle_shake(data);
 	handle_shooting(data);
