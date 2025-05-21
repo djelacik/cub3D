@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:37:31 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/09 17:13:21 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:54:40 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ bool	get_movement_delta(t_data *data, double *dx, double *dy)
 
 void	try_move(t_data *data, double dx, double dy)
 {
-	double  x;
-	double  y;
+	double	x;
+	double	y;
 
 	x = data->player.x;
 	y = data->player.y;
