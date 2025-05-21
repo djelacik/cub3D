@@ -103,7 +103,7 @@ typedef struct s_column {
 }	t_column;
 
 typedef struct s_dda {
-	in		map_x;
+	int		map_x;
 	int		map_y;
 	int		step_x;
 	int		step_y;

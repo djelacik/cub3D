@@ -30,7 +30,7 @@ void	draw_mini_map(t_data *data)
 			if (data->map.grid[y][x] == '1')
 				data->aux_color = BLUE_COLOR;
 			else if (data->map.grid[y][x] == 'D' && is_wall(data, (double)x, (double)y))
-				data->aux_color = GREEN_C
+				data->aux_color = GREEN_COLOR;
 			else
 				data->aux_color = BLUE_COLOR_2;
 			draw_square(data, screen_x, screen_y, TILE_SIZE * MINIMAP_SCALE);
