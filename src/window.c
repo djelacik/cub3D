@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aapadill <aapadill@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: djelacik <djelacik@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 02:12:10 by aapadill          #+#    #+#             */
-/*   Updated: 2025/05/08 02:12:11 by aapadill         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:11:04 by djelacik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ bool	init_mlx_data(t_data *data)
 	data->height = mh / 2;
 	mlx_set_window_size(data->mlx, data->width, data->height);
 	mlx_set_window_limit(data->mlx, MIN_WIDTH, MIN_HEIGHT, mw, mh);
-	mlx_set_window_pos(data->mlx, (mw - data->width) / 2, (mh - data->height) / 2);
+	mlx_set_window_pos(data->mlx, (mw - data->width) / 2,
+		(mh - data->height) / 2);
 	return (true);
 }
