@@ -35,7 +35,7 @@ bool	load_hud_textures(t_data *data)
 	ft_memset(ok, 0, sizeof(bool) * 5);
 	data->hud_hands = gc_alloc(sizeof(mlx_texture_t *) * 5);
 	if (!data->hud_hands)
-		return (false);
+		return (!error_return(data, "Hud hands alloc failed"));
 	ok[0] = load_texture("textures/hand/hand111.png", &data->hud_hands[0]);
 	ok[1] = load_texture("textures/hand/hand222.png", &data->hud_hands[1]);
 	ok[2] = load_texture("textures/hand/hand333.png", &data->hud_hands[2]);
@@ -46,6 +46,7 @@ bool	load_hud_textures(t_data *data)
 	{
 		data->error_msg = "Failed to load HUD textures";
 		free_hud_textures(data);
+		data->hud_frame_count = 0;
 		return (false);
 	}
 	return (true);

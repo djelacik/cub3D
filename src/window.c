@@ -20,7 +20,7 @@ bool	init_mlx_data(t_data *data)
 	data->mlx = mlx_init(MIN_WIDTH, MIN_HEIGHT, "Cub3D Ray-Casting", true);
 	if (!data->mlx)
 	{
-		data->error_msg = "Failed to initialize MLX";
+		data->error_msg = "Failed to initialize MLX window";
 		return (false);
 	}
 	data->textures = gc_alloc(sizeof(t_textures));

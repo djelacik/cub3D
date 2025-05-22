@@ -17,7 +17,7 @@ bool	alloc_map_grid(t_data *data, size_t rows)
 	data->map.height = rows;
 	data->map.grid = gc_alloc((rows + 1) * sizeof(char *));
 	if (!data->map.grid)
-		error_return(data, "Map alloc failed");
+		return (error_return(data, "Map alloc failed"));
 	data->map.grid[rows] = NULL;
 	return (false);
 }
