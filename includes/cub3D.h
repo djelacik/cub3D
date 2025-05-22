@@ -316,8 +316,7 @@ bool				is_map_closed(t_data *data);
 int					parse_cubfile(char *filepath, t_data *data);
 
 //free.c
-void				free_and_exit(void);
-void				free_and_exit_with(int exit_code);
+bool				error_return(t_data *data, char *msg);
 void				error_exit(char *msg);
 void				free_textures(t_textures *textures);
 void				free_hud_textures(t_data *data);

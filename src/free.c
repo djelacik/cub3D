@@ -12,18 +12,10 @@
 
 #include "cub3D.h"
 
-//clean textures too
-//terminate window
-void	free_and_exit(void)
+bool	error_return(t_data *data, char *msg)
 {
-	gc_free_all();
-	exit(EXIT_FAILURE);
-}
-
-void	free_and_exit_with(int exit_code)
-{
-	gc_free_all();
-	exit(exit_code);
+	data->error_msg = msg;
+	return (true);
 }
 
 void	error_exit(char *msg)

@@ -12,9 +12,6 @@
 
 #include "gc_alloc.h"
 
-void	free_and_exit(void);
-void	free_and_exit_with(int exit_code);
-
 /*
 ** @description
 ** Returns the global gc structure.
@@ -52,13 +49,16 @@ void	*gc_alloc(size_t size)
 
 	gc = get_gc();
 	if (!size)
-		free_and_exit();
+		return (NULL);
 	ptr = malloc(size);
 	if (!ptr)
-		free_and_exit();
+		return (NULL);
 	node = ft_lstnew(ptr);
 	if (!node)
-		free_and_exit();
+	{
+		free(ptr);
+		return (NULL);
+	}
 	ft_bzero(ptr, size);
 	ft_lstadd_front(&(gc->head), node);
 	return (ptr);

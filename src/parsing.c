@@ -12,19 +12,10 @@
 
 #include "cub3D.h"
 
-bool	error_return(t_data *data, char *msg)
-{
-	data->error_msg = msg;
-	return (true);
-}
-
 int	push_map_line(t_vec *map_vec, char *line, t_data *data)
 {
 	if (vec_push(map_vec, &line) < 0)
-	{
-		data->error_msg = "Vec push failed";
-		return (1);
-	}
+		return (error_return(data, "Vec push failed"));
 	return (0);
 }
 
@@ -99,6 +90,7 @@ int	parse_cubfile(char *filepath, t_data *data)
 		close_cub_file(fd, data);
 		return (1);
 	}
+	close_cub_file(fd, data);
 	if (build_map(data, &data->map_vec))
 		return (error_return(data, "Map build failed"));
 	if (parse_player_pos(data))

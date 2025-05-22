@@ -17,10 +17,7 @@ bool	alloc_map_grid(t_data *data, size_t rows)
 	data->map.height = rows;
 	data->map.grid = gc_alloc((rows + 1) * sizeof(char *));
 	if (!data->map.grid)
-	{
-		data->error_msg = "Map alloc failed";
-		return (true);
-	}
+		error_return(data, "Map alloc failed");
 	data->map.grid[rows] = NULL;
 	return (false);
 }
@@ -60,10 +57,7 @@ bool	alloc_doors_array(t_data *data, int doors)
 	}
 	data->doors = gc_alloc(doors * sizeof(t_door));
 	if (!data->doors)
-	{
-		data->error_msg = "Doors alloc failed";
-		return (true);
-	}
+		return (error_return(data, "Doors alloc failed"));
 	ft_memset(data->doors, 0, doors * sizeof(t_door));
 	return (false);
 }
