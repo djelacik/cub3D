@@ -52,7 +52,9 @@ void	draw_square(t_data *data, int x, int y, int size)
 		j = 0;
 		while (j < size)
 		{
-			mlx_put_pixel(data->image, x + i, y + j, data->aux_color);
+			if (x + i >= 0 && x + i < data->width
+				&& y + j >= 0 && y + j < data->height)
+				mlx_put_pixel(data->image, x + i, y + j, data->aux_color);
 			j++;
 		}
 		i++;
